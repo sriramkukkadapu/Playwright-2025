@@ -28,7 +28,7 @@ const config = ({
     browserName: 'chromium',
     // browserName: 'firefox',
     // browserName: 'webkit',
-    headless: false,
+    headless: true,
     screenshot: 'on',
     trace: 'on', //retain-on-failure
     video: 'on',
