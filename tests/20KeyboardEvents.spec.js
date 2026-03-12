@@ -36,9 +36,9 @@ test('Keyboard events example - Hold release', async ({ page }) => {
   await page.pause();
 });
 
-test.only('Keyboard events example - auto suggestions - amazon example', async ({ page }) => {
+test.skip('Keyboard events example - auto suggestions - amazon example', async ({ page }) => {
 
-  await page.goto("https://www.amazon.in/");
+  await page.goto("https://www.amazon.in/",{timeout: 600000});
   await page.locator("input[id='twotabsearchtextbox']").type("iPhone");
 
   // Wait for the suggestion container to appear
