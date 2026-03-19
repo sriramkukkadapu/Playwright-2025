@@ -7,7 +7,7 @@ test("Hover example 1",async ({page}) =>
     await page.pause();
 });
 
-test.only("Hover Example 2", async function({page}){
+test("Hover Example 2", async function({page}){
     page.goto("https://freelance-learn-automation.vercel.app/login");
     await page.getByPlaceholder("Enter Email").fill("admin@email.com");
     await page.getByPlaceholder("Enter Password").fill("admin@123");

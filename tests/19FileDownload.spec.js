@@ -7,7 +7,7 @@ test('File Download', async ({ page }) => {
   // for multiple files: await page.locator("#file-upload").setInputFiles("file1.txt", "file2.txt");
   console.log("current working directory: +"+process.cwd()); 
   const cwd = process.cwd();
-  const file_path = cwd + "downloads/file_downloaded.png";
+  const file_path = cwd + "/downloads/file_downloaded.png";
 
   //1st delete file in the directory if it is existing
   fs.unlink(file_path, (err) => {
@@ -28,7 +28,7 @@ test('File Download', async ({ page }) => {
 
   console.log(await download.suggestedFilename());
   console.log(await download.path());
-  await expect(download.path()).not.toBeNull();
+  expect(await download.path()).not.toBeNull();
 
   //verify file existing in given path
   expect(fs.existsSync(file_path)).toBeTruthy();

@@ -30,7 +30,7 @@ test("2. Frames using Frame Name",async ({page}) =>
     await page.locator("#alertbtn").click();
 });
 
-test.only("3. Frames - Java docs example",async ({page}) =>
+test("3. Frames - Java docs example",async ({page}) =>
 {
     await page.goto("https://docs.oracle.com/javase/8/docs/api/");
     
@@ -38,4 +38,18 @@ test.only("3. Frames - Java docs example",async ({page}) =>
     const subPage = page.frame("packageListFrame");
     await subPage.locator("a[href='java/applet/package-frame.html']").click();
     
+});
+
+
+//Good solution for iframe & you can optimise the code like below:-
+test('4. Practice Iframe Interaction', async ({ page }) => {
+  await page.goto('https://vinothqaacademy.com/iframe/');
+
+  const nameInput = page.frameLocator('iframe[title="Web Table"]').getByRole('textbox', { name: 'Name' });
+  await nameInput.scrollIntoViewIfNeeded();
+  await nameInput.fill('John Doe');
+
+  const checkbox = page.frameLocator('iframe[title="Web Table"]').getByRole('checkbox').first();
+  await checkbox.scrollIntoViewIfNeeded();
+  await checkbox.check();
 });

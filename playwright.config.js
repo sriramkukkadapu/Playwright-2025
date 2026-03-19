@@ -16,6 +16,7 @@ import { trace } from 'console';
 const config = ({
   workers: 3, // Use a specific number of workers
   testDir: './tests',
+  // testMatch: './tests/*.spec.js',
   fullyParallel: true,
   timeout: 60*1000, //test timeout across entire project
   expect: { 

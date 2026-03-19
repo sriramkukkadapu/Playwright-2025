@@ -2,7 +2,7 @@ const {test,expect, chromium} = require('@playwright/test');
 
 test.describe.configure({ mode: 'parallel' });
 
-test.only('1 - Multiple browser Contexts', async () => 
+test('1 - Multiple browser Contexts', async () => 
     {               
         const browser = await chromium.launch();
         const context1 = await browser.newContext();
