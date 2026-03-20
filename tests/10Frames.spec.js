@@ -45,7 +45,7 @@ test("3. Frames - Java docs example",async ({page}) =>
 test('4. Practice Iframe Interaction', async ({ page }) => {
   await page.goto('https://vinothqaacademy.com/iframe/');
 
-  const nameInput = page.frameLocator('iframe[title="Web Table"]').getByRole('textbox', { name: 'Name' });
+  const nameInput = page.frameLocator('iframe[title="Web Table"]').locator('input[name="name"], input[placeholder*="Name"]').first();
   await nameInput.scrollIntoViewIfNeeded();
   await nameInput.fill('John Doe');
 
