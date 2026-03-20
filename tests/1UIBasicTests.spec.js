@@ -18,6 +18,6 @@ test('1 - Browser Context declaration', async ({browser}) =>
 
 test('First Playwright test - 2', async ({browser,page}) => 
     {               
-        await page.goto("https://www.flipkart.com");  
+        await page.goto("https://www.flipkart.com", {waitUntil: 'domcontentloaded'});  
 });
 
