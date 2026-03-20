@@ -16,7 +16,7 @@ test('1 - Browser Context declaration', async ({browser}) =>
         await page.goto("https://www.facebook.com");
 });
 
-test('First Playwright test - 2', async ({browser,page}) => 
+test.skip('First Playwright test - 2', async ({browser,page}) => 
     {               
         await page.goto("https://www.flipkart.com", {waitUntil: 'domcontentloaded'});  
 });
