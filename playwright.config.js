@@ -14,7 +14,7 @@ import { trace } from 'console';
  * @see https://playwright.dev/docs/test-configuration
  */
 const config = ({
-  workers: 3, // Use a specific number of workers
+  workers: 10, // Use a specific number of workers
   testDir: './tests',
   // testMatch: './tests/*.spec.js',
   fullyParallel: true,
