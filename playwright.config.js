@@ -25,6 +25,7 @@ const config = ({
   reporter: 'html',
   retries: 0, // for now dont retry
   use: {
+    baseURL: process.env.BASE_URL || 'http://www.google.com',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     browserName: 'chromium',
     // browserName: 'firefox',
