@@ -38,7 +38,7 @@ test('Automate Journey Login add product place order etc', async ({browser,page}
 
         const cartBtn = page.locator("button[routerLink='/dashboard/cart']");
         await cartBtn.click();
-        await page.locator("div li").first().waitFor();
+        // await page.locator("div li").first().waitFor();
         expect (await page.locator("'ZARA COAT 3'").isVisible()).toBeTruthy();
 
         await page.locator("text=Checkout").click();
