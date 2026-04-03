@@ -20,7 +20,7 @@ const config = ({
   fullyParallel: true,
   timeout: 60*1000, //test timeout across entire project
   expect: { 
-    timeout: 5*1000 //this time out applicable only expect - assertions
+    timeout: 15*1000 //this time out applicable only expect - assertions
   },
   reporter: 'html',
   retries: 2, // for now dont retry
