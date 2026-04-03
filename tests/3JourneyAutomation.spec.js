@@ -2,9 +2,9 @@ const {test,expect} = require('@playwright/test');
 
 test('Automate Journey Login add product place order etc', async ({browser,page}) => 
     {           
-        const userName = await page.locator("#userEmail");  
-        const password = await page.locator("#userPassword");
-        const login = await page.locator("#login");
+        const userName = page.locator("#userEmail");  
+        const password = page.locator("#userPassword");
+        const login = page.locator("#login");
 
         await page.goto("https://rahulshettyacademy.com/client");  
 
@@ -39,6 +39,20 @@ test('Automate Journey Login add product place order etc', async ({browser,page}
         const cartBtn = page.locator("button[routerLink='/dashboard/cart']");
         await cartBtn.click();
         // await page.locator("div li").first().waitFor();
+        const maxRetries = 3;
+        const retryDelay = 2000;
+
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                await page.locator("div li").first().waitFor({ timeout: 60000 });
+                break;
+            } catch (e) {
+                if (attempt === maxRetries) throw e;
+                console.log(`Attempt ${attempt} failed, retrying in ${retryDelay}ms...`);
+                await page.waitForTimeout(retryDelay);
+            }
+        }
+
         expect (await page.locator("'ZARA COAT 3'").isVisible()).toBeTruthy();
 
         await page.locator("text=Checkout").click();
