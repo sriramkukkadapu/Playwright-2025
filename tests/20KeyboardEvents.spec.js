@@ -1,12 +1,16 @@
 import { test, expect } from '@playwright/test';
 
-test('Keyboard events example - google', async ({ page }) => {
+test('Keyboard events example - press enter', async ({ page }) => {
 
-  await page.goto("https://www.google.com");
-  await page.locator("textarea[title='Search']").type("Sriram Kukkadapu");
+  // await page.goto("https://www.google.com");
+  // await page.locator("textarea[title='Search']").type("Sriram Kukkadapu");
+  // await page.keyboard.press("Enter");
+
+  // await page.pause();
+
+  await page.goto("https://www.yahoo.com");
+  await page.locator("input[placeholder='Search the web']").type("Test - clearing the data");
   await page.keyboard.press("Enter");
-
-  await page.pause();
   
 });
 
@@ -33,7 +37,7 @@ test('Keyboard events example - Hold release', async ({ page }) => {
   }
   await page.keyboard.up("Shift");
   await page.keyboard.press("Backspace");
-  await page.pause();
+  // await page.pause();
 });
 
 test.skip('Keyboard events example - auto suggestions - amazon example', async ({ page }) => {

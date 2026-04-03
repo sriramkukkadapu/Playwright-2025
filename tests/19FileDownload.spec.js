@@ -20,7 +20,8 @@ test('File Download', async ({ page }) => {
 
   let [download] = await Promise.all([
     page.waitForEvent("download"),
-    page.locator("a[href='download/upload.txt']").click()
+    // page.locator("a[href='download/upload.txt']").click()
+    page.locator(".example a").first().click()
   ]);
 
   await download.saveAs(file_path);
