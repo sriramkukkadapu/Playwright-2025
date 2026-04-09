@@ -6,7 +6,7 @@ test('1 - UI Elements - Login Example', async ({page}) =>
         const password =  page.locator("#password");
         const signInBtn =  page.locator("#signInBtn");
 
-        await page.goto("https://rahulshettyacademy.com/loginpagePractise/");  
+        await page.goto("https://rahulshettyacademy.com/loginpagePractise/", { waitUntil: 'domcontentloaded' });  
 
         await userName.fill("sriramkukkadapu@gmail.com");
         await password.fill("sriramk1");
@@ -46,7 +46,7 @@ test('2 - Select and Checkbox Examples', async ({page}) =>
         const terms =  page.locator("#terms");
         const documentsLink = page.locator("a[href*='documents']"); // //a[contains(@href,'documents')]");
 
-        await page.goto("https://rahulshettyacademy.com/loginpagePractise/");  
+        await page.goto("https://rahulshettyacademy.com/loginpagePractise/", { waitUntil: 'domcontentloaded' });  
 
         await userName.fill("sriramkukkadapu@gmail.com");
         await password.fill("sriramk1");
@@ -71,7 +71,7 @@ test('3 - Child window handling', async ({browser}) => {
     const context = await browser.newContext();
     const page = await context.newPage();                  
 
-    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");  
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/", { waitUntil: 'domcontentloaded' });  
     const documentsLink = page.locator("a[href*='documents']"); // //a[contains(@href,'documents')]");
 
     //here waiting for new page & clicking should be tied with a promise
