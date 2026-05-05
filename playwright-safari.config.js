@@ -27,9 +27,9 @@ const config = ({
   use: {
     baseURL: process.env.BASE_URL || 'http://www.google.com',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    browserName: 'chromium',
+    // browserName: 'chromium',
     // browserName: 'firefox',
-    // browserName: 'webkit',
+    browserName: 'webkit',
     headless: true,
     screenshot: 'on', //only-on-failure, off
     trace: 'on', //retain-on-failure
