@@ -46,7 +46,7 @@ test('4. Practice Iframe Interaction', async ({ page }) => {
   const maxRetries = 3;
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await page.goto('https://vinothqaacademy.com/iframe/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await page.goto('https://vinothqaacademy.com/iframe/', { waitUntil: 'domcontentloaded', timeout: 60000 });
       break;
     } catch (e) {
       if (attempt === maxRetries) throw e;

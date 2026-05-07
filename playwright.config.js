@@ -34,8 +34,9 @@ const config = ({
     screenshot: 'on', //only-on-failure, off
     trace: 'on', //retain-on-failure
     video: 'on',
+    viewport: null,
     launchOptions: {
-      // args: ["--start-maximized"],
+      args: ["--start-maximized"],
     }
   }
   // ,projects: [
