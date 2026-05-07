@@ -43,7 +43,17 @@ test("3. Frames - Java docs example",async ({page}) =>
 
 //Good solution for iframe & you can optimise the code like below:-
 test('4. Practice Iframe Interaction', async ({ page }) => {
-  await page.goto('https://vinothqaacademy.com/iframe/');
+  const maxRetries = 3;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      await page.goto('https://vinothqaacademy.com/iframe/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+      break;
+    } catch (e) {
+      if (attempt === maxRetries) throw e;
+      console.log(`Attempt ${attempt} failed, retrying...`);
+      await page.waitForTimeout(2000);
+    }
+  }
 
   const nameInput = page.frameLocator('iframe[title="Web Table"]').locator('input[name="name"], input[placeholder*="Name"]').first();
   await nameInput.scrollIntoViewIfNeeded();
