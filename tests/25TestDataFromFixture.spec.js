@@ -1,5 +1,5 @@
-const { expect } = require('@playwright/test');
-const { test: testWithFixture } = require("./utils/test-base");
+import { expect } from '@playwright/test';
+import { test as testWithFixture } from './utils/test-base';
 
 testWithFixture('End to end journey with Special locators', async ({page, testDataForLogin}) => 
     {           

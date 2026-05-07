@@ -1,6 +1,6 @@
-const { test: base } = require('@playwright/test');
+import { test as base } from '@playwright/test';
 
-exports.test = base.extend(
+export const test = base.extend(
     {
         testDataForLogin: async ({}, use) => {
             await use({
