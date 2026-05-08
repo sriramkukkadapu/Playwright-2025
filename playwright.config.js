@@ -1,6 +1,7 @@
 // @ts-check
 import { chromium, defineConfig, devices } from '@playwright/test';
 import { trace } from 'console';
+import { permission } from 'process';
 
 /**
  * Read environment variables from file.
@@ -28,6 +29,8 @@ const config = ({
     baseURL: process.env.BASE_URL || 'http://www.google.com',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     browserName: 'chromium',
+    ignoreHttpsErrors: true,
+    Permissions: ['geolocation'],
     // browserName: 'firefox',
     // browserName: 'webkit',
     headless: true,
