@@ -51,7 +51,7 @@ test('4. Practice Iframe Interaction', async ({ page }) => {
     } catch (e) {
       if (attempt === maxRetries) throw e;
       console.log(`Attempt ${attempt} failed, retrying...`);
-      await page.waitForTimeout(2000);
+      // await page.waitForTimeout(2000);
     }
   }
 
