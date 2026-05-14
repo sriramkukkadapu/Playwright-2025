@@ -1,6 +1,6 @@
 const {test,expect} = require('@playwright/test');
 
-test('End to end journey with Special locators', async ({browser,page}) => 
+test('@journey End to end journey with Special locators', async ({browser,page}) => 
     {           
 
         await page.goto("https://rahulshettyacademy.com/client");  

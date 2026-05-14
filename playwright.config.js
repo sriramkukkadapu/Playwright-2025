@@ -15,16 +15,16 @@ import { permission } from 'process';
  * @see https://playwright.dev/docs/test-configuration
  */
 const config = ({
-  workers: 10, // Use a specific number of workers
+  workers: 10, // Use a specific number of workers(threads)
   testDir: './tests',
   // testMatch: './tests/*.spec.js',
-  fullyParallel: true,
+  fullyParallel: true, // each test in spec file is run independently
   timeout: 60*1000, //test timeout across entire project
   expect: { 
     timeout: 30*1000 //this time out applicable only expect - assertions
   },
   reporter: 'html',
-  retries: 2, // for now dont retry
+  retries: 2, // 0-no retries - dont put this under use because this will be applicable globally.
   use: {
     baseURL: process.env.BASE_URL || 'http://www.google.com',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -35,8 +35,8 @@ const config = ({
     // browserName: 'webkit',
     headless: true,
     screenshot: 'on', //only-on-failure, off
-    trace: 'on', //retain-on-failure
-    video: 'on',
+    trace: 'on', //retain-on-failure - only if test failed it will retain
+    video: 'on-first-retry', //on
     viewport: null,
     launchOptions: {
       args: ["--start-maximized"],

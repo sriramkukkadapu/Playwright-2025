@@ -1,6 +1,6 @@
 const {test,expect} = require('@playwright/test');
 
-test('Automate Journey Login add product place order etc', async ({browser,page}) => 
+test('@journey Automate Journey Login add product place order etc', async ({browser,page}) => 
     {           
         const userName = page.locator("#userEmail");  
         const password = page.locator("#userPassword");
