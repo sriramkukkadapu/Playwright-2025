@@ -4,6 +4,7 @@ const createOrderPayload = {"orders":[{"country":"Cuba","productOrderedId":"6960
 let token;
 let orderId;
 
+//Login and creating an order using API .
 test.beforeAll(async () => {
     const apiContext = await request.newContext(); //get a fresh api context
 
