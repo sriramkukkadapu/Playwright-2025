@@ -14,16 +14,14 @@ test('1 - Multiple browser Contexts', async () =>
         await page1.goto("https://www.google.com");  
         await page2.goto("https://www.amazon.in");  
 
-        // await page2.waitForLoadState('networkidle');
-
-        context1.close();
-        context2.close();
+        await context1.close();
+        await context2.close();
+        await browser.close();
 });
 
 
 test('2 - Multiple browser Contexts with default browser object', async ({browser}) => 
     {               
-        // const browser = await chromium.launch();
         const context1 = await browser.newContext();
         const context2 = await browser.newContext();
 
@@ -33,9 +31,7 @@ test('2 - Multiple browser Contexts with default browser object', async ({browse
         await page1.goto("https://www.google.com");  
         await page2.goto("https://www.amazon.in");  
 
-        // await page2.waitForLoadState('networkidle');
-
-        context1.close();
-        context2.close();
+        await context1.close();
+        await context2.close();
 });
 
