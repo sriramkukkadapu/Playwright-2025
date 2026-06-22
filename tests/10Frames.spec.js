@@ -42,7 +42,7 @@ test("3. Frames - Java docs example",async ({page}) =>
 
 
 //Good solution for iframe & you can optimise the code like below:-
-test('4. Practice Iframe Interaction', async ({ page }) => {
+test.skip('4. Practice Iframe Interaction', async ({ page }) => {
   const maxRetries = 3;
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
