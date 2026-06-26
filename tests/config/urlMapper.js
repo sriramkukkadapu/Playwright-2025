@@ -1,3 +1,5 @@
+// APP Test URL - https://restful-api.dev/
+
 const environments = {
     dev: "https://api.restful-api.dev",
     test: "https://api.restful-api.test",

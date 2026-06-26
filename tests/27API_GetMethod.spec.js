@@ -1,11 +1,12 @@
-const {test, expect, request} = require('@playwright/test');
+const {test, expect} = require('./fixtures/apiFixture');
 const {objectsAPI_BaseURL: base_url} = require('./config/urlMapper');
 let objectId;
 test.describe.configure({ mode: 'serial' })
 
-test("1. GET Objects API", async ({request}) => {
+test("1. GET Objects API", async ({apiContext}) => {
+    // https://restful-api.dev/
     //GET request to fetch all objects
-    const getResponse = await request.get(base_url);
+    const getResponse = await apiContext.get(base_url);
     expect(getResponse.ok()).toEqual(true);
 
     const responseJson = await getResponse.json();
@@ -25,10 +26,10 @@ test("1. GET Objects API", async ({request}) => {
 });
 
 
-test("2. GET Object by ID", async ({request}) => {
+test("2. GET Object by ID", async ({apiContext}) => {
     //GET request to fetch specific object by ID
     // let objectId = "1";
-    const getResponse = await request.get(base_url+"/"+objectId);
+    const getResponse = await apiContext.get(base_url+"/"+objectId);
     expect(getResponse.ok()).toEqual(true);
 
     const responseJson = await getResponse.json();
@@ -38,4 +39,11 @@ test("2. GET Object by ID", async ({request}) => {
     expect(responseJson).toHaveProperty('id');
     expect(responseJson.id).toBe(objectId);
     console.log("Object retrieved successfully with ID: " + objectId);
+});
+
+test("3. GET Object by ID - null", async ({apiContext}) => {
+    const getResponse = await apiContext.get(base_url+"/"+null);
+    console.log(getResponse);
+    expect(getResponse.ok()).toEqual(false);
+    expect(getResponse.status()).toBe(404);
 });
