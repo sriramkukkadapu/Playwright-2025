@@ -20,7 +20,7 @@ test('Login and verify iPhone X product on shop page', async ({ page }) => {
     // ── Step 3: Verify navigation to shop page
     await shopPage.waitForPageLoad();
 
-    await expect(page).toHaveURL("/shop");
+    await expect(page).toHaveURL(/angularpractice\/shop/);
     await expect(page).toHaveTitle('ProtoCommerce');
 
     // ── Step 4: Verify iPhone X is present on the page 
