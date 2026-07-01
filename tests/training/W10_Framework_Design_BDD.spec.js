@@ -78,7 +78,7 @@ for (const data of loginTestData) {
         await page.getByRole('button', { name: 'Login' }).click();
 
         if (data.valid) {
-            await page.waitForLoadState('networkidle');
+            await page.waitForURL(/dashboard/, { timeout: 15000 });
             expect(page.url()).toContain('dashboard');
             console.log(`✅ ${data.desc} — logged in`);
         } else {
@@ -131,7 +131,7 @@ test('W10: Fixtures concept demo - beforeEach as fixture substitute', async ({ p
     await page.getByPlaceholder('email@example.com').fill('sriramkukkadapu@gmail.com');
     await page.getByPlaceholder('enter your passsword').fill('Test1234!');
     await page.getByRole('button', { name: 'Login' }).click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForURL(/dashboard/, { timeout: 15000 });
 
     expect(page.url()).toContain('dashboard');
     console.log('Fixture: logged in ✅');

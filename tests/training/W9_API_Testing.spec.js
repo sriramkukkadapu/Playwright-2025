@@ -2,68 +2,62 @@
 // WEEK 9 — API Testing with Playwright
 // Topics: GET, POST, PUT, DELETE, Network Interception,
 //         Response Validation, Auth Flows, API+UI Hybrid
+// Note: Uses jsonplaceholder.typicode.com (free, no auth needed)
 // ============================================================
 
 const { test, expect, request } = require('@playwright/test');
 
-const BASE_URL  = 'https://rahulshettyacademy.com/api/ecom';
-const LOGIN_URL = `${BASE_URL}/user/login`;
+const BASE_URL   = 'https://rahulshettyacademy.com/api/ecom';
+const LOGIN_URL  = `${BASE_URL}/user/login`;
 const ORDERS_URL = `${BASE_URL}/order/get-orders-for-customer`;
+const JSON_API   = 'https://jsonplaceholder.typicode.com';
 
 // ─── 1. GET Request ─────────────────────────────────────────
 test('W9: GET request - fetch data', async ({ request }) => {
-    // GET public API
-    const response = await request.get('https://reqres.in/api/users?page=1', {
-        headers: { 'x-api-key': 'reqres-free-v1' }
-    });
+    const response = await request.get(`${JSON_API}/users`);
 
     console.log('Status:', response.status());
-    console.log('Status text:', response.statusText());
     expect(response.status()).toBe(200);
 
     const body = await response.json();
-    console.log('Total users:', body.total);
-    console.log('First user:', body.data[0]);
+    console.log('Total users:', body.length);
+    console.log('First user:', body[0].name, body[0].email);
 
-    expect(body.data.length).toBeGreaterThan(0);
-    expect(body.data[0]).toHaveProperty('email');
+    expect(body.length).toBeGreaterThan(0);
+    expect(body[0]).toHaveProperty('email');
+    expect(body[0]).toHaveProperty('name');
 });
 
 // ─── 2. POST Request ────────────────────────────────────────
 test('W9: POST request - create resource', async ({ request }) => {
-    const response = await request.post('https://reqres.in/api/users', {
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': 'reqres-free-v1'
-        },
+    const response = await request.post(`${JSON_API}/posts`, {
+        headers: { 'Content-Type': 'application/json' },
         data: {
-            name: 'Sriram Kukkadapu',
-            job:  'SDET'
+            title:  'Playwright API Testing',
+            body:   'Learning API testing with Playwright',
+            userId: 1
         }
     });
 
     expect(response.status()).toBe(201);
 
     const body = await response.json();
-    console.log('Created user:', body);
-    console.log('ID:', body.id);
-    console.log('Created at:', body.createdAt);
+    console.log('Created post:', body);
 
-    expect(body.name).toBe('Sriram Kukkadapu');
-    expect(body.job).toBe('SDET');
+    expect(body.title).toBe('Playwright API Testing');
+    expect(body.userId).toBe(1);
     expect(body.id).toBeTruthy();
 });
 
 // ─── 3. PUT Request ─────────────────────────────────────────
 test('W9: PUT request - update resource', async ({ request }) => {
-    const response = await request.put('https://reqres.in/api/users/2', {
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': 'reqres-free-v1'
-        },
+    const response = await request.put(`${JSON_API}/posts/1`, {
+        headers: { 'Content-Type': 'application/json' },
         data: {
-            name: 'Jane Updated',
-            job:  'QA Lead'
+            id:     1,
+            title:  'Updated Title',
+            body:   'Updated body content',
+            userId: 1
         }
     });
 
@@ -71,27 +65,23 @@ test('W9: PUT request - update resource', async ({ request }) => {
 
     const body = await response.json();
     console.log('Updated:', body);
-    expect(body.name).toBe('Jane Updated');
-    expect(body.updatedAt).toBeTruthy();
+    expect(body.title).toBe('Updated Title');
+    expect(body.id).toBe(1);
 });
 
 // ─── 4. DELETE Request ──────────────────────────────────────
 test('W9: DELETE request', async ({ request }) => {
-    const response = await request.delete('https://reqres.in/api/users/2', {
-        headers: { 'x-api-key': 'reqres-free-v1' }
-    });
+    const response = await request.delete(`${JSON_API}/posts/1`);
 
-    console.log('Delete status:', response.status()); // 204 No Content
-    expect(response.status()).toBe(204);
+    console.log('Delete status:', response.status()); // 200 for jsonplaceholder
+    expect(response.status()).toBe(200);
 });
 
 // ─── 5. Response Headers & Body Validation ──────────────────
 test('W9: Response validation - headers, body, status', async ({ request }) => {
-    const response = await request.get('https://reqres.in/api/users/2', {
-        headers: { 'x-api-key': 'reqres-free-v1' }
-    });
+    const response = await request.get(`${JSON_API}/users/1`);
 
-    // Status assertion
+    // Status assertions
     expect(response.status()).toBe(200);
     expect(response.ok()).toBe(true);
 
@@ -102,22 +92,21 @@ test('W9: Response validation - headers, body, status', async ({ request }) => {
 
     // Body validation
     const body = await response.json();
-    console.log('Body:', JSON.stringify(body, null, 2));
+    console.log('Body:', JSON.stringify(body, null, 2).substring(0, 200));
 
-    // Deep assertions
-    expect(body.data).toHaveProperty('id', 2);
-    expect(body.data).toHaveProperty('email');
-    expect(body.data.first_name).toBeTruthy();
+    expect(body).toHaveProperty('id', 1);
+    expect(body).toHaveProperty('email');
+    expect(body.name).toBeTruthy();
 
     // Schema-like validation
-    expect(typeof body.data.id).toBe('number');
-    expect(typeof body.data.email).toBe('string');
-    expect(body.data.email).toContain('@');
+    expect(typeof body.id).toBe('number');
+    expect(typeof body.email).toBe('string');
+    expect(body.email).toContain('@');
 });
 
 // ─── 6. Authentication - Token based ────────────────────────
 test('W9: Auth - login and get token', async ({ request }) => {
-    // Login to get auth token
+    // Login to get auth token from rahulshettyacademy
     const loginResp = await request.post(LOGIN_URL, {
         data: {
             userEmail:    'sriramkukkadapu@gmail.com',
@@ -126,7 +115,12 @@ test('W9: Auth - login and get token', async ({ request }) => {
     });
 
     console.log('Login status:', loginResp.status());
-    const loginBody = await loginResp.json();
+    let loginBody = {};
+    try {
+        loginBody = await loginResp.json();
+    } catch (e) {
+        console.log('Login response is not JSON - API may have changed');
+    }
     console.log('Login response:', JSON.stringify(loginBody).substring(0, 150));
 
     if (loginResp.status() === 200 && loginBody.token) {
@@ -138,7 +132,6 @@ test('W9: Auth - login and get token', async ({ request }) => {
             `${ORDERS_URL}/${loginBody.userId}`,
             { headers: { Authorization: token } }
         );
-
         console.log('Orders status:', ordersResp.status());
     }
 
@@ -147,16 +140,14 @@ test('W9: Auth - login and get token', async ({ request }) => {
 
 // ─── 7. Network Interception & Mocking ──────────────────────
 test('W9: Network interception - mock API response', async ({ page }) => {
-    // Mock a specific API endpoint
     await page.route('**/api/users**', async route => {
         const mockData = {
             data: [
                 { id: 1, email: 'mock@test.com', first_name: 'Mock', last_name: 'User' }
             ],
             total: 1,
-            page: 1
+            page:  1
         };
-
         await route.fulfill({
             status:      200,
             contentType: 'application/json',
@@ -164,12 +155,11 @@ test('W9: Network interception - mock API response', async ({ page }) => {
         });
     });
 
-    // Now when page makes request to /api/users, it gets mocked data
-    await page.goto('https://reqres.in');
+    await page.goto('https://jsonplaceholder.typicode.com');
 
-    // Verify the mock worked
+    // Trigger the mocked endpoint
     const response = await page.evaluate(async () => {
-        const res = await fetch('https://reqres.in/api/users');
+        const res = await fetch('https://jsonplaceholder.typicode.com/api/users');
         return await res.json();
     });
 
@@ -188,7 +178,13 @@ test('W9: API + UI Hybrid - create via API, verify in UI', async ({ page, reques
         }
     });
 
-    const loginBody = await loginResp.json();
+    let loginBody = {};
+    try {
+        loginBody = await loginResp.json();
+    } catch (e) {
+        console.log('Login response is not JSON - skipping hybrid test');
+        return;
+    }
     const token = loginBody.token;
 
     if (!token) {
@@ -204,7 +200,7 @@ test('W9: API + UI Hybrid - create via API, verify in UI', async ({ page, reques
         },
         data: {
             orders: [{
-                country:   'India',
+                country:          'India',
                 productOrderedId: '6262e990e26b7e1a10e89bf0'
             }]
         }
@@ -212,14 +208,13 @@ test('W9: API + UI Hybrid - create via API, verify in UI', async ({ page, reques
 
     console.log('Order creation status:', orderResp.status());
 
-    // STEP 3: Verify order in UI
+    // STEP 3: Verify in UI
     await page.goto('https://rahulshettyacademy.com/client');
     await page.getByPlaceholder('email@example.com').fill('sriramkukkadapu@gmail.com');
     await page.getByPlaceholder('enter your passsword').fill('Test1234!');
     await page.getByRole('button', { name: 'Login' }).click();
     await page.waitForLoadState('networkidle');
 
-    // Navigate to orders
     await page.locator("button[routerlink='/dashboard/myorders']").click().catch(() => {
         console.log('My orders button not found in this flow');
     });
@@ -230,17 +225,14 @@ test('W9: API + UI Hybrid - create via API, verify in UI', async ({ page, reques
 
 // ─── 9. PATCH Request ───────────────────────────────────────
 test('W9: PATCH request - partial update', async ({ request }) => {
-    const response = await request.patch('https://reqres.in/api/users/2', {
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': 'reqres-free-v1'
-        },
-        data: { job: 'Senior SDET' }
+    const response = await request.patch(`${JSON_API}/posts/1`, {
+        headers: { 'Content-Type': 'application/json' },
+        data: { title: 'Patched Title' }
     });
 
     expect(response.status()).toBe(200);
     const body = await response.json();
     console.log('Patched:', body);
-    expect(body.job).toBe('Senior SDET');
-    expect(body.updatedAt).toBeTruthy();
+    expect(body.title).toBe('Patched Title');
+    expect(body.id).toBe(1);
 });

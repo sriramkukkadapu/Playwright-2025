@@ -39,16 +39,17 @@ test('W6: Radio Buttons', async ({ page }) => {
     await page.goto(PRACTISE_URL);
 
     const userRadio    = page.locator('input[value="user"]');
-    const teacherRadio = page.locator('input[value="teacher"]');
+    const adminRadio   = page.locator('input[value="admin"]');
 
-    // Select user radio
+    // Select user radio — dismissing modal that pops up
     await userRadio.click();
+    await page.locator('#okayBtn').click();
     await expect(userRadio).toBeChecked();
-    await expect(teacherRadio).not.toBeChecked();
+    await expect(adminRadio).not.toBeChecked();
 
-    // Switch to teacher
-    await teacherRadio.click();
-    await expect(teacherRadio).toBeChecked();
+    // Switch to admin
+    await adminRadio.click();
+    await expect(adminRadio).toBeChecked();
     await expect(userRadio).not.toBeChecked();
 
     console.log('Radio buttons verified ✅');
@@ -85,7 +86,7 @@ test('W6: Dropdowns - select element', async ({ page }) => {
 test('W6: Web Tables - read and interact', async ({ page }) => {
     await page.goto(AUTO_URL);
 
-    const table = page.locator('.table-responsive table');
+    const table = page.locator('table');
     const rows  = table.locator('tbody tr');
     const count = await rows.count();
 
@@ -202,8 +203,9 @@ test('W6: Form submission - fill and submit', async ({ page }) => {
     // Select dropdown
     await page.locator('select.form-control').selectOption('consult');
 
-    // Check radio
+    // Check radio — user radio triggers a modal, dismiss it first
     await page.locator('input[value="user"]').click();
+    await page.locator('#okayBtn').click();
 
     // Check terms
     await page.locator('#terms').check();

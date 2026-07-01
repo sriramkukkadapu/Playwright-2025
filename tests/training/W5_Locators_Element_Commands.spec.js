@@ -15,8 +15,8 @@ test('W5: CSS Locators', async ({ page }) => {
     // By ID
     const username = page.locator('#username');
 
-    // By class
-    const signInBtn = page.locator('.btn-primary');
+    // By class (actual class is 'btn btn-info btn-md')
+    const signInBtn = page.locator('.btn-info');
 
     // By attribute
     const passwordInput = page.locator('[type="password"]');
@@ -86,8 +86,9 @@ test('W5: getByText, getByLabel, getByPlaceholder', async ({ page }) => {
     await page.goto(URL);
 
     // getByPlaceholder — best for inputs with placeholder text
-    const username = page.getByPlaceholder('Username');
-    const password = page.getByPlaceholder('Password');
+    // These inputs have no placeholder — use locator by id instead
+    const username = page.locator('#username');
+    const password = page.locator('#password');
 
     // getByText — for visible text on page
     // getByLabel — matches input associated with a label
@@ -120,7 +121,7 @@ test('W5: Filtered Locators - filter()', async ({ page }) => {
 
     // filter by child element
     const cardsWithBtn = page.locator('.card-body').filter({
-        has: page.locator('button.btn-primary')
+        has: page.locator('button.w-40')
     });
     const count = await cardsWithBtn.count();
     console.log('Cards with button:', count);

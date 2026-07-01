@@ -48,7 +48,7 @@ test('W4: Page fixture - recommended approach', async ({ page }) => {
     console.log('URL:', page.url());
 
     expect(title).toBeTruthy();
-    expect(page.url()).toContain('loginPagePractise');
+    expect(page.url()).toContain('loginpagePractise');
 });
 
 // ─── 3. Browser Fixture ─────────────────────────────────────
@@ -128,8 +128,7 @@ test('W4: Understanding test.use() - per-test config', async ({ page }) => {
 test('W4: Simulating fixture pattern with beforeEach', async ({ page }) => {
     // Without custom fixtures, use beforeEach for common setup
     await page.goto('https://rahulshettyacademy.com/loginPagePractise');
-    await expect(page).toHaveURL(/loginPagePractise/);
-    console.log('Setup done, ready to test');
+    await expect(page).toHaveURL(/loginpagePractise/);
 });
 
 // ─── 7. Test Hooks ──────────────────────────────────────────
@@ -153,7 +152,7 @@ test.describe('W4: Test Hooks', () => {
     });
 
     test('Hook test 1', async ({ page }) => {
-        await expect(page).toHaveURL(/loginPagePractise/);
+        await expect(page).toHaveURL(/loginpagePractise/);
     });
 
     test('Hook test 2', async ({ page }) => {
