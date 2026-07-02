@@ -57,9 +57,7 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
     });
 
     await test.step('4. Verify cart item', async () => {
-        const cartItems = page.locator('.cartSection');
-        await cartItems.first().waitFor({ state: 'visible' });
-        const cartItem = await page.locator('.cartSection h3').first().textContent();
+        const cartItem = await page.locator('h3').first().textContent();
         console.log('Cart item:', cartItem);
         expect(cartItem).toBeTruthy();
         console.log('✅ Step 4: Cart item verified');

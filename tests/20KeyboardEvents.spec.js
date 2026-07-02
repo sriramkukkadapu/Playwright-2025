@@ -5,7 +5,8 @@ test('Keyboard events example - press enter', async ({ page }) => {
   await page.goto("https://www.yahoo.com");
   const searchBox = page.locator("input[placeholder='Search the web']");
   await searchBox.waitFor({ state: 'visible' });
-  await searchBox.type("Test - clearing the data");
+  await searchBox.click();
+  await searchBox.fill("Test - clearing the data");
   await page.keyboard.press("Enter");
 
 });
@@ -15,7 +16,9 @@ test('Keyboard events example - Multiple Keys ', async ({ page }) => {
   await page.goto("https://www.yahoo.com");
   const searchBox = page.locator("input[placeholder='Search the web']");
   await searchBox.waitFor({ state: 'visible' });
-  await searchBox.type("Test - clearing the data");
+  await searchBox.click();
+  await searchBox.fill("Test - clearing the data");
+  await expect(searchBox).toHaveValue("Test - clearing the data");
   await page.keyboard.press("Meta+A");
   await page.keyboard.press("Backspace");
 
@@ -28,7 +31,7 @@ test('Keyboard events example - Hold release', async ({ page }) => {
   const searchBox = page.locator("input[placeholder='Search the web']");
   await searchBox.waitFor({ state: 'visible' });
   await searchBox.click();
-  await searchBox.type("Test - clearing the data");
+  await searchBox.fill("Test - clearing the data");
   await expect(searchBox).toHaveValue("Test - clearing the data");
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.down("Shift");
