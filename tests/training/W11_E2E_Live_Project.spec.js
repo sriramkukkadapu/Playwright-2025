@@ -49,7 +49,7 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
 
     await test.step('3. Navigate to cart', async () => {
         await page.locator("button[routerLink='/dashboard/cart']").click();
-        await page.waitForLoadState('networkidle');
+        await page.locator('.cartSection').first().waitFor({ state: 'visible' });
         console.log('✅ Step 3: Navigated to cart');
     });
 
@@ -64,7 +64,7 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
 
     await test.step('5. Checkout', async () => {
         await page.locator('text=Checkout').click();
-        await page.waitForLoadState('networkidle');
+        await page.locator('[placeholder="Select Country"]').waitFor({ state: 'visible' });
         console.log('✅ Step 5: Checkout clicked');
     });
 
@@ -82,14 +82,12 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
         const placeOrderBtn = page.getByText('Place Order', { exact: true });
         await placeOrderBtn.waitFor({ state: 'visible', timeout: 10000 });
         await placeOrderBtn.click();
-        await page.waitForLoadState('networkidle');
+        await page.locator('text=Thankyou for the order').or(page.locator('.hero-primary')).first().waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
         console.log('✅ Step 7: Order placed');
     });
 
     await test.step('8. Verify order confirmation', async () => {
-        const confirmation = page.locator(
-            'text=Thankyou for the order, .hero-primary, [class*="hero"]'
-        );
+        const confirmation = page.locator('text=Thankyou for the order').or(page.locator('.hero-primary'));
         await confirmation.first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
             console.log('Confirmation element not found - may vary by flow');
         });

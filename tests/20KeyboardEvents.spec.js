@@ -2,34 +2,33 @@ import { test, expect } from '@playwright/test';
 
 test('Keyboard events example - press enter', async ({ page }) => {
 
-  // await page.goto("https://www.google.com");
-  // await page.locator("textarea[title='Search']").type("Sriram Kukkadapu");
-  // await page.keyboard.press("Enter");
-
-  // await page.pause();
-
   await page.goto("https://www.yahoo.com");
-  await page.locator("input[placeholder='Search the web']").type("Test - clearing the data");
+  const searchBox = page.locator("input[placeholder='Search the web']");
+  await searchBox.waitFor({ state: 'visible' });
+  await searchBox.type("Test - clearing the data");
   await page.keyboard.press("Enter");
-  
+
 });
 
 test('Keyboard events example - Multiple Keys ', async ({ page }) => {
 
   await page.goto("https://www.yahoo.com");
-  await page.locator("input[placeholder='Search the web']").type("Test - clearing the data");
+  const searchBox = page.locator("input[placeholder='Search the web']");
+  await searchBox.waitFor({ state: 'visible' });
+  await searchBox.type("Test - clearing the data");
   await page.keyboard.press("Meta+A");
   await page.keyboard.press("Backspace");
-  
-  // await page.pause();
+
 });
 
 
 test('Keyboard events example - Hold release', async ({ page }) => {
 
   await page.goto("https://www.yahoo.com");
-  await page.locator("input[placeholder='Search the web']").type("Test - clearing the data");
-  await page.locator("input[placeholder='Search the web']").focus();
+  const searchBox = page.locator("input[placeholder='Search the web']");
+  await searchBox.waitFor({ state: 'visible' });
+  await searchBox.type("Test - clearing the data");
+  await searchBox.focus();
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.down("Shift");
   for(let i=0;i<"data".length;i++){
@@ -37,7 +36,6 @@ test('Keyboard events example - Hold release', async ({ page }) => {
   }
   await page.keyboard.up("Shift");
   await page.keyboard.press("Backspace");
-  // await page.pause();
 });
 
 test.skip('Keyboard events example - auto suggestions - amazon example', async ({ page }) => {
