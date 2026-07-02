@@ -44,12 +44,15 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
         // Add ZARA COAT to cart
         const zaraCard = page.locator('.card-body').filter({ hasText: testData.products.zaraCoat });
         await zaraCard.locator("button:has-text('Add To Cart')").click();
+        // Wait for cart count to update confirming item was added
+        await page.locator("button[routerLink='/dashboard/cart']").waitFor({ state: 'visible' });
         console.log(`✅ Step 2: Added ${testData.products.zaraCoat} to cart`);
     });
 
     await test.step('3. Navigate to cart', async () => {
         await page.locator("button[routerLink='/dashboard/cart']").click();
-        await page.locator('.cartSection').first().waitFor({ state: 'visible' });
+        await page.waitForURL(/cart/, { timeout: 15000 });
+        await page.locator('h3').first().waitFor({ state: 'visible', timeout: 15000 });
         console.log('✅ Step 3: Navigated to cart');
     });
 

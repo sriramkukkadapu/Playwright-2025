@@ -27,8 +27,9 @@ test('Keyboard events example - Hold release', async ({ page }) => {
   await page.goto("https://www.yahoo.com");
   const searchBox = page.locator("input[placeholder='Search the web']");
   await searchBox.waitFor({ state: 'visible' });
+  await searchBox.click();
   await searchBox.type("Test - clearing the data");
-  await searchBox.focus();
+  await expect(searchBox).toHaveValue("Test - clearing the data");
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.down("Shift");
   for(let i=0;i<"data".length;i++){
