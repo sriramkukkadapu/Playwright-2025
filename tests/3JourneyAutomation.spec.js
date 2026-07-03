@@ -55,7 +55,7 @@ test('@journey Automate Journey Login add product place order etc', async ({brow
 
         expect (await page.locator("'ZARA COAT 3'").isVisible()).toBeTruthy();
 
-        await page.locator("text=Checkout").click();
+        await page.locator("button:has-text('Checkout'), a:has-text('Checkout')").first().click();
         // await page.locator("//button[text()='Checkout']").click();
         await page.locator("div[class*='user__name']  input[class*='pristine']").fill("sriramkukkadapu@gmail.com");
         await page.locator("//span[@class='numberCircle']/../../input").fill("666");

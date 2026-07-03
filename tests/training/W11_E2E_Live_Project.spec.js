@@ -64,7 +64,7 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
     });
 
     await test.step('5. Checkout', async () => {
-        await page.locator('text=Checkout').click();
+        await page.locator("button:has-text('Checkout'), a:has-text('Checkout')").first().click();
         await page.locator('[placeholder="Select Country"]').waitFor({ state: 'visible' });
         console.log('✅ Step 5: Checkout clicked');
     });

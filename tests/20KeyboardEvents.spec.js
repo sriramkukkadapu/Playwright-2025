@@ -2,9 +2,11 @@ import { test, expect } from '@playwright/test';
 
 async function loadYahooAndFill(page, value) {
   await page.goto("https://www.yahoo.com");
-  // Dismiss consent/cookie modal if present
-  const acceptBtn = page.locator('button:has-text("Accept all"), button:has-text("I agree"), button:has-text("Agree")');
-  await acceptBtn.first().click({ timeout: 5000 }).catch(() => {});
+  // Dismiss consent/cookie modal if present (each variant as separate locator)
+  const consent = page.locator('button:has-text("Accept all")')
+    .or(page.locator('button:has-text("I agree")'))
+    .or(page.locator('button:has-text("Agree")'));
+  await consent.first().click({ timeout: 5000 }).catch(() => {});
   const searchBox = page.locator("input[placeholder='Search the web']");
   await searchBox.waitFor({ state: 'visible' });
   await searchBox.click();

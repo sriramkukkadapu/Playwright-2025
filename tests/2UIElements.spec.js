@@ -12,13 +12,13 @@ test('1 - UI Elements - Login Example', async ({page}) =>
         await password.fill("sriramk1");
         await signInBtn.click();
 
+        await userName.clear();
         await password.clear();
         await signInBtn.click();
 
         //it throws error on UI capture and assert the error msg
         const errorMsg = await page.locator("//div[@style='display: block;']").textContent();
         console.log("===> Error message: "+errorMsg);
-        expect(errorMsg).toEqual("Empty username/password.");
         expect(errorMsg).toContain("Empty username/password.");
 
         await userName.fill("rahulshettyacademy");

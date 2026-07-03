@@ -5,8 +5,8 @@ class ShopPage {
     }
 
     async waitForPageLoad() {
-        await this.page.waitForURL('**/shop', { timeout: 15000 });
-        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForURL(/angularpractice\/shop/, { timeout: 15000 });
+        await this.productTitles.first().waitFor({ state: 'visible', timeout: 15000 });
     }
 
     async isProductPresent(productName) {
