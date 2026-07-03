@@ -1,37 +1,37 @@
 import { test, expect } from '@playwright/test';
 
-test('Keyboard events example - press enter', async ({ page }) => {
-
+async function loadYahooAndFill(page, value) {
   await page.goto("https://www.yahoo.com");
+  // Dismiss consent/cookie modal if present
+  const acceptBtn = page.locator('button:has-text("Accept all"), button:has-text("I agree"), button:has-text("Agree")');
+  await acceptBtn.first().click({ timeout: 5000 }).catch(() => {});
   const searchBox = page.locator("input[placeholder='Search the web']");
   await searchBox.waitFor({ state: 'visible' });
   await searchBox.click();
-  await searchBox.fill("Test - clearing the data");
-  await page.keyboard.press("Enter");
+  await searchBox.fill(value);
+  // Retry fill if value didn't stick
+  const current = await searchBox.inputValue();
+  if (current !== value) {
+    await searchBox.clear();
+    await searchBox.pressSequentially(value, { delay: 50 });
+  }
+  return searchBox;
+}
 
+test('Keyboard events example - press enter', async ({ page }) => {
+  const searchBox = await loadYahooAndFill(page, "Test - clearing the data");
+  await page.keyboard.press("Enter");
 });
 
 test('Keyboard events example - Multiple Keys ', async ({ page }) => {
-
-  await page.goto("https://www.yahoo.com");
-  const searchBox = page.locator("input[placeholder='Search the web']");
-  await searchBox.waitFor({ state: 'visible' });
-  await searchBox.click();
-  await searchBox.fill("Test - clearing the data");
+  const searchBox = await loadYahooAndFill(page, "Test - clearing the data");
   await expect(searchBox).toHaveValue("Test - clearing the data");
   await page.keyboard.press("Meta+A");
   await page.keyboard.press("Backspace");
-
 });
 
-
 test('Keyboard events example - Hold release', async ({ page }) => {
-
-  await page.goto("https://www.yahoo.com");
-  const searchBox = page.locator("input[placeholder='Search the web']");
-  await searchBox.waitFor({ state: 'visible' });
-  await searchBox.click();
-  await searchBox.fill("Test - clearing the data");
+  const searchBox = await loadYahooAndFill(page, "Test - clearing the data");
   await expect(searchBox).toHaveValue("Test - clearing the data");
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.down("Shift");
