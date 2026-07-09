@@ -1,0 +1,448 @@
+- generic [ref=e2]:
+  - navigation "Skip":
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#main"
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e12]:
+        - link "Skip to main content" [ref=e13] [cursor=pointer]:
+          - /url: "#maincontent"
+        - button "Switch to Business" [ref=e16] [cursor=pointer]:
+          - text: Switch to Business
+          - img [ref=e19]
+        - navigation "primary" [ref=e27]:
+          - generic [ref=e28]:
+            - button "EE Logo" [ref=e30] [cursor=pointer]:
+              - link "EE Logo" [ref=e31]:
+                - /url: https://ee.co.uk/
+                - img [ref=e33]
+            - generic [ref=e35]:
+              - link "Manage" [ref=e36] [cursor=pointer]:
+                - /url: https://ee.co.uk/manage
+                - img [ref=e39]
+                - text: Manage
+              - link "Rewards" [ref=e41] [cursor=pointer]:
+                - /url: https://ee.co.uk/rewards
+                - img [ref=e44]
+                - text: Rewards
+              - link "Help" [ref=e46] [cursor=pointer]:
+                - /url: https://ee.co.uk/help
+                - img [ref=e49]
+                - text: Help
+            - generic [ref=e52]:
+              - button "Search" [ref=e55] [cursor=pointer]:
+                - img [ref=e59]
+              - button "Basket" [ref=e63] [cursor=pointer]:
+                - img [ref=e67]
+              - button "Log in" [ref=e72] [cursor=pointer]:
+                - img [ref=e76]
+          - list [ref=e80]:
+            - listitem [ref=e81]:
+              - link "Phones" [ref=e83] [cursor=pointer]:
+                - /url: https://ee.co.uk/mobile
+                - generic [ref=e85]: Phones
+              - generic [ref=e86]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e87]:
+              - link "SIM-only" [ref=e89] [cursor=pointer]:
+                - /url: https://ee.co.uk/mobile/sim-only-deals
+                - generic [ref=e91]: SIM-only
+              - generic [ref=e92]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e93]:
+              - link "Broadband" [ref=e95] [cursor=pointer]:
+                - /url: https://ee.co.uk/broadband
+                - generic [ref=e97]: Broadband
+              - generic [ref=e98]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e99]:
+              - link "TV & Sport" [ref=e101] [cursor=pointer]:
+                - /url: https://ee.co.uk/tv
+                - generic [ref=e103]: TV & Sport
+              - generic [ref=e104]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e105]:
+              - link "Gaming" [ref=e107] [cursor=pointer]:
+                - /url: https://ee.co.uk/gaming
+                - generic [ref=e109]: Gaming
+              - generic [ref=e110]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e111]:
+              - link "Tech" [ref=e113] [cursor=pointer]:
+                - /url: https://ee.co.uk/tech
+                - generic [ref=e115]: Tech
+              - generic [ref=e116]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e117]:
+              - link "Insurance" [ref=e119] [cursor=pointer]:
+                - /url: https://ee.co.uk/insurance
+                - generic [ref=e121]: Insurance
+            - listitem [ref=e122]:
+              - link "Why EE" [ref=e124] [cursor=pointer]:
+                - /url: https://ee.co.uk/why-ee
+                - generic [ref=e126]: Why EE
+              - generic [ref=e127]:
+                - button "null Menu":
+                  - generic:
+                    - img
+            - listitem [ref=e128]:
+              - link "Brands" [ref=e130] [cursor=pointer]:
+                - /url: https://ee.co.uk/search/brands
+                - generic [ref=e132]: Brands
+            - listitem [ref=e133]:
+              - link "Summer Sale" [ref=e135] [cursor=pointer]:
+                - /url: https://ee.co.uk/summer-sale
+                - generic [ref=e137]: Summer Sale
+      - generic [ref=e139]:
+        - generic [ref=e141]:
+          - generic [ref=e145]:
+            - generic [ref=e152]:
+              - region "Image carousel" [ref=e154]:
+                - generic [ref=e155]:
+                  - group "Slide 1 of 3" [ref=e156]
+                  - group "Slide 2 of 3" [ref=e158]
+                  - group "Slide 3 of 3" [ref=e160]
+              - generic "Image carousel thumbnail" [ref=e165]:
+                - generic [ref=e166]:
+                  - group "Slide 1 of 3" [ref=e167]:
+                    - button "Thumbnail 1" [ref=e168] [cursor=pointer]
+                  - group "Slide 2 of 3" [ref=e171]:
+                    - button "Thumbnail 2" [ref=e172] [cursor=pointer]
+                  - group "Slide 3 of 3" [ref=e175]:
+                    - button "Thumbnail 3" [ref=e176] [cursor=pointer]
+            - generic [ref=e182]:
+              - generic [ref=e184]:
+                - paragraph [ref=e185]: Apple
+                - heading "iPhone 17 Pro Max" [level=1] [ref=e186]:
+                  - generic [ref=e187]: iPhone 17 Pro Max
+                - paragraph [ref=e189]: iPhone 17 Pro Max. The most powerful iPhone ever. Brilliant 6.9-inch display, aluminium unibody design, A19 Pro chip, all 48MP rear cameras and best-ever battery life.
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - list [ref=e194]:
+                    - listitem [ref=e195] [cursor=pointer]:
+                      - generic [ref=e197]:
+                        - img [ref=e200]
+                        - paragraph [ref=e204]: Log in to see your offers
+                        - img [ref=e207]
+                    - listitem [ref=e209] [cursor=pointer]:
+                      - generic [ref=e211]:
+                        - img [ref=e214]
+                        - paragraph [ref=e219]: Product details
+                        - img [ref=e222]
+                    - listitem [ref=e224] [cursor=pointer]:
+                      - generic [ref=e226]:
+                        - img [ref=e229]
+                        - paragraph [ref=e234]: Get this phone SIM Free
+                        - img [ref=e237]
+                  - generic [ref=e242]:
+                    - tablist [ref=e245]:
+                      - tab "Product details" [selected] [ref=e246] [cursor=pointer]:
+                        - generic [ref=e248]: Product details
+                      - tab "FAQs" [ref=e249] [cursor=pointer]:
+                        - generic [ref=e251]: FAQs
+                    - tabpanel "Product details" [ref=e252]:
+                      - generic [ref=e257]:
+                        - generic [ref=e258]:
+                          - paragraph:
+                            - paragraph: Device
+                        - list [ref=e259]:
+                          - listitem [ref=e260]:
+                            - generic [ref=e263]:
+                              - generic [ref=e264]: Camera
+                              - paragraph [ref=e265]: 48.0 mp
+                          - listitem [ref=e266]:
+                            - generic [ref=e269]:
+                              - generic [ref=e270]: Screen Size
+                              - paragraph [ref=e271]: 6.9"
+                          - listitem [ref=e272]:
+                            - generic [ref=e275]:
+                              - generic [ref=e276]: Battery
+                              - paragraph [ref=e277]: 39 hours
+                          - listitem [ref=e278]:
+                            - generic [ref=e281]:
+                              - generic [ref=e282]: Ready for 5G+
+                              - paragraph [ref=e283]: Ready for 5G+
+                          - listitem [ref=e284]:
+                            - generic [ref=e287]:
+                              - generic [ref=e288]: SIM type
+                              - paragraph [ref=e289]: physical SIM, eSIM
+                - button "Save £288 on 150GB Essentials plan, plus more offers" [ref=e292] [cursor=pointer]:
+                  - generic [ref=e293]:
+                    - text: Save £288 on 150GB Essentials plan, plus more offers
+                    - img [ref=e296]
+              - generic [ref=e300]:
+                - generic [ref=e301]:
+                  - generic [ref=e302]: "1"
+                  - heading "Choose colour" [level=2] [ref=e303]
+                - group [ref=e308]:
+                  - generic [ref=e309]:
+                    - generic [ref=e314]:
+                      - radio "Cosmic Orange" [ref=e315]
+                      - paragraph [ref=e321] [cursor=pointer]:
+                        - strong [ref=e322]: Cosmic Orange
+                    - generic [ref=e327]:
+                      - radio "Silver" [ref=e328]
+                      - paragraph [ref=e334] [cursor=pointer]:
+                        - strong [ref=e335]: Silver
+                    - generic [ref=e340]:
+                      - radio "Deep Blue" [ref=e341]
+                      - paragraph [ref=e347] [cursor=pointer]:
+                        - strong [ref=e348]: Deep Blue
+              - generic [ref=e351]:
+                - generic [ref=e352]:
+                  - generic [ref=e353]: "2"
+                  - heading "Choose storage" [level=2] [ref=e354]
+                - generic [ref=e357]:
+                  - generic [ref=e362]:
+                    - checkbox [ref=e363]
+                    - paragraph [ref=e366] [cursor=pointer]:
+                      - strong [ref=e367]: 256GB
+                  - generic [ref=e372]:
+                    - checkbox [ref=e373]
+                    - paragraph [ref=e376] [cursor=pointer]:
+                      - strong [ref=e377]: 512GB
+                  - generic [ref=e382]:
+                    - checkbox [ref=e383]
+                    - paragraph [ref=e386] [cursor=pointer]:
+                      - strong [ref=e387]: 1024GB
+                  - generic [ref=e392]:
+                    - checkbox [ref=e393]
+                    - paragraph [ref=e396] [cursor=pointer]:
+                      - strong [ref=e397]: 2048GB
+              - generic [ref=e400]:
+                - generic [ref=e401]:
+                  - generic [ref=e402]: "3"
+                  - heading "Device payment" [level=2] [ref=e403]
+                - generic [ref=e406]: loading
+              - generic [ref=e427]:
+                - generic [ref=e428]:
+                  - generic [ref=e429]: "4"
+                  - heading "Choose plan" [level=2] [ref=e430]
+                - generic [ref=e432]:
+                  - generic [ref=e433]:
+                    - generic [ref=e434]:
+                      - generic [ref=e437]: loading
+                      - generic [ref=e441]: loading
+                    - generic [ref=e447]: loading
+                  - generic [ref=e452]:
+                    - generic [ref=e453]:
+                      - generic [ref=e456]: loading
+                      - generic [ref=e460]: loading
+                    - generic [ref=e466]: loading
+                  - generic [ref=e471]:
+                    - generic [ref=e472]:
+                      - generic [ref=e475]: loading
+                      - generic [ref=e479]: loading
+                    - generic [ref=e485]: loading
+                  - generic [ref=e490]:
+                    - generic [ref=e491]:
+                      - generic [ref=e494]: loading
+                      - generic [ref=e498]: loading
+                    - generic [ref=e504]: loading
+              - generic [ref=e510]:
+                - generic [ref=e512]:
+                  - generic [ref=e513]:
+                    - generic [ref=e514]: "5"
+                    - heading "Choose SIM type" [level=2] [ref=e515]
+                  - radiogroup [ref=e517]:
+                    - generic [ref=e518]:
+                      - generic [ref=e519]:
+                        - button [ref=e521] [cursor=pointer]: Learn more about eSIM
+                        - generic [ref=e526]:
+                          - heading [level=2] [ref=e527]: Why choose an eSIM
+                          - paragraph [ref=e530]: An eSIM is a digital SIM built into your device. No more fiddling around with a physical SIM card. Get connected instantly No waiting for a SIM to arrive in the post. Reduce environmental impact eSIMs remove the need for physical materials and packaging. Supports multiple numbers You can have multiple eSIMs on one device, allowing you to switch between numbers easily.
+                      - group [ref=e531]:
+                        - generic [ref=e534]:
+                          - radio [ref=e535]
+                          - generic [ref=e538] [cursor=pointer]:
+                            - generic [ref=e539]: eSIM (Recommended)
+                            - paragraph [ref=e540]: eSIMs are plastic-free and built-in to your device.
+                        - generic [ref=e544]:
+                          - radio [ref=e545]
+                          - generic [ref=e548] [cursor=pointer]:
+                            - generic [ref=e549]: Physical SIM
+                            - paragraph [ref=e550]: A physical SIM card you insert into your device.
+                - button "Continue" [disabled] [ref=e553]:
+                  - generic [ref=e554]: Continue
+          - generic [ref=e560]:
+            - generic [ref=e561]: Product tabs
+            - generic [ref=e569]:
+              - navigation [ref=e571]:
+                - tablist [ref=e572]:
+                  - tab "Why EE?" [expanded] [ref=e573] [cursor=pointer]:
+                    - generic [ref=e574]: Why EE?
+                  - tab "Features" [expanded] [ref=e575] [cursor=pointer]:
+                    - generic [ref=e576]: Features
+              - tabpanel "Why EE?" [ref=e581]:
+                - generic [ref=e582]:
+                  - generic [ref=e589]:
+                    - generic [ref=e590]:
+                      - heading "Inclusive Extras" [level=3] [ref=e591]
+                      - paragraph [ref=e592]: Exclusively on EE. Select one Inclusive Extra with our All Rounder plans or pay an extra £5 per month to choose Apple One as your Inclusive Extra. Apple One and our Roam Abroad Pass are both included with our Full Works Plan for iPhone.
+                    - generic [ref=e594]:
+                      - generic [ref=e595]:
+                        - img "Apple One icon"
+                        - generic [ref=e596]:
+                          - heading "Apple One" [level=3] [ref=e597]
+                          - paragraph [ref=e598]: Bundles together Apple Music, Apple TV, Apple Arcade and iCloud+ with 50GB of online storage. Apple One is included with Full Works. Pay just £5 extra a month to get it with an All Rounder plan when selected as an Inclusive Extra. Worth £18.95 a month.
+                      - generic [ref=e599]:
+                        - img "Apple Music logo"
+                        - generic [ref=e600]:
+                          - heading "Apple Music" [level=3] [ref=e601]
+                          - paragraph [ref=e602]: Access over 100 million songs ad-free, online or off. Worth £10.99 a month.
+                      - generic [ref=e603]:
+                        - img "Apple TV+ logo"
+                        - generic [ref=e604]:
+                          - heading "Apple TV" [level=3] [ref=e605]
+                          - paragraph [ref=e606]: Apple Original series and films with new Apple Originals added every month. Worth £9.99 a month.
+                      - generic [ref=e607]:
+                        - img "TNT Sports on discovery+ logo"
+                        - generic [ref=e608]:
+                          - heading "TNT Sports on HBO Max" [level=3] [ref=e609]
+                          - paragraph [ref=e610]: There’s nothing quite like kicking back and getting stuck into a weekend of incredible sport. Worth £20 a month.
+                  - generic [ref=e618]:
+                    - generic [ref=e620]:
+                      - generic [ref=e624]:
+                        - paragraph [ref=e626]: Device Care Extras
+                        - paragraph [ref=e627]: We’ve put together a bunch of Device Care Extras worth £105 that help you keep your phone, tablet, laptop or smart watch in tip-top condition for the life of your plan.
+                      - generic [ref=e630] [cursor=pointer]: See Device Care Extras
+                    - generic [ref=e632]:
+                      - generic [ref=e636]:
+                        - paragraph [ref=e638]: 5G+ is even better at connecting your life
+                        - paragraph [ref=e639]: 5G+ is the latest evolution in network technology. It’s up to 10x faster than 4G so you can live stream video even faster and browse with fewer interruptions. 5G+ also runs more efficiently, extending your battery life.
+                      - link "Find out more" [ref=e642] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/mobile/manage-use/using-phone-features/5G-plus
+                  - heading "iPhone 17 Pro Max Short T&Cs" [level=4] [ref=e649]:
+                    - button "iPhone 17 Pro Max Short T&Cs" [ref=e650] [cursor=pointer]:
+                      - generic [ref=e651]: iPhone 17 Pro Max Short T&Cs
+                      - img [ref=e652]
+        - generic [ref=e659]:
+          - navigation [ref=e660]:
+            - list [ref=e661]:
+              - listitem [ref=e662]:
+                - generic [ref=e663]:
+                  - heading "Help" [level=2] [ref=e664]
+                  - list [ref=e666]:
+                    - listitem [ref=e667]:
+                      - link "Contact us" [ref=e668] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/contact-ee
+                    - listitem [ref=e670]:
+                      - link "Find a store" [ref=e671] [cursor=pointer]:
+                        - /url: https://ee.co.uk/store-finder
+                    - listitem [ref=e673]:
+                      - link "Coverage checker" [ref=e674] [cursor=pointer]:
+                        - /url: https://coverage.ee.co.uk/coverage/ee
+                    - listitem [ref=e676]:
+                      - link "EE Community" [ref=e677] [cursor=pointer]:
+                        - /url: https://community.ee.co.uk
+                    - listitem [ref=e679]:
+                      - link "Orders and returns" [ref=e680] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/orders
+                    - listitem [ref=e682]:
+                      - link "Trade in a device" [ref=e683] [cursor=pointer]:
+                        - /url: https://ee.co.uk/trade-in
+                    - listitem [ref=e685]:
+                      - link "Product recalls and alerts" [ref=e686] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/orders/ee-tech#article-heading-6
+              - listitem [ref=e688]:
+                - generic [ref=e689]:
+                  - heading "Our websites & app" [level=2] [ref=e690]
+                  - list [ref=e692]:
+                    - listitem [ref=e693]:
+                      - link "Small business" [ref=e694] [cursor=pointer]:
+                        - /url: https://business.ee.co.uk/?s_cid=eeb_switch_to_small_business
+                    - listitem [ref=e696]:
+                      - link "Large business" [ref=e697] [cursor=pointer]:
+                        - /url: https://business.ee.co.uk/large-business/?s_cid=eeb_footer_large_business
+                    - listitem [ref=e699]:
+                      - link "BT Group" [ref=e700] [cursor=pointer]:
+                        - /url: https://www.bt.com/about
+                    - listitem [ref=e702]:
+                      - link "Download the EE app" [ref=e703] [cursor=pointer]:
+                        - /url: https://ee.co.uk/download-ee-app
+              - listitem [ref=e705]:
+                - generic [ref=e706]:
+                  - heading "Digital Society" [level=2] [ref=e707]
+                  - list [ref=e709]:
+                    - listitem [ref=e710]:
+                      - link "Digital inclusion and sustainability" [ref=e711] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/corporate-responsibility/being-responsible
+                    - listitem [ref=e713]:
+                      - link "Digital accessibility" [ref=e714] [cursor=pointer]:
+                        - /url: https://ee.co.uk/digital-accessibility
+                    - listitem [ref=e716]:
+                      - link "EE Gender pay gap" [ref=e717] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/corporate-responsibility/building-trust/gender-pay-gap
+                    - listitem [ref=e719]:
+                      - link "Modern slavery statement" [ref=e720] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/corporate-responsibility/building-trust/our-supply-chain
+                    - listitem [ref=e722]:
+                      - link "Here for you - Supporting your needs" [ref=e723] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/here-for-you
+              - listitem [ref=e725]:
+                - generic [ref=e726]:
+                  - heading "Our company" [level=2] [ref=e727]
+                  - list [ref=e729]:
+                    - listitem [ref=e730]:
+                      - link "About us" [ref=e731] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/about-us
+                    - listitem [ref=e733]:
+                      - link "Students and key workers" [ref=e734] [cursor=pointer]:
+                        - /url: https://ee.co.uk/mobile/student-discount
+                    - listitem [ref=e736]:
+                      - link "Newsroom" [ref=e737] [cursor=pointer]:
+                        - /url: https://newsroom.ee.co.uk
+                    - listitem [ref=e739]:
+                      - link "Careers" [ref=e740] [cursor=pointer]:
+                        - /url: https://jobs.ee.co.uk
+          - generic [ref=e742]:
+            - generic [ref=e743]:
+              - link "X" [ref=e745] [cursor=pointer]:
+                - /url: https://x.com/EE
+                - img [ref=e749]
+              - link "LinkedIn" [ref=e752] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ee-uk
+                - img [ref=e756]
+              - link "Facebook" [ref=e759] [cursor=pointer]:
+                - /url: https://www.facebook.com/ee
+                - img [ref=e763]
+              - link "YouTube" [ref=e766] [cursor=pointer]:
+                - /url: https://youtube.com/ee
+                - img [ref=e770]
+            - generic [ref=e772]:
+              - paragraph [ref=e773]:
+                - paragraph [ref=e774]: EE Limited is authorised and regulated by the Financial Conduct Authority for the provision of consumer credit.
+              - paragraph [ref=e775]:
+                - paragraph [ref=e776]: EE Limited is an appointed representative of Chubb European Group SE (CEG). CEG is authorised and regulated by the French Prudential Supervision and Resolution Authority.
+                - paragraph [ref=e777]: CEG is authorised by the Prudential Regulation Authority. Subject to regulation by the Financial Conduct Authority and limited regulation by the Prudential Regulation Authority.
+                - paragraph [ref=e778]: Details about the extent of CEG's regulation by the Prudential Regulation Authority are available from CEG on request.
+          - generic [ref=e779]:
+            - paragraph [ref=e781]: ©2026 EE LIMITED
+            - list [ref=e782]:
+              - listitem [ref=e783]:
+                - link "Terms and conditions" [ref=e784] [cursor=pointer]:
+                  - /url: https://ee.co.uk/help/terms-and-conditions
+              - listitem [ref=e785]:
+                - link "Privacy centre" [ref=e786] [cursor=pointer]:
+                  - /url: https://ee.co.uk/eeprivacycentre
+              - listitem [ref=e787]:
+                - link "Cookie settings" [ref=e788] [cursor=pointer]:
+                  - /url: https://ee.co.uk/cookies
+              - listitem [ref=e789]:
+                - link "Codes of practice" [ref=e790] [cursor=pointer]:
+                  - /url: https://ee.co.uk/regulatory
+              - listitem [ref=e791]:
+                - link "Complaints Code" [ref=e792] [cursor=pointer]:
+                  - /url: https://ee.co.uk/content/dam/help/terms-and-conditions/regulatory/ee-complaints-code-of-practice-april-2026.pdf

@@ -1,0 +1,867 @@
+- generic [ref=e2]:
+  - navigation "Skip":
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#main"
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e12]:
+        - link "Skip to main content" [ref=e13] [cursor=pointer]:
+          - /url: "#maincontent"
+        - button "Switch to Business" [ref=e16] [cursor=pointer]:
+          - text: Switch to Business
+          - img [ref=e19]
+        - generic [ref=e24]:
+          - navigation "primary" [ref=e27]:
+            - generic [ref=e28]:
+              - button "EE Logo" [ref=e30] [cursor=pointer]:
+                - link "EE Logo" [ref=e31]:
+                  - /url: https://ee.co.uk/
+                  - img [ref=e33]
+              - generic [ref=e35]:
+                - link "Manage" [ref=e36] [cursor=pointer]:
+                  - /url: https://ee.co.uk/manage
+                  - img [ref=e39]
+                  - text: Manage
+                - link "Rewards" [ref=e41] [cursor=pointer]:
+                  - /url: https://ee.co.uk/rewards
+                  - img [ref=e44]
+                  - text: Rewards
+                - link "Help" [ref=e46] [cursor=pointer]:
+                  - /url: https://ee.co.uk/help
+                  - img [ref=e49]
+                  - text: Help
+              - generic [ref=e52]:
+                - button "Search" [ref=e55] [cursor=pointer]:
+                  - img [ref=e59]
+                - button "Basket" [ref=e63] [cursor=pointer]:
+                  - img [ref=e67]
+                - button "Log in" [ref=e72] [cursor=pointer]:
+                  - img [ref=e76]
+            - list [ref=e80]:
+              - listitem [ref=e81]:
+                - link "Phones" [ref=e83] [cursor=pointer]:
+                  - /url: https://ee.co.uk/mobile
+                  - generic [ref=e85]: Phones
+                - generic [ref=e86]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e87]:
+                - link "SIM-only" [ref=e89] [cursor=pointer]:
+                  - /url: https://ee.co.uk/mobile/sim-only-deals
+                  - generic [ref=e91]: SIM-only
+                - generic [ref=e92]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e93]:
+                - link "Broadband" [ref=e95] [cursor=pointer]:
+                  - /url: https://ee.co.uk/broadband
+                  - generic [ref=e97]: Broadband
+                - generic [ref=e98]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e99]:
+                - link "TV & Sport" [ref=e101] [cursor=pointer]:
+                  - /url: https://ee.co.uk/tv
+                  - generic [ref=e103]: TV & Sport
+                - generic [ref=e104]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e105]:
+                - link "Gaming" [ref=e107] [cursor=pointer]:
+                  - /url: https://ee.co.uk/gaming
+                  - generic [ref=e109]: Gaming
+                - generic [ref=e110]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e111]:
+                - link "Tech" [ref=e113] [cursor=pointer]:
+                  - /url: https://ee.co.uk/tech
+                  - generic [ref=e115]: Tech
+                - generic [ref=e116]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e117]:
+                - link "Insurance" [ref=e119] [cursor=pointer]:
+                  - /url: https://ee.co.uk/insurance
+                  - generic [ref=e121]: Insurance
+              - listitem [ref=e122]:
+                - link "Why EE" [ref=e124] [cursor=pointer]:
+                  - /url: https://ee.co.uk/why-ee
+                  - generic [ref=e126]: Why EE
+                - generic [ref=e127]:
+                  - button "null Menu":
+                    - generic:
+                      - img
+              - listitem [ref=e128]:
+                - link "Brands" [ref=e130] [cursor=pointer]:
+                  - /url: https://ee.co.uk/search/brands
+                  - generic [ref=e132]: Brands
+              - listitem [ref=e133]:
+                - link "Summer Sale" [ref=e135] [cursor=pointer]:
+                  - /url: https://ee.co.uk/summer-sale
+                  - generic [ref=e137]: Summer Sale
+          - navigation "secondary" [ref=e140]:
+            - button "Next" [ref=e143] [cursor=pointer]:
+              - img [ref=e147]
+            - list "secondary navigation" [ref=e149]:
+              - listitem [ref=e150]:
+                - link "Explore Phones" [ref=e152] [cursor=pointer]:
+                  - /url: https://ee.co.uk/mobile
+                  - generic [ref=e154]: Explore Phones
+              - listitem [ref=e155]:
+                - link "Pay monthly phones" [ref=e157] [cursor=pointer]:
+                  - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery
+                  - generic [ref=e159]: Pay monthly phones
+              - listitem [ref=e160]:
+                - link "SIM-free phones" [ref=e162] [cursor=pointer]:
+                  - /url: https://ee.co.uk/mobile/sim-free
+                  - generic [ref=e164]: SIM-free phones
+              - listitem [ref=e165]:
+                - link "Pay as you go phones" [ref=e167] [cursor=pointer]:
+                  - /url: https://ee.co.uk/mobile/pay-as-you-go-phones-gallery
+                  - generic [ref=e169]: Pay as you go phones
+              - listitem [ref=e170]:
+                - link "Phone accessories" [ref=e172] [cursor=pointer]:
+                  - /url: https://ee.co.uk/accessories
+                  - generic [ref=e174]: Phone accessories
+              - listitem [ref=e175]:
+                - link "App subscriptions" [ref=e177] [cursor=pointer]:
+                  - /url: https://ee.co.uk/apps-and-subscriptions/mobile-apps
+                  - generic [ref=e179]: App subscriptions
+              - listitem [ref=e180]:
+                - link "Scam Guard" [ref=e182] [cursor=pointer]:
+                  - /url: https://ee.co.uk/security/scam-guard
+                  - generic [ref=e184]: Scam Guard
+              - listitem [ref=e185]:
+                - link "EE Cyber Security" [ref=e187] [cursor=pointer]:
+                  - /url: https://ee.co.uk/security/cyber-security
+                  - generic [ref=e189]: EE Cyber Security
+              - listitem [ref=e190]:
+                - link "EE One" [ref=e192] [cursor=pointer]:
+                  - /url: https://ee.co.uk/ee-one
+                  - generic [ref=e194]: EE One
+      - generic [ref=e195]:
+        - generic [ref=e196]:
+          - generic [ref=e199]:
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - group "1 of 7" [ref=e203]:
+                  - generic [ref=e205]:
+                    - img "Hero Banner" [ref=e206]
+                    - generic [ref=e210]:
+                      - heading "SAVE UP TO £288 ON 125GB ESSENTIALS" [level=2] [ref=e212]
+                      - generic "With the iPhone 17 Pro. Get the edge this summer with EE." [ref=e214]:
+                        - paragraph [ref=e215]: With the iPhone 17 Pro. Get the edge this summer with EE.
+                      - generic [ref=e216]:
+                        - link "Buy Apple iPhone 17 Pro" [ref=e218] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/iphone-17-pro-details
+                          - generic [ref=e219]: Buy iPhone 17 Pro
+                        - link "Upgrade to Apple iPhone 17 Pro" [ref=e220] [cursor=pointer]:
+                          - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/iphone-17-pro-details
+                          - generic [ref=e221]: Log in to upgrade
+                - group "2 of 7" [ref=e222]:
+                  - generic [ref=e224]:
+                    - img "Hero Banner" [ref=e225]
+                    - generic [ref=e229]:
+                      - heading "FULL WORKS SIM FOR JUST £36" [level=2] [ref=e231]
+                      - generic "On a 24 month plan. £38.50 from 31 March 2027. £41 from 31 March 2028." [ref=e233]:
+                        - paragraph [ref=e234]: On a 24 month plan. £38.50 from 31 March 2027. £41 from 31 March 2028.
+                      - generic [ref=e235]:
+                        - link "Shop SIMs" [ref=e237] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/sim-only-deals
+                          - generic [ref=e238]: Shop SIMs
+                        - link "Log in to upgrade SIM" [ref=e239] [cursor=pointer]:
+                          - /url: https://ee.co.uk/shop/mobile/upgrade/df?deviceType=SIM
+                          - generic [ref=e240]: Log in to upgrade
+                - group "3 of 7" [ref=e241]:
+                  - generic [ref=e243]:
+                    - img "Hero Banner" [ref=e244]
+                    - generic [ref=e248]:
+                      - heading "SAVE UP TO £720 on 125GB ESSENTIALS" [level=2] [ref=e250]
+                      - generic "With the Samsung Galaxy S26 Ultra. Plus, claim a Galaxy Watch Ultra 47mm." [ref=e252]:
+                        - paragraph [ref=e253]: With the Samsung Galaxy S26 Ultra. Plus, claim a Galaxy Watch Ultra 47mm.
+                      - generic [ref=e254]:
+                        - link "Buy Samsung Galaxy S26 Ultra" [ref=e256] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/samsung-galaxy-s26-ultra-5g-details
+                          - generic [ref=e257]: Buy Samsung Galaxy S26 Ultra
+                        - link "Log in to upgrade to Samsung Galaxy S26 Ultra" [ref=e258] [cursor=pointer]:
+                          - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/samsung-galaxy-s26-ultra-5g-details
+                          - generic [ref=e259]: Log in to upgrade
+                - group "4 of 7" [ref=e260]:
+                  - generic [ref=e262]:
+                    - img "Hero Banner" [ref=e263]
+                    - generic [ref=e267]:
+                      - heading "SAVE UP TO £734 ON 25GB ESSENTIALS" [level=2] [ref=e269]
+                      - generic "With the Google Pixel 10 Pro. Get the edge this summer with EE." [ref=e271]:
+                        - paragraph [ref=e272]: With the Google Pixel 10 Pro. Get the edge this summer with EE.
+                      - generic [ref=e273]:
+                        - link "Buy Google Pixel 10 Pro" [ref=e275] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/google-pixel-10-pro-details
+                          - generic [ref=e276]: Buy now
+                        - link "Log in to upgrade to Google Pixel 10 Pro" [ref=e277] [cursor=pointer]:
+                          - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/google-pixel-10-pro-details
+                          - generic [ref=e278]: Log in to upgrade
+                - group "5 of 7" [ref=e279]:
+                  - generic [ref=e281]:
+                    - img "Hero Banner" [ref=e282]
+                    - generic [ref=e286]:
+                      - heading "SAVE UP TO £216 on 25GB ESSENTIALS" [level=2] [ref=e288]
+                      - generic "With the iPhone 16. Get the edge this summer with EE." [ref=e290]:
+                        - paragraph [ref=e291]: With the iPhone 16. Get the edge this summer with EE.
+                      - generic [ref=e292]:
+                        - link "Buy Apple iPhone 16" [ref=e294] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/iphone-16-details
+                          - generic [ref=e295]: Buy iPhone 16
+                        - link "Log in to upgrade to Apple iPhone 16" [ref=e296] [cursor=pointer]:
+                          - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/iphone-16-details
+                          - generic [ref=e297]: Log in to upgrade
+                - group "6 of 7" [ref=e298]:
+                  - generic [ref=e300]:
+                    - img "Hero Banner" [ref=e301]
+                    - generic [ref=e305]:
+                      - generic [ref=e306]:
+                        - heading "GET THE EDGE" [level=2] [ref=e307]
+                        - heading "WITH 5G+" [level=2] [ref=e308]
+                      - generic "Stay a step ahead on the UK's best network." [ref=e310]:
+                        - paragraph [ref=e311]: Stay a step ahead on the UK's best network.
+                      - link "Explore 5G+ on EE" [ref=e314] [cursor=pointer]:
+                        - /url: https://ee.co.uk/why-ee/5g-on-ee
+                        - generic [ref=e315]: Explore 5G+
+                - group "7 of 7" [ref=e316]:
+                  - generic [ref=e318]:
+                    - img "Hero Banner" [ref=e319]
+                    - generic [ref=e323]:
+                      - heading "SAVE UP TO £684 ON 30GB ESSENTIALS" [level=2] [ref=e325]
+                      - generic "With the Google Pixel 10a. Get the edge this summer with EE." [ref=e327]:
+                        - paragraph [ref=e328]: With the Google Pixel 10a. Get the edge this summer with EE.
+                      - generic [ref=e329]:
+                        - link "Buy Google Pixel 10a" [ref=e331] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/google-pixel-10a-details
+                          - generic [ref=e332]: Buy Google Pixel 10a
+                        - link "Upgrade to Google Pixel 10a" [ref=e333] [cursor=pointer]:
+                          - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/google-pixel-10a-details
+                          - generic [ref=e334]: Log in to upgrade
+              - group "Carousel controls" [ref=e335]:
+                - generic [ref=e336]:
+                  - button "Previous" [ref=e337] [cursor=pointer]:
+                    - img [ref=e341]
+                  - generic "4 of 7" [ref=e1411]:
+                    - generic [ref=e344]: 4 / 7
+                  - button "Pause" [ref=e345] [cursor=pointer]:
+                    - img [ref=e349]
+                  - button "Next" [ref=e351] [cursor=pointer]:
+                    - img [ref=e355]
+            - generic [ref=e361]:
+              - generic [ref=e362]:
+                - img [ref=e364]
+                - paragraph [ref=e368]: Looking to upgrade? Log in and start your upgrade today.
+              - link "Log in" [ref=e369] [cursor=pointer]:
+                - /url: https://ee.co.uk/authorize/login
+                - generic [ref=e370]: Log in
+            - generic [ref=e372]:
+              - heading "Mobile phone deals" [level=1] [ref=e374]
+              - generic [ref=e378]:
+                - tablist [ref=e381]:
+                  - tab "New" [selected] [ref=e382] [cursor=pointer]:
+                    - generic [ref=e383]:
+                      - img [ref=e386]
+                      - generic [ref=e388]: New
+                  - tab "Good as new" [ref=e389] [cursor=pointer]:
+                    - generic [ref=e390]:
+                      - img [ref=e393]
+                      - generic [ref=e395]: Good as new
+                  - tab "Refurbished" [ref=e396] [cursor=pointer]:
+                    - generic [ref=e397]:
+                      - img [ref=e400]
+                      - generic [ref=e404]: Refurbished
+                - separator [ref=e405]
+                - tabpanel [ref=e406]:
+                  - generic [ref=e409]:
+                    - generic [ref=e410]: Already with EE? Save up to £16 on selected additional SIMs or airtime plans you buy.
+                    - generic [ref=e411]:
+                      - generic [ref=e413]: Show existing customer discount
+                      - switch [ref=e415]
+                  - generic "filter chips carousel" [ref=e419]:
+                    - generic [ref=e420]:
+                      - group "Slide 1 of 4" [ref=e421]:
+                        - link "Apple" [ref=e422] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/apple-iphone
+                          - button "Apple" [ref=e423]:
+                            - generic [ref=e424]:
+                              - generic:
+                                - img "icon for Apple"
+                              - generic [ref=e425]: Apple
+                      - group "Slide 2 of 4" [ref=e426]:
+                        - link "Samsung" [ref=e427] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/samsung-galaxy
+                          - button "Samsung" [ref=e428]:
+                            - generic [ref=e429]:
+                              - generic:
+                                - img "icon for Samsung"
+                              - generic [ref=e430]: Samsung
+                      - group "Slide 3 of 4" [ref=e431]:
+                        - link "Google" [ref=e432] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/google-pixel
+                          - button "Google" [ref=e433]:
+                            - generic [ref=e434]:
+                              - generic:
+                                - img "icon for Google"
+                              - generic [ref=e435]: Google
+                      - group "Slide 4 of 4" [ref=e436]:
+                        - link "Honor" [ref=e437] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery?search=%3AofferingsOrder%3AproductBrands%3Abrands_honor
+                          - button "Honor" [ref=e438]:
+                            - generic [ref=e439]:
+                              - generic:
+                                - img "icon for Honor"
+                              - generic [ref=e440]: Honor
+                  - generic [ref=e442]:
+                    - generic [ref=e448]:
+                      - generic [ref=e450]:
+                        - img "Google Pixel 10" [ref=e453]
+                        - generic [ref=e456] [cursor=pointer]: View product
+                        - link [ref=e457] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/google-pixel-10-details?color=obsidian04&capacity=256GB
+                      - generic [ref=e459]:
+                        - link "Google Pixel 10" [ref=e465] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/google-pixel-10-details?color=obsidian04&capacity=256GB
+                          - heading "Google Pixel 10" [level=2] [ref=e466]
+                        - generic [ref=e467]:
+                          - generic [ref=e468]:
+                            - generic [ref=e469]:
+                              - generic [ref=e471]:
+                                - paragraph [ref=e472]: From
+                                - generic [ref=e473]: £34.39
+                                - generic [ref=e474]: £34.39
+                                - paragraph [ref=e476]: a month
+                              - generic [ref=e480]: was £51.39
+                            - generic [ref=e484]:
+                              - generic [ref=e485]: £64.39
+                              - generic [ref=e486]: £64.39
+                              - paragraph [ref=e488]: in month one (inc £30 upfront)
+                          - list [ref=e489]:
+                            - listitem [ref=e490]:
+                              - generic [ref=e492]:
+                                - generic [ref=e493]: £36.89
+                                - generic [ref=e494]: £36.89
+                                - paragraph [ref=e496]: from 31 March 2027
+                            - listitem [ref=e497]:
+                              - generic [ref=e499]:
+                                - generic [ref=e500]: £39.39
+                                - generic [ref=e501]: £39.39
+                                - paragraph [ref=e503]: from 31 March 2028
+                          - generic [ref=e508]: Save £612 + Get double storage
+                    - generic [ref=e514]:
+                      - generic [ref=e516]:
+                        - img "Google Pixel 10a" [ref=e519]
+                        - generic [ref=e522] [cursor=pointer]: View product
+                        - link [ref=e523] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/google-pixel-10a-details
+                      - generic [ref=e525]:
+                        - link "Google Pixel 10a" [ref=e531] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/google-pixel-10a-details
+                          - heading "Google Pixel 10a" [level=2] [ref=e532]
+                        - generic [ref=e533]:
+                          - generic [ref=e534]:
+                            - generic [ref=e535]:
+                              - generic [ref=e537]:
+                                - paragraph [ref=e538]: From
+                                - generic [ref=e539]: £24.67
+                                - generic [ref=e540]: £24.67
+                                - paragraph [ref=e542]: a month
+                              - generic [ref=e546]: was £43.67
+                            - generic [ref=e550]:
+                              - generic [ref=e551]: £54.67
+                              - generic [ref=e552]: £54.67
+                              - paragraph [ref=e554]: in month one (inc £30 upfront)
+                          - list [ref=e555]:
+                            - listitem [ref=e556]:
+                              - generic [ref=e558]:
+                                - generic [ref=e559]: £27.17
+                                - generic [ref=e560]: £27.17
+                                - paragraph [ref=e562]: from 31 March 2027
+                            - listitem [ref=e563]:
+                              - generic [ref=e565]:
+                                - generic [ref=e566]: £29.67
+                                - generic [ref=e567]: £29.67
+                                - paragraph [ref=e569]: from 31 March 2028
+                          - generic [ref=e574]: Save £684 + claim buds 2a
+                    - generic [ref=e580]:
+                      - generic [ref=e582]:
+                        - img "HONOR Magic V6" [ref=e585]
+                        - generic [ref=e588] [cursor=pointer]: View product
+                        - link [ref=e589] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/honor-magic-v6-details
+                      - generic [ref=e591]:
+                        - link "HONOR Magic V6" [ref=e597] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/honor-magic-v6-details
+                          - heading "HONOR Magic V6" [level=2] [ref=e598]
+                        - generic [ref=e599]:
+                          - generic [ref=e600]:
+                            - generic [ref=e601]:
+                              - generic [ref=e603]:
+                                - paragraph [ref=e604]: From
+                                - generic [ref=e605]: £60.89
+                                - generic [ref=e606]: £60.89
+                                - paragraph [ref=e608]: a month
+                              - generic [ref=e612]: was £74.89
+                            - generic [ref=e616]:
+                              - generic [ref=e617]: £90.89
+                              - generic [ref=e618]: £90.89
+                              - paragraph [ref=e620]: in month one (inc £30 upfront)
+                          - list [ref=e621]:
+                            - listitem [ref=e622]:
+                              - generic [ref=e624]:
+                                - generic [ref=e625]: £63.39
+                                - generic [ref=e626]: £63.39
+                                - paragraph [ref=e628]: from 31 March 2027
+                            - listitem [ref=e629]:
+                              - generic [ref=e631]:
+                                - generic [ref=e632]: £65.89
+                                - generic [ref=e633]: £65.89
+                                - paragraph [ref=e635]: from 31 March 2028
+                          - generic [ref=e640]: Save £1200 on 125GB Essentials
+                    - generic [ref=e646]:
+                      - generic [ref=e648]:
+                        - img "Samsung Galaxy S26" [ref=e651]
+                        - generic [ref=e654] [cursor=pointer]: View product
+                        - link [ref=e655] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/samsung-galaxy-s26-5g-details?color=cobaltviolet01&capacity=256GB
+                      - generic [ref=e657]:
+                        - link "Samsung Galaxy S26" [ref=e663] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/samsung-galaxy-s26-5g-details?color=cobaltviolet01&capacity=256GB
+                          - heading "Samsung Galaxy S26" [level=2] [ref=e664]
+                        - generic [ref=e665]:
+                          - generic [ref=e666]:
+                            - generic [ref=e667]:
+                              - generic [ref=e669]:
+                                - paragraph [ref=e670]: From
+                                - generic [ref=e671]: £43.26
+                                - generic [ref=e672]: £43.26
+                                - paragraph [ref=e674]: a month
+                              - generic [ref=e678]: was £55.26
+                            - generic [ref=e682]:
+                              - generic [ref=e683]: £73.26
+                              - generic [ref=e684]: £73.26
+                              - paragraph [ref=e686]: in month one (inc £30 upfront)
+                          - list [ref=e687]:
+                            - listitem [ref=e688]:
+                              - generic [ref=e690]:
+                                - generic [ref=e691]: £45.76
+                                - generic [ref=e692]: £45.76
+                                - paragraph [ref=e694]: from 31 March 2027
+                            - listitem [ref=e695]:
+                              - generic [ref=e697]:
+                                - generic [ref=e698]: £48.26
+                                - generic [ref=e699]: £48.26
+                                - paragraph [ref=e701]: from 31 March 2028
+                          - generic [ref=e706]: Save £432 + claim Watch8 Classic
+                    - generic [ref=e712]:
+                      - generic [ref=e714]:
+                        - img "iPhone 17 Pro" [ref=e717]
+                        - generic [ref=e720] [cursor=pointer]: View product
+                        - link [ref=e721] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/iphone-17-pro-details
+                      - generic [ref=e723]:
+                        - link "iPhone 17 Pro" [ref=e729] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/iphone-17-pro-details
+                          - heading "iPhone 17 Pro" [level=2] [ref=e730]
+                        - generic [ref=e731]:
+                          - generic [ref=e732]:
+                            - generic [ref=e733]:
+                              - generic [ref=e735]:
+                                - paragraph [ref=e736]: From
+                                - generic [ref=e737]: £55.29
+                                - generic [ref=e738]: £55.29
+                                - paragraph [ref=e740]: a month
+                              - generic [ref=e744]: was £57.29
+                            - generic [ref=e748]:
+                              - generic [ref=e749]: £85.29
+                              - generic [ref=e750]: £85.29
+                              - paragraph [ref=e752]: in month one (inc £30 upfront)
+                          - list [ref=e753]:
+                            - listitem [ref=e754]:
+                              - generic [ref=e756]:
+                                - generic [ref=e757]: £57.79
+                                - generic [ref=e758]: £57.79
+                                - paragraph [ref=e760]: from 31 March 2027
+                            - listitem [ref=e761]:
+                              - generic [ref=e763]:
+                                - generic [ref=e764]: £60.29
+                                - generic [ref=e765]: £60.29
+                                - paragraph [ref=e767]: from 31 March 2028
+                          - generic [ref=e772]: Save £288 on 125GB Essentials plan
+                    - generic [ref=e778]:
+                      - generic [ref=e780]:
+                        - img "iPhone 16e" [ref=e783]
+                        - generic [ref=e786] [cursor=pointer]: View product
+                        - link [ref=e787] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/iphone-16e-details
+                      - generic [ref=e789]:
+                        - link "iPhone 16e" [ref=e795] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/iphone-16e-details
+                          - heading "iPhone 16e" [level=2] [ref=e796]
+                        - generic [ref=e797]:
+                          - generic [ref=e798]:
+                            - generic [ref=e801]:
+                              - paragraph [ref=e802]: From
+                              - generic [ref=e803]: £39.19
+                              - generic [ref=e804]: £39.19
+                              - paragraph [ref=e806]: a month
+                            - generic [ref=e810]:
+                              - generic [ref=e811]: £69.19
+                              - generic [ref=e812]: £69.19
+                              - paragraph [ref=e814]: in month one (inc £30 upfront)
+                          - list [ref=e815]:
+                            - listitem [ref=e816]:
+                              - generic [ref=e818]:
+                                - generic [ref=e819]: £41.69
+                                - generic [ref=e820]: £41.69
+                                - paragraph [ref=e822]: from 31 March 2027
+                            - listitem [ref=e823]:
+                              - generic [ref=e825]:
+                                - generic [ref=e826]: £44.19
+                                - generic [ref=e827]: £44.19
+                                - paragraph [ref=e829]: from 31 March 2028
+                          - generic [ref=e834]: Save up to £360 + double storage
+                    - generic [ref=e840]:
+                      - generic [ref=e842]:
+                        - img "Samsung Galaxy A17 5G" [ref=e845]
+                        - generic [ref=e848] [cursor=pointer]: View product
+                        - link [ref=e849] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/samsung-galaxy-a17-5g-details
+                      - generic [ref=e851]:
+                        - link "Samsung Galaxy A17 5G" [ref=e857] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/samsung-galaxy-a17-5g-details
+                          - heading "Samsung Galaxy A17 5G" [level=2] [ref=e858]
+                        - generic [ref=e859]:
+                          - generic [ref=e860]:
+                            - generic [ref=e861]:
+                              - generic [ref=e863]:
+                                - paragraph [ref=e864]: From
+                                - generic [ref=e865]: £21.67
+                                - generic [ref=e866]: £21.67
+                                - paragraph [ref=e868]: a month
+                              - generic [ref=e872]: was £29.67
+                            - generic [ref=e876]:
+                              - generic [ref=e877]: £51.67
+                              - generic [ref=e878]: £51.67
+                              - paragraph [ref=e880]: in month one (inc £30 upfront)
+                          - list [ref=e881]:
+                            - listitem [ref=e882]:
+                              - generic [ref=e884]:
+                                - generic [ref=e885]: £24.17
+                                - generic [ref=e886]: £24.17
+                                - paragraph [ref=e888]: from 31 March 2027
+                            - listitem [ref=e889]:
+                              - generic [ref=e891]:
+                                - generic [ref=e892]: £26.67
+                                - generic [ref=e893]: £26.67
+                                - paragraph [ref=e895]: from 31 March 2028
+                          - generic [ref=e900]: Save up to £288 on 5GB plan
+                    - generic [ref=e906]:
+                      - generic [ref=e908]:
+                        - img "iPhone Air" [ref=e911]
+                        - generic [ref=e914] [cursor=pointer]: View product
+                        - link [ref=e915] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/iphone-air-details?color=icyblue01&capacity=256GB
+                      - generic [ref=e917]:
+                        - link "iPhone Air" [ref=e923] [cursor=pointer]:
+                          - /url: /mobile/pay-monthly-phones-gallery/iphone-air-details?color=icyblue01&capacity=256GB
+                          - heading "iPhone Air" [level=2] [ref=e924]
+                        - generic [ref=e925]:
+                          - generic [ref=e926]:
+                            - generic [ref=e927]:
+                              - generic [ref=e929]:
+                                - paragraph [ref=e930]: From
+                                - generic [ref=e931]: £46.26
+                                - generic [ref=e932]: £46.26
+                                - paragraph [ref=e934]: a month
+                              - generic [ref=e938]: was £58.26
+                            - generic [ref=e942]:
+                              - generic [ref=e943]: £76.26
+                              - generic [ref=e944]: £76.26
+                              - paragraph [ref=e946]: in month one (inc £30 upfront)
+                          - list [ref=e947]:
+                            - listitem [ref=e948]:
+                              - generic [ref=e950]:
+                                - generic [ref=e951]: £48.76
+                                - generic [ref=e952]: £48.76
+                                - paragraph [ref=e954]: from 31 March 2027
+                            - listitem [ref=e955]:
+                              - generic [ref=e957]:
+                                - generic [ref=e958]: £51.26
+                                - generic [ref=e959]: £51.26
+                                - paragraph [ref=e961]: from 31 March 2028
+                          - generic [ref=e966]: Save up to £866 + double storage
+                  - generic [ref=e968]:
+                    - link "View all mobile phones" [ref=e969] [cursor=pointer]:
+                      - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery
+                      - generic [ref=e970]: View all mobile phones
+                    - link "View SIM free phones" [ref=e971] [cursor=pointer]:
+                      - /url: https://ee.co.uk/mobile/sim-free
+                      - generic [ref=e972]: View SIM free phones
+            - generic [ref=e976]:
+              - generic [ref=e977]: EE Does more
+              - paragraph [ref=e979]: Enjoy amazing perks on all your favourite tech.
+              - region "ee-card-carousel" [ref=e981]:
+                - group "Carousel controls" [ref=e982]:
+                  - generic [ref=e983]:
+                    - button "Previous" [disabled] [ref=e984]:
+                      - img [ref=e988]
+                    - button "Next" [ref=e990] [cursor=pointer]:
+                      - img [ref=e994]
+                - generic [ref=e996]:
+                  - group "Slide 1 of 10" [ref=e997]:
+                    - generic [ref=e1001]:
+                      - generic [ref=e1003]:
+                        - img "UK's best network" [ref=e1006]
+                        - link [ref=e1009] [cursor=pointer]:
+                          - /url: https://ee.co.uk/why-ee/5g-on-ee
+                      - generic [ref=e1010]:
+                        - generic [ref=e1015]:
+                          - paragraph [ref=e1016]: Mobile
+                          - link "UK's best network" [ref=e1017] [cursor=pointer]:
+                            - /url: https://ee.co.uk/why-ee/5g-on-ee
+                            - heading "UK's best network" [level=2] [ref=e1018]
+                        - paragraph [ref=e1020]: Unrivalled reliability and unbeatable 5G. The UK's best network 25 times and counting.
+                  - group "Slide 2 of 10" [ref=e1021]:
+                    - generic [ref=e1025]:
+                      - generic [ref=e1027]:
+                        - img "Talking to your child about online safety Talking to your child about online safety" [ref=e1030]
+                        - link [ref=e1033] [cursor=pointer]:
+                          - /url: https://ee.co.uk/ee-phone-chat
+                      - generic [ref=e1034]:
+                        - generic [ref=e1039]:
+                          - paragraph [ref=e1040]: Mobile
+                          - link "Talking to your child about online safety" [ref=e1041] [cursor=pointer]:
+                            - /url: https://ee.co.uk/ee-phone-chat
+                            - heading "Talking to your child about online safety" [level=2] [ref=e1042]
+                        - paragraph [ref=e1044]: Use our P.H.O.N.E. Chat guide, in partnership with Internet Matters, to get useful online safety tips for parents.
+                  - group "Slide 3 of 10" [ref=e1045]:
+                    - generic [ref=e1049]:
+                      - img "Stay connected data Stay Connected Data" [ref=e1054]
+                      - generic [ref=e1057]:
+                        - generic [ref=e1062]:
+                          - paragraph [ref=e1063]: Mobile
+                          - heading "Stay Connected Data" [level=2] [ref=e1064]
+                        - paragraph [ref=e1066]: Relax knowing you can always stay connected and use apps like WhatsApp and Maps, with back-up data just in case you run out.
+                  - group "Slide 4 of 10" [ref=e1067]:
+                    - generic [ref=e1071]:
+                      - generic [ref=e1073]:
+                        - img "Discover Inclusive Extras Get Inclusive Extras as a part of your plan" [ref=e1076]
+                        - link [ref=e1079] [cursor=pointer]:
+                          - /url: https://www.ee.co.uk/inclusive-extras
+                      - generic [ref=e1080]:
+                        - generic [ref=e1085]:
+                          - paragraph [ref=e1086]: Inclusive Extras
+                          - link "Get Inclusive Extras as a part of your plan" [ref=e1087] [cursor=pointer]:
+                            - /url: https://www.ee.co.uk/inclusive-extras
+                            - heading "Get Inclusive Extras as a part of your plan" [level=2] [ref=e1088]
+                        - paragraph [ref=e1090]: Inclusive Extras let you add amazing benefits from the best brands. You can also swap them each month.
+                  - group "Slide 5 of 10" [ref=e1091]:
+                    - generic [ref=e1095]:
+                      - generic [ref=e1097]:
+                        - img "Discover EE One Create your EE One today" [ref=e1100]
+                        - link [ref=e1103] [cursor=pointer]:
+                          - /url: https://ee.co.uk/ee-one
+                      - generic [ref=e1104]:
+                        - generic [ref=e1109]:
+                          - paragraph [ref=e1110]: EE One
+                          - link "Create your EE One today" [ref=e1111] [cursor=pointer]:
+                            - /url: https://ee.co.uk/ee-one
+                            - heading "Create your EE One today" [level=2] [ref=e1112]
+                        - paragraph [ref=e1114]: Create the perfect plan for your household by combining your phones, broadband and TV.
+                  - group "Slide 6 of 10" [ref=e1115]:
+                    - generic [ref=e1119]:
+                      - generic [ref=e1121]:
+                        - img "Discover broadband Experience blistering fast 1.6Gbps broadband" [ref=e1124]
+                        - link [ref=e1127] [cursor=pointer]:
+                          - /url: https://www.ee.co.uk/broadband
+                      - generic [ref=e1128]:
+                        - generic [ref=e1133]:
+                          - paragraph [ref=e1134]: Broadband
+                          - link "Experience blistering fast 1.6Gbps broadband" [ref=e1135] [cursor=pointer]:
+                            - /url: https://www.ee.co.uk/broadband
+                            - heading "Experience blistering fast 1.6Gbps broadband" [level=2] [ref=e1136]
+                        - paragraph [ref=e1138]: Our fastest Full Fibre powers the whole household and connects up to 190 devices at once.
+                  - group "Slide 7 of 10" [ref=e1139]:
+                    - generic [ref=e1143]:
+                      - generic [ref=e1145]:
+                        - img "Discover EE Rewards Earn, win & save? Now that’s rewarding" [ref=e1148]
+                        - link [ref=e1151] [cursor=pointer]:
+                          - /url: https://ee.co.uk/rewards
+                      - generic [ref=e1152]:
+                        - generic [ref=e1157]:
+                          - paragraph [ref=e1158]: Rewards
+                          - link "Earn, win & save? Now that’s rewarding" [ref=e1159] [cursor=pointer]:
+                            - /url: https://ee.co.uk/rewards
+                            - heading "Earn, win & save? Now that’s rewarding" [level=2] [ref=e1160]
+                        - paragraph [ref=e1162]: EE Rewards offers unforgettable experiences, money off your bill, and amazing brand discounts.
+                  - group "Slide 8 of 10" [ref=e1163]:
+                    - generic [ref=e1167]:
+                      - generic [ref=e1169]:
+                        - img "Fix my device Get your device repaired in as little as 2 hours" [ref=e1172]
+                        - link [ref=e1175] [cursor=pointer]:
+                          - /url: https://www.ee.co.uk/local-repairs
+                      - generic [ref=e1176]:
+                        - generic [ref=e1181]:
+                          - paragraph [ref=e1182]: Service
+                          - link "Get your device repaired in as little as 2 hours" [ref=e1183] [cursor=pointer]:
+                            - /url: https://www.ee.co.uk/local-repairs
+                            - heading "Get your device repaired in as little as 2 hours" [level=2] [ref=e1184]
+                        - paragraph [ref=e1186]: EE is the only major provider to offer rapid repairs, with a loan phone while you wait.
+                  - group "Slide 9 of 10" [ref=e1187]:
+                    - generic [ref=e1191]:
+                      - generic [ref=e1193]:
+                        - img "Shop EE Mobile Get Apple One included in your monthly plan" [ref=e1196]
+                        - link [ref=e1199] [cursor=pointer]:
+                          - /url: https://www.ee.co.uk/mobile/pay-monthly-phones-gallery/apple-iphone
+                      - generic [ref=e1200]:
+                        - generic [ref=e1205]:
+                          - paragraph [ref=e1206]: Apple One
+                          - link "Get Apple One included in your monthly plan" [ref=e1207] [cursor=pointer]:
+                            - /url: https://www.ee.co.uk/mobile/pay-monthly-phones-gallery/apple-iphone
+                            - heading "Get Apple One included in your monthly plan" [level=2] [ref=e1208]
+                        - paragraph [ref=e1210]: Only with EE can you get Apple One included with our Full Works iPhone plan.
+                  - group "Slide 10 of 10" [ref=e1211]:
+                    - generic [ref=e1215]:
+                      - generic [ref=e1217]:
+                        - img "Power your productivity with Work Mode" [ref=e1220]
+                        - link [ref=e1223] [cursor=pointer]:
+                          - /url: https://www.ee.co.uk/broadband/wifi-enhancer
+                      - generic [ref=e1224]:
+                        - generic [ref=e1229]:
+                          - paragraph [ref=e1230]: Broadband
+                          - link "Power your productivity with Work Mode" [ref=e1231] [cursor=pointer]:
+                            - /url: https://www.ee.co.uk/broadband/wifi-enhancer
+                            - heading "Power your productivity with Work Mode" [level=2] [ref=e1232]
+                        - paragraph [ref=e1234]: Only EE has Work Mode, which optimises your broadband for working from home.
+          - heading "The legal bit" [level=3] [ref=e1246]:
+            - button "The legal bit" [ref=e1247] [cursor=pointer]:
+              - img [ref=e1250]
+              - generic [ref=e1253]: The legal bit
+        - generic [ref=e1260]:
+          - navigation [ref=e1261]:
+            - list [ref=e1262]:
+              - listitem [ref=e1263]:
+                - generic [ref=e1264]:
+                  - heading "Help" [level=2] [ref=e1265]
+                  - list [ref=e1267]:
+                    - listitem [ref=e1268]:
+                      - link "Contact us" [ref=e1269] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/contact-ee
+                    - listitem [ref=e1271]:
+                      - link "Find a store" [ref=e1272] [cursor=pointer]:
+                        - /url: https://ee.co.uk/store-finder
+                    - listitem [ref=e1274]:
+                      - link "Coverage checker" [ref=e1275] [cursor=pointer]:
+                        - /url: https://coverage.ee.co.uk/coverage/ee
+                    - listitem [ref=e1277]:
+                      - link "EE Community" [ref=e1278] [cursor=pointer]:
+                        - /url: https://community.ee.co.uk
+                    - listitem [ref=e1280]:
+                      - link "Orders and returns" [ref=e1281] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/orders
+                    - listitem [ref=e1283]:
+                      - link "Trade in a device" [ref=e1284] [cursor=pointer]:
+                        - /url: https://ee.co.uk/trade-in
+                    - listitem [ref=e1286]:
+                      - link "Product recalls and alerts" [ref=e1287] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/orders/ee-tech#article-heading-6
+              - listitem [ref=e1289]:
+                - generic [ref=e1290]:
+                  - heading "Our websites & app" [level=2] [ref=e1291]
+                  - list [ref=e1293]:
+                    - listitem [ref=e1294]:
+                      - link "Small business" [ref=e1295] [cursor=pointer]:
+                        - /url: https://business.ee.co.uk/?s_cid=eeb_switch_to_small_business
+                    - listitem [ref=e1297]:
+                      - link "Large business" [ref=e1298] [cursor=pointer]:
+                        - /url: https://business.ee.co.uk/large-business/?s_cid=eeb_footer_large_business
+                    - listitem [ref=e1300]:
+                      - link "BT Group" [ref=e1301] [cursor=pointer]:
+                        - /url: https://www.bt.com/about
+                    - listitem [ref=e1303]:
+                      - link "Download the EE app" [ref=e1304] [cursor=pointer]:
+                        - /url: https://ee.co.uk/download-ee-app
+              - listitem [ref=e1306]:
+                - generic [ref=e1307]:
+                  - heading "Digital Society" [level=2] [ref=e1308]
+                  - list [ref=e1310]:
+                    - listitem [ref=e1311]:
+                      - link "Digital inclusion and sustainability" [ref=e1312] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/corporate-responsibility/being-responsible
+                    - listitem [ref=e1314]:
+                      - link "Digital accessibility" [ref=e1315] [cursor=pointer]:
+                        - /url: https://ee.co.uk/digital-accessibility
+                    - listitem [ref=e1317]:
+                      - link "EE Gender pay gap" [ref=e1318] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/corporate-responsibility/building-trust/gender-pay-gap
+                    - listitem [ref=e1320]:
+                      - link "Modern slavery statement" [ref=e1321] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/corporate-responsibility/building-trust/our-supply-chain
+                    - listitem [ref=e1323]:
+                      - link "Here for you - Supporting your needs" [ref=e1324] [cursor=pointer]:
+                        - /url: https://ee.co.uk/help/here-for-you
+              - listitem [ref=e1326]:
+                - generic [ref=e1327]:
+                  - heading "Our company" [level=2] [ref=e1328]
+                  - list [ref=e1330]:
+                    - listitem [ref=e1331]:
+                      - link "About us" [ref=e1332] [cursor=pointer]:
+                        - /url: https://ee.co.uk/our-company/about-us
+                    - listitem [ref=e1334]:
+                      - link "Students and key workers" [ref=e1335] [cursor=pointer]:
+                        - /url: https://ee.co.uk/mobile/student-discount
+                    - listitem [ref=e1337]:
+                      - link "Newsroom" [ref=e1338] [cursor=pointer]:
+                        - /url: https://newsroom.ee.co.uk
+                    - listitem [ref=e1340]:
+                      - link "Careers" [ref=e1341] [cursor=pointer]:
+                        - /url: https://jobs.ee.co.uk
+          - generic [ref=e1343]:
+            - generic [ref=e1344]:
+              - link "X" [ref=e1346] [cursor=pointer]:
+                - /url: https://x.com/EE
+                - img [ref=e1350]
+              - link "LinkedIn" [ref=e1353] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ee-uk
+                - img [ref=e1357]
+              - link "Facebook" [ref=e1360] [cursor=pointer]:
+                - /url: https://www.facebook.com/ee
+                - img [ref=e1364]
+              - link "YouTube" [ref=e1367] [cursor=pointer]:
+                - /url: https://youtube.com/ee
+                - img [ref=e1371]
+            - generic [ref=e1373]:
+              - paragraph [ref=e1374]:
+                - paragraph [ref=e1375]: EE Limited is authorised and regulated by the Financial Conduct Authority for the provision of consumer credit.
+              - paragraph [ref=e1376]:
+                - paragraph [ref=e1377]: EE Limited is an appointed representative of Chubb European Group SE (CEG). CEG is authorised and regulated by the French Prudential Supervision and Resolution Authority.
+                - paragraph [ref=e1378]: CEG is authorised by the Prudential Regulation Authority. Subject to regulation by the Financial Conduct Authority and limited regulation by the Prudential Regulation Authority.
+                - paragraph [ref=e1379]: Details about the extent of CEG's regulation by the Prudential Regulation Authority are available from CEG on request.
+          - generic [ref=e1380]:
+            - paragraph [ref=e1382]: ©2026 EE LIMITED
+            - list [ref=e1383]:
+              - listitem [ref=e1384]:
+                - link "Terms and conditions" [ref=e1385] [cursor=pointer]:
+                  - /url: https://ee.co.uk/help/terms-and-conditions
+              - listitem [ref=e1386]:
+                - link "Privacy centre" [ref=e1387] [cursor=pointer]:
+                  - /url: https://ee.co.uk/eeprivacycentre
+              - listitem [ref=e1388]:
+                - link "Cookie settings" [ref=e1389] [cursor=pointer]:
+                  - /url: https://ee.co.uk/cookies
+              - listitem [ref=e1390]:
+                - link "Codes of practice" [ref=e1391] [cursor=pointer]:
+                  - /url: https://ee.co.uk/regulatory
+              - listitem [ref=e1392]:
+                - link "Complaints Code" [ref=e1393] [cursor=pointer]:
+                  - /url: https://ee.co.uk/content/dam/help/terms-and-conditions/regulatory/ee-complaints-code-of-practice-april-2026.pdf

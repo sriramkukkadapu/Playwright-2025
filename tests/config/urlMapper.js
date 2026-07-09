@@ -21,4 +21,7 @@ const objectsAPI_BaseURL = `${environments[env]}/objects`;
 console.log(`Using environment: ${env}`);
 console.log(`Objects API Base URL: ${objectsAPI_BaseURL}`);
 
-module.exports = { objectsAPI_BaseURL };
+// EE URL
+const eeURL = "https://ee.co.uk/";
+
+module.exports = { objectsAPI_BaseURL, eeURL };

@@ -39,7 +39,10 @@ const config = ({
     video: 'on-first-retry', //on
     viewport: null,
     launchOptions: {
-      args: ["--start-maximized"],
+      args: [
+        "--start-maximized",
+        "--disable-features=PrivateNetworkAccessPermissionPrompt"
+      ],
     }
   }
   // ,projects: [

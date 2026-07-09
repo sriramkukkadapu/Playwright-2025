@@ -1,0 +1,521 @@
+- generic [active] [ref=f50e1]:
+  - generic [ref=f50e2]:
+    - navigation "Skip":
+      - link "Skip to main content" [ref=f50e3] [cursor=pointer]:
+        - /url: "#main"
+    - main [ref=f50e5]:
+      - generic [ref=f50e6]:
+        - generic [ref=f50e12]:
+          - link "Skip to main content" [ref=f50e13] [cursor=pointer]:
+            - /url: "#maincontent"
+          - button "Switch to Business" [ref=f50e16] [cursor=pointer]:
+            - text: Switch to Business
+            - img [ref=f50e19]
+          - generic [ref=f50e24]:
+            - navigation "primary" [ref=f50e27]:
+              - generic [ref=f50e28]:
+                - button "EE Logo" [ref=f50e30] [cursor=pointer]:
+                  - link "EE Logo" [ref=f50e31]:
+                    - /url: https://ee.co.uk/
+                    - img [ref=f50e33]
+                - generic [ref=f50e35]:
+                  - link "Manage" [ref=f50e36] [cursor=pointer]:
+                    - /url: https://ee.co.uk/manage
+                    - img [ref=f50e39]
+                    - text: Manage
+                  - link "Rewards" [ref=f50e41] [cursor=pointer]:
+                    - /url: https://ee.co.uk/rewards
+                    - img [ref=f50e44]
+                    - text: Rewards
+                  - link "Help" [ref=f50e46] [cursor=pointer]:
+                    - /url: https://ee.co.uk/help
+                    - img [ref=f50e49]
+                    - text: Help
+                - generic [ref=f50e52]:
+                  - button "Search" [ref=f50e55] [cursor=pointer]:
+                    - img [ref=f50e59]
+                  - button "Basket" [ref=f50e63] [cursor=pointer]:
+                    - img [ref=f50e67]
+                  - button "Log in" [ref=f50e72] [cursor=pointer]:
+                    - img [ref=f50e76]
+              - list [ref=f50e80]:
+                - listitem [ref=f50e81]:
+                  - link "Phones" [ref=f50e83] [cursor=pointer]:
+                    - /url: https://ee.co.uk/mobile
+                    - generic [ref=f50e85]: Phones
+                  - generic [ref=f50e86]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e87]:
+                  - link "SIM-only" [ref=f50e89] [cursor=pointer]:
+                    - /url: https://ee.co.uk/mobile/sim-only-deals
+                    - generic [ref=f50e91]: SIM-only
+                  - generic [ref=f50e92]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e93]:
+                  - link "Broadband" [ref=f50e95] [cursor=pointer]:
+                    - /url: https://ee.co.uk/broadband
+                    - generic [ref=f50e97]: Broadband
+                  - generic [ref=f50e98]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e99]:
+                  - link "TV & Sport" [ref=f50e101] [cursor=pointer]:
+                    - /url: https://ee.co.uk/tv
+                    - generic [ref=f50e103]: TV & Sport
+                  - generic [ref=f50e104]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e105]:
+                  - link "Gaming" [ref=f50e107] [cursor=pointer]:
+                    - /url: https://ee.co.uk/gaming
+                    - generic [ref=f50e109]: Gaming
+                  - generic [ref=f50e110]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e111]:
+                  - link "Tech" [ref=f50e113] [cursor=pointer]:
+                    - /url: https://ee.co.uk/tech
+                    - generic [ref=f50e115]: Tech
+                  - generic [ref=f50e116]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e117]:
+                  - link "Insurance" [ref=f50e119] [cursor=pointer]:
+                    - /url: https://ee.co.uk/insurance
+                    - generic [ref=f50e121]: Insurance
+                - listitem [ref=f50e122]:
+                  - link "Why EE" [ref=f50e124] [cursor=pointer]:
+                    - /url: https://ee.co.uk/why-ee
+                    - generic [ref=f50e126]: Why EE
+                  - generic [ref=f50e127]:
+                    - button "null Menu":
+                      - generic:
+                        - img
+                - listitem [ref=f50e128]:
+                  - link "Brands" [ref=f50e130] [cursor=pointer]:
+                    - /url: https://ee.co.uk/search/brands
+                    - generic [ref=f50e132]: Brands
+                - listitem [ref=f50e133]:
+                  - link "Summer Sale" [ref=f50e135] [cursor=pointer]:
+                    - /url: https://ee.co.uk/summer-sale
+                    - generic [ref=f50e137]: Summer Sale
+            - navigation "secondary" [ref=f50e140]:
+              - button "Next" [ref=f50e143] [cursor=pointer]:
+                - img [ref=f50e147]
+              - list "secondary navigation" [ref=f50e149]:
+                - listitem [ref=f50e150]:
+                  - link "Explore Phones" [ref=f50e152] [cursor=pointer]:
+                    - /url: https://ee.co.uk/mobile
+                    - generic [ref=f50e154]: Explore Phones
+                - listitem [ref=f50e155]:
+                  - link "Pay monthly phones" [ref=f50e157] [cursor=pointer]:
+                    - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery
+                    - generic [ref=f50e159]: Pay monthly phones
+                - listitem [ref=f50e160]:
+                  - link "SIM-free phones" [ref=f50e162] [cursor=pointer]:
+                    - /url: https://ee.co.uk/mobile/sim-free
+                    - generic [ref=f50e164]: SIM-free phones
+                - listitem [ref=f50e165]:
+                  - link "Pay as you go phones" [ref=f50e167] [cursor=pointer]:
+                    - /url: https://ee.co.uk/mobile/pay-as-you-go-phones-gallery
+                    - generic [ref=f50e169]: Pay as you go phones
+                - listitem [ref=f50e170]:
+                  - link "Phone accessories" [ref=f50e172] [cursor=pointer]:
+                    - /url: https://ee.co.uk/accessories
+                    - generic [ref=f50e174]: Phone accessories
+                - listitem [ref=f50e175]:
+                  - link "App subscriptions" [ref=f50e177] [cursor=pointer]:
+                    - /url: https://ee.co.uk/apps-and-subscriptions/mobile-apps
+                    - generic [ref=f50e179]: App subscriptions
+                - listitem [ref=f50e180]:
+                  - link "Scam Guard" [ref=f50e182] [cursor=pointer]:
+                    - /url: https://ee.co.uk/security/scam-guard
+                    - generic [ref=f50e184]: Scam Guard
+                - listitem [ref=f50e185]:
+                  - link "EE Cyber Security" [ref=f50e187] [cursor=pointer]:
+                    - /url: https://ee.co.uk/security/cyber-security
+                    - generic [ref=f50e189]: EE Cyber Security
+                - listitem [ref=f50e190]:
+                  - link "EE One" [ref=f50e192] [cursor=pointer]:
+                    - /url: https://ee.co.uk/ee-one
+                    - generic [ref=f50e194]: EE One
+        - generic [ref=f50e195]:
+          - generic [ref=f50e197]:
+            - navigation "Breadcrumb" [ref=f50e200]:
+              - list [ref=f50e201]:
+                - listitem [ref=f50e202]:
+                  - link "Mobile" [ref=f50e203] [cursor=pointer]:
+                    - /url: /mobile
+                  - img [ref=f50e205]
+                - listitem [ref=f50e207]:
+                  - link "Pay Monthly Phones" [ref=f50e208] [cursor=pointer]:
+                    - /url: /mobile/pay-monthly-phones-gallery
+            - generic [ref=f50e210]:
+              - generic [ref=f50e212]:
+                - generic [ref=f50e213]:
+                  - group "1 of 3" [ref=f50e214]:
+                    - generic [ref=f50e216]:
+                      - img "Hero Banner" [ref=f50e217]
+                      - generic [ref=f50e221]:
+                        - heading "SAVE UP TO £720 ON 125GB ESSENTIALS" [level=2] [ref=f50e223]
+                        - generic "With the Samsung Galaxy S26 Ultra. Plus, claim a Galaxy Watch Ultra 47mm." [ref=f50e225]:
+                          - paragraph [ref=f50e226]: With the Samsung Galaxy S26 Ultra. Plus, claim a Galaxy Watch Ultra 47mm.
+                        - generic [ref=f50e227]:
+                          - link "Buy Samsung Galaxy S26 Ultra" [ref=f50e229] [cursor=pointer]:
+                            - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/samsung-galaxy-s26-ultra-5g-details
+                            - generic [ref=f50e230]: Buy Samsung Galaxy S26 Ultra
+                          - link "Upgrade to Samsung Galaxy S26 Ultra" [ref=f50e231] [cursor=pointer]:
+                            - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/samsung-galaxy-s26-ultra-5g-details
+                            - generic [ref=f50e232]: Log in to upgrade
+                  - group "2 of 3" [ref=f50e233]:
+                    - generic [ref=f50e235]:
+                      - img "Hero Banner" [ref=f50e236]
+                      - generic [ref=f50e240]:
+                        - heading "SAVE UP TO £288 ON 125GB ESSENTIALS" [level=2] [ref=f50e242]
+                        - generic "With the iPhone 17 Pro. Get the edge this summer with EE." [ref=f50e244]:
+                          - paragraph [ref=f50e245]: With the iPhone 17 Pro. Get the edge this summer with EE.
+                        - generic [ref=f50e246]:
+                          - link "Buy Apple iPhone 17 Pro" [ref=f50e248] [cursor=pointer]:
+                            - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/iphone-17-pro-details
+                            - generic [ref=f50e249]: Buy iPhone 17 Pro
+                          - link "Upgrade to Apple iPhone 17 Pro" [ref=f50e250] [cursor=pointer]:
+                            - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/iphone-17-pro-details
+                            - generic [ref=f50e251]: Log in to upgrade
+                  - group "3 of 3" [ref=f50e252]:
+                    - generic [ref=f50e254]:
+                      - img "Hero Banner" [ref=f50e255]
+                      - generic [ref=f50e259]:
+                        - heading "SAVE UP TO £684 ON 30GB ESSENTIALS" [level=2] [ref=f50e261]
+                        - generic "With the Google Pixel 10a. Get the edge this summer with EE." [ref=f50e263]:
+                          - paragraph [ref=f50e264]: With the Google Pixel 10a. Get the edge this summer with EE.
+                        - generic [ref=f50e265]:
+                          - link "Buy Google Pixel 10a" [ref=f50e267] [cursor=pointer]:
+                            - /url: https://ee.co.uk/mobile/pay-monthly-phones-gallery/google-pixel-10a-details
+                            - generic [ref=f50e268]: Buy Google Pixel 10a
+                          - link "Upgrade to Google Pixel 10a" [ref=f50e269] [cursor=pointer]:
+                            - /url: https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/google-pixel-10a-details
+                            - generic [ref=f50e270]: Log in to upgrade
+                - group "Carousel controls" [ref=f50e271]:
+                  - generic [ref=f50e272]:
+                    - button "Previous" [ref=f50e273] [cursor=pointer]:
+                      - img [ref=f50e277]
+                    - generic "2 of 3" [ref=f50e814]:
+                      - generic [ref=f50e280]: 2 / 3
+                    - button "Pause" [ref=f50e281] [cursor=pointer]:
+                      - img [ref=f50e285]
+                    - button "Next" [ref=f50e287] [cursor=pointer]:
+                      - img [ref=f50e291]
+              - generic [ref=f50e296]:
+                - generic [ref=f50e297]:
+                  - img [ref=f50e300]
+                  - heading "Log in to upgrade and save on any additional phones and plans" [level=3] [ref=f50e303]
+                - link "Log in" [ref=f50e305] [cursor=pointer]:
+                  - /url: /authorize/login
+                  - generic [ref=f50e306]: Log in
+              - generic [ref=f50e308]:
+                - generic [ref=f50e309]:
+                  - generic [ref=f50e314]:
+                    - heading "Pay monthly phone deals" [level=1] [ref=f50e315]
+                    - generic [ref=f50e317]: Browse the latest EE pay monthly phone deals for brand new phones. Deals include a 24 or 36 month device credit agreement (paying using Flex Pay) and a separate 24 month airtime plan.
+                  - button "Save on plans with EE Broadband" [ref=f50e320] [cursor=pointer]:
+                    - generic [ref=f50e321]:
+                      - text: Save on plans with EE Broadband
+                      - img [ref=f50e324]
+                - generic [ref=f50e327]:
+                  - generic [ref=f50e328]:
+                    - tablist [ref=f50e331]:
+                      - tab "New" [selected] [ref=f50e332] [cursor=pointer]:
+                        - generic [ref=f50e333]:
+                          - img [ref=f50e336]
+                          - generic [ref=f50e338]: New
+                      - tab "Good as new" [ref=f50e339] [cursor=pointer]:
+                        - generic [ref=f50e340]:
+                          - img [ref=f50e343]
+                          - generic [ref=f50e345]: Good as new
+                      - tab "Refurbished" [ref=f50e346] [cursor=pointer]:
+                        - generic [ref=f50e347]:
+                          - img [ref=f50e350]
+                          - generic [ref=f50e354]: Refurbished
+                    - separator [ref=f50e355]
+                    - tabpanel "New"
+                  - generic [ref=f50e357]:
+                    - generic [ref=f50e360]:
+                      - generic [ref=f50e362]:
+                        - paragraph [ref=f50e363]: Filters
+                        - button "Clear all" [ref=f50e364] [cursor=pointer]:
+                          - generic [ref=f50e365]: Clear all
+                      - generic [ref=f50e366]:
+                        - generic [ref=f50e367]:
+                          - group "Brands" [ref=f50e369]:
+                            - generic [ref=f50e370]: Brands
+                            - generic [ref=f50e373] [cursor=pointer]:
+                              - checkbox "Apple" [ref=f50e374]
+                              - generic [ref=f50e376]: Apple
+                            - generic [ref=f50e379] [cursor=pointer]:
+                              - checkbox "Samsung" [ref=f50e380]
+                              - generic [ref=f50e382]: Samsung
+                            - generic [ref=f50e385] [cursor=pointer]:
+                              - checkbox "Google" [ref=f50e386]
+                              - generic [ref=f50e388]: Google
+                          - generic [ref=f50e390] [cursor=pointer]:
+                            - text: Show more
+                            - img [ref=f50e393]
+                        - group "Condition" [ref=f50e397]:
+                          - generic [ref=f50e398]: Condition
+                          - generic [ref=f50e399]:
+                            - generic [ref=f50e402] [cursor=pointer]:
+                              - radio "New" [checked] [ref=f50e403]
+                              - generic [ref=f50e404]: New
+                            - generic [ref=f50e406] [cursor=pointer]:
+                              - radio "Good as new" [ref=f50e407]
+                              - generic [ref=f50e408]: Good as new
+                            - generic [ref=f50e410] [cursor=pointer]:
+                              - radio "Refurbished" [ref=f50e411]
+                              - generic [ref=f50e412]: Refurbished
+                        - group "Speed" [ref=f50e416]:
+                          - generic [ref=f50e417]: Speed
+                          - generic [ref=f50e420] [cursor=pointer]:
+                            - checkbox "4G" [ref=f50e421]
+                            - generic [ref=f50e423]: 4G
+                          - generic [ref=f50e426] [cursor=pointer]:
+                            - checkbox "5G" [ref=f50e427]
+                            - generic [ref=f50e429]: 5G
+                          - generic [ref=f50e432] [cursor=pointer]:
+                            - checkbox "5G Plus" [ref=f50e433]
+                            - generic [ref=f50e435]: 5G Plus
+                        - group "Capacity" [ref=f50e440]:
+                          - generic [ref=f50e441]: Capacity
+                          - generic [ref=f50e444] [cursor=pointer]:
+                            - checkbox "128GB" [ref=f50e445]
+                            - generic [ref=f50e447]: 128GB
+                          - generic [ref=f50e450] [cursor=pointer]:
+                            - checkbox "256GB" [ref=f50e451]
+                            - generic [ref=f50e453]: 256GB
+                          - generic [ref=f50e456] [cursor=pointer]:
+                            - checkbox "512GB" [ref=f50e457]
+                            - generic [ref=f50e459]: 512GB
+                        - group "Monthly price" [ref=f50e464]:
+                          - generic [ref=f50e465]: Monthly price
+                          - generic [ref=f50e468] [cursor=pointer]:
+                            - checkbox "From £20 to £30" [ref=f50e469]
+                            - generic [ref=f50e471]: From £20 to £30
+                          - generic [ref=f50e474] [cursor=pointer]:
+                            - checkbox "From £30 to £40" [ref=f50e475]
+                            - generic [ref=f50e477]: From £30 to £40
+                          - generic [ref=f50e480] [cursor=pointer]:
+                            - checkbox "£40 and above" [ref=f50e481]
+                            - generic [ref=f50e483]: £40 and above
+                    - generic [ref=f50e492]:
+                      - generic [ref=f50e493]:
+                        - button "Hide filters" [ref=f50e495] [cursor=pointer]:
+                          - generic [ref=f50e496]: Hide filters
+                        - generic "filter chips carousel" [ref=f50e500]:
+                          - group "Slide 1 of 1" [ref=f50e502]:
+                            - button "HONOR" [pressed] [ref=f50e503] [cursor=pointer]:
+                              - generic [ref=f50e504]:
+                                - generic [ref=f50e505]: HONOR
+                                - generic:
+                                  - generic:
+                                    - img
+                      - button "Sort by" [ref=f50e508] [cursor=pointer]:
+                        - generic [ref=f50e509]: Sort by
+                - heading "Why choose EE" [level=2] [ref=f50e511]
+                - generic [ref=f50e514]:
+                  - generic [ref=f50e516]:
+                    - img [ref=f50e518]
+                    - generic [ref=f50e520]: The UK's best mobile network
+                    - paragraph [ref=f50e522]: EE has been the UK's best network for 25 times and counting, plus we're the fastest and most reliable network, too.
+                    - link:
+                      - /url: ""
+                  - generic [ref=f50e524]:
+                    - img [ref=f50e526]
+                    - generic [ref=f50e529]: The latest phones
+                    - paragraph [ref=f50e531]: Find the latest phones on contract with EE, including the Apple iPhone, Samsung Galaxy, Google Pixel and many more.
+                    - link:
+                      - /url: ""
+                  - generic [ref=f50e533]:
+                    - img [ref=f50e535]
+                    - generic [ref=f50e537]: Amazing Inclusive Extras
+                    - paragraph [ref=f50e539]: Selected plans come with a choice of extras like Apple Music, Apple TV, Netflix and Google AI to name a few.
+                    - link:
+                      - /url: ""
+                  - generic [ref=f50e541]:
+                    - img [ref=f50e543]
+                    - generic [ref=f50e546]: Incredible savings
+                    - paragraph [ref=f50e548]: On top on our incredible money saving offers, save even more with Trade In or by choosing a good as new device.
+                    - link:
+                      - /url: ""
+                - generic [ref=f50e552]:
+                  - generic [ref=f50e553]:
+                    - heading "Learn more about pay monthly phones" [level=2] [ref=f50e554]
+                    - paragraph [ref=f50e556]:
+                      - paragraph [ref=f50e558]: Need help choosing from EE’s pay monthly phones? Here are answers to common questions about buying a brand-new phone on contract with EE.
+                  - generic [ref=f50e562]:
+                    - heading "What types of phones can I get on pay monthly contracts?" [level=3] [ref=f50e564]:
+                      - button "What types of phones can I get on pay monthly contracts?" [ref=f50e565] [cursor=pointer]:
+                        - img [ref=f50e568]
+                        - generic [ref=f50e571]: What types of phones can I get on pay monthly contracts?
+                    - heading "Do all EE pay monthly phones come with a warranty?" [level=3] [ref=f50e574]:
+                      - button "Do all EE pay monthly phones come with a warranty?" [ref=f50e575] [cursor=pointer]:
+                        - img [ref=f50e578]
+                        - generic [ref=f50e581]: Do all EE pay monthly phones come with a warranty?
+                    - heading "Can I upgrade my phone on a pay monthly contract?" [level=3] [ref=f50e584]:
+                      - button "Can I upgrade my phone on a pay monthly contract?" [ref=f50e585] [cursor=pointer]:
+                        - img [ref=f50e588]
+                        - generic [ref=f50e591]: Can I upgrade my phone on a pay monthly contract?
+                    - heading "Can I return a pay monthly phone if I change my mind?" [level=3] [ref=f50e594]:
+                      - button "Can I return a pay monthly phone if I change my mind?" [ref=f50e595] [cursor=pointer]:
+                        - img [ref=f50e598]
+                        - generic [ref=f50e601]: Can I return a pay monthly phone if I change my mind?
+                    - heading "What support do I get with an EE phone contract?" [level=3] [ref=f50e604]:
+                      - button "What support do I get with an EE phone contract?" [ref=f50e605] [cursor=pointer]:
+                        - img [ref=f50e608]
+                        - generic [ref=f50e611]: What support do I get with an EE phone contract?
+                    - heading "What happens if my phone breaks or is damaged?" [level=3] [ref=f50e614]:
+                      - button "What happens if my phone breaks or is damaged?" [ref=f50e615] [cursor=pointer]:
+                        - img [ref=f50e618]
+                        - generic [ref=f50e621]: What happens if my phone breaks or is damaged?
+                    - heading "Can I keep my number when getting a new phone on contract?" [level=3] [ref=f50e624]:
+                      - button "Can I keep my number when getting a new phone on contract?" [ref=f50e625] [cursor=pointer]:
+                        - img [ref=f50e628]
+                        - generic [ref=f50e631]: Can I keep my number when getting a new phone on contract?
+                    - heading "Do EE pay monthly phones support 5G?" [level=3] [ref=f50e634]:
+                      - button "Do EE pay monthly phones support 5G?" [ref=f50e635] [cursor=pointer]:
+                        - img [ref=f50e638]
+                        - generic [ref=f50e641]: Do EE pay monthly phones support 5G?
+                  - heading "The legal bit" [level=3] [ref=f50e647]:
+                    - button "The legal bit" [ref=f50e648] [cursor=pointer]:
+                      - img [ref=f50e651]
+                      - generic [ref=f50e654]: The legal bit
+                - button "Back to top" [ref=f50e656] [cursor=pointer]:
+                  - img [ref=f50e660]
+          - generic [ref=f50e667]:
+            - navigation [ref=f50e668]:
+              - list [ref=f50e669]:
+                - listitem [ref=f50e670]:
+                  - generic [ref=f50e671]:
+                    - heading "Help" [level=2] [ref=f50e672]
+                    - list [ref=f50e674]:
+                      - listitem [ref=f50e675]:
+                        - link "Contact us" [ref=f50e676] [cursor=pointer]:
+                          - /url: https://ee.co.uk/help/contact-ee
+                      - listitem [ref=f50e678]:
+                        - link "Find a store" [ref=f50e679] [cursor=pointer]:
+                          - /url: https://ee.co.uk/store-finder
+                      - listitem [ref=f50e681]:
+                        - link "Coverage checker" [ref=f50e682] [cursor=pointer]:
+                          - /url: https://coverage.ee.co.uk/coverage/ee
+                      - listitem [ref=f50e684]:
+                        - link "EE Community" [ref=f50e685] [cursor=pointer]:
+                          - /url: https://community.ee.co.uk
+                      - listitem [ref=f50e687]:
+                        - link "Orders and returns" [ref=f50e688] [cursor=pointer]:
+                          - /url: https://ee.co.uk/help/orders
+                      - listitem [ref=f50e690]:
+                        - link "Trade in a device" [ref=f50e691] [cursor=pointer]:
+                          - /url: https://ee.co.uk/trade-in
+                      - listitem [ref=f50e693]:
+                        - link "Product recalls and alerts" [ref=f50e694] [cursor=pointer]:
+                          - /url: https://ee.co.uk/help/orders/ee-tech#article-heading-6
+                - listitem [ref=f50e696]:
+                  - generic [ref=f50e697]:
+                    - heading "Our websites & app" [level=2] [ref=f50e698]
+                    - list [ref=f50e700]:
+                      - listitem [ref=f50e701]:
+                        - link "Small business" [ref=f50e702] [cursor=pointer]:
+                          - /url: https://business.ee.co.uk/?s_cid=eeb_switch_to_small_business
+                      - listitem [ref=f50e704]:
+                        - link "Large business" [ref=f50e705] [cursor=pointer]:
+                          - /url: https://business.ee.co.uk/large-business/?s_cid=eeb_footer_large_business
+                      - listitem [ref=f50e707]:
+                        - link "BT Group" [ref=f50e708] [cursor=pointer]:
+                          - /url: https://www.bt.com/about
+                      - listitem [ref=f50e710]:
+                        - link "Download the EE app" [ref=f50e711] [cursor=pointer]:
+                          - /url: https://ee.co.uk/download-ee-app
+                - listitem [ref=f50e713]:
+                  - generic [ref=f50e714]:
+                    - heading "Digital Society" [level=2] [ref=f50e715]
+                    - list [ref=f50e717]:
+                      - listitem [ref=f50e718]:
+                        - link "Digital inclusion and sustainability" [ref=f50e719] [cursor=pointer]:
+                          - /url: https://ee.co.uk/our-company/corporate-responsibility/being-responsible
+                      - listitem [ref=f50e721]:
+                        - link "Digital accessibility" [ref=f50e722] [cursor=pointer]:
+                          - /url: https://ee.co.uk/digital-accessibility
+                      - listitem [ref=f50e724]:
+                        - link "EE Gender pay gap" [ref=f50e725] [cursor=pointer]:
+                          - /url: https://ee.co.uk/our-company/corporate-responsibility/building-trust/gender-pay-gap
+                      - listitem [ref=f50e727]:
+                        - link "Modern slavery statement" [ref=f50e728] [cursor=pointer]:
+                          - /url: https://ee.co.uk/our-company/corporate-responsibility/building-trust/our-supply-chain
+                      - listitem [ref=f50e730]:
+                        - link "Here for you - Supporting your needs" [ref=f50e731] [cursor=pointer]:
+                          - /url: https://ee.co.uk/help/here-for-you
+                - listitem [ref=f50e733]:
+                  - generic [ref=f50e734]:
+                    - heading "Our company" [level=2] [ref=f50e735]
+                    - list [ref=f50e737]:
+                      - listitem [ref=f50e738]:
+                        - link "About us" [ref=f50e739] [cursor=pointer]:
+                          - /url: https://ee.co.uk/our-company/about-us
+                      - listitem [ref=f50e741]:
+                        - link "Students and key workers" [ref=f50e742] [cursor=pointer]:
+                          - /url: https://ee.co.uk/mobile/student-discount
+                      - listitem [ref=f50e744]:
+                        - link "Newsroom" [ref=f50e745] [cursor=pointer]:
+                          - /url: https://newsroom.ee.co.uk
+                      - listitem [ref=f50e747]:
+                        - link "Careers" [ref=f50e748] [cursor=pointer]:
+                          - /url: https://jobs.ee.co.uk
+            - generic [ref=f50e750]:
+              - generic [ref=f50e751]:
+                - link "X" [ref=f50e753] [cursor=pointer]:
+                  - /url: https://x.com/EE
+                  - img [ref=f50e757]
+                - link "LinkedIn" [ref=f50e760] [cursor=pointer]:
+                  - /url: https://linkedin.com/company/ee-uk
+                  - img [ref=f50e764]
+                - link "Facebook" [ref=f50e767] [cursor=pointer]:
+                  - /url: https://www.facebook.com/ee
+                  - img [ref=f50e771]
+                - link "YouTube" [ref=f50e774] [cursor=pointer]:
+                  - /url: https://youtube.com/ee
+                  - img [ref=f50e778]
+              - generic [ref=f50e780]:
+                - paragraph [ref=f50e781]:
+                  - paragraph [ref=f50e782]: EE Limited is authorised and regulated by the Financial Conduct Authority for the provision of consumer credit.
+                - paragraph [ref=f50e783]:
+                  - paragraph [ref=f50e784]: EE Limited is an appointed representative of Chubb European Group SE (CEG). CEG is authorised and regulated by the French Prudential Supervision and Resolution Authority.
+                  - paragraph [ref=f50e785]: CEG is authorised by the Prudential Regulation Authority. Subject to regulation by the Financial Conduct Authority and limited regulation by the Prudential Regulation Authority.
+                  - paragraph [ref=f50e786]: Details about the extent of CEG's regulation by the Prudential Regulation Authority are available from CEG on request.
+            - generic [ref=f50e787]:
+              - paragraph [ref=f50e789]: ©2026 EE LIMITED
+              - list [ref=f50e790]:
+                - listitem [ref=f50e791]:
+                  - link "Terms and conditions" [ref=f50e792] [cursor=pointer]:
+                    - /url: https://ee.co.uk/help/terms-and-conditions
+                - listitem [ref=f50e793]:
+                  - link "Privacy centre" [ref=f50e794] [cursor=pointer]:
+                    - /url: https://ee.co.uk/eeprivacycentre
+                - listitem [ref=f50e795]:
+                  - link "Cookie settings" [ref=f50e796] [cursor=pointer]:
+                    - /url: https://ee.co.uk/cookies
+                - listitem [ref=f50e797]:
+                  - link "Codes of practice" [ref=f50e798] [cursor=pointer]:
+                    - /url: https://ee.co.uk/regulatory
+                - listitem [ref=f50e799]:
+                  - link "Complaints Code" [ref=f50e800] [cursor=pointer]:
+                    - /url: https://ee.co.uk/content/dam/help/terms-and-conditions/regulatory/ee-complaints-code-of-practice-april-2026.pdf
+  - generic [ref=f50e804] [cursor=pointer]:
+    - button "Open chat" [ref=f50e805]
+    - iframe [ref=f50e806]:
+      

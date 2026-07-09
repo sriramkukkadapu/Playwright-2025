@@ -1,0 +1,123 @@
+[    3065ms] [LOG] 30% Discount Plan Filter: URL monitoring started... @ :103
+[    3072ms] TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.
+    at <anonymous>:157:61
+    at <anonymous>:164:3
+    at C (https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:1504)
+    at https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:14777
+    at x (https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:1264)
+    at https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:14659
+    at Array.forEach (<anonymous>)
+    at HTMLHeadElement.<anonymous> (https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:14451)
+    at h.each (https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:6297)
+    at z.forEach.S.fn.<computed> [as append] (https://assets.adobedtm.com/468fd5a0b220/f1dd5ada620a/launch-ENc69d733bf4824e17ac296b1064825816.min.js:8:14248)
+[    3421ms] [LOG] [AAT] Region explicitly set to EU @ https://c.amazon-adsystem.com/aat/amzn.js:1
+[    4379ms] [WARNING]  [33m[1m⚠[22m[39m Runtime config is deprecated and will be removed in Next.js 16. Please remove the usage of "next/config" from your project. @ https://ee.co.uk/shop_mobile/_next/static/chunks/pages/_app-5db325b61ed12ccf.js:30
+[    4512ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4513ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4514ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4514ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4514ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4514ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4515ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4515ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4515ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4515ms] [WARNING] 
+
+⚠️ Your `allowedTags` option includes, `style`, which is inherently
+vulnerable to XSS attacks. Please remove it from `allowedTags`.
+Or, to disable this warning, add the `allowVulnerableTags` option
+and ensure you are accounting for this risk.
+
+ @ https://ee.co.uk/shop_mobile/_next/static/chunks/25733-2091d58d50dec18c.js:0
+[    4541ms] Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at rO (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:46046)
+    at https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:132148
+    at sC (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:135452)
+    at sw (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:127240)
+    at https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:127024
+    at sS (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:127032)
+    at sc (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:122407)
+    at sJ (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:145545)
+    at MessagePort._ (https://ee.co.uk/shop_mobile/_next/static/chunks/framework-362268fe6de55927.js:1:9028)
+[    4541ms] [WARNING] Loop: `HeroCarousel` is deprecated. It will be removed in a future major release, please use `Carousel` instead. @ https://ee.co.uk/shop_mobile/_next/static/chunks/pages/_app-5db325b61ed12ccf.js:0
+[    4583ms] [WARNING] Loop: `FormControl` is deprecated. It will be removed in a future major release, please use `FormControlV2` instead. @ https://ee.co.uk/shop_mobile/_next/static/chunks/pages/_app-5db325b61ed12ccf.js:0
+[    4680ms] [INFO] AIMEE is enabled with Version 1.1.53 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:45999
+[    4698ms] [INFO] UPDATE MINI BASKET 1.12.0 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:15068
+[    4748ms] [LOG] Call to dtrum.enable() had no effect since RUM JavaScript agent was already enabled or opt-in mode was not active! @ https://ee.co.uk/ruxitagentjs_ICA15789NPRTUVXfghlqrux_10339260603164134.js:175
+[    4819ms] [INFO] AIMEE is enabled with Version 1.1.53 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:45999
+[    4875ms] [LOG] Call to dtrum.enable() had no effect since RUM JavaScript agent was already enabled or opt-in mode was not active! @ https://ee.co.uk/ruxitagentjs_ICA15789NPRTUVXfghlqrux_10339260603164134.js:175
+[    4990ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ https://aax-eu.amazon-adsystem.com/s/iu3?pid=cc23b900-ed11-4f20-aa04-0557e214924a&event=PageView&match_id=1199830439.1783420655&clientDedupeId=96bcf1477a152acc-PageView&page_url=https___ee.co.uk_mobile_pay-monthly-phones-gallery_search__offeringsOrder_productBrands_brands_honor&ts=1783422664334&eventSource=amzn.js&uuid=74445403-1958-40ec-ad4f-2c2f0ffc8520:0
+[    4990ms] [WARNING] Event request via fetch failed, reverting to iframe @ https://c.amazon-adsystem.com/aat/amzn.js:1
+[    4993ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ https://aax-eu.amazon-adsystem.com/s/iu3?pid=cc23b900-ed11-4f20-aa04-0557e214924a&event=PageView&match_id=1199830439.1783420655&clientDedupeId=ef07f54ea94f07ef-PageView&page_url=https___ee.co.uk_mobile_pay-monthly-phones-gallery_search__offeringsOrder_productBrands_brands_honor&ts=1783422664464&eventSource=amzn.js&uuid=b82a6dc7-2b6d-42ed-a424-66f4e66cd1eb:0
+[    4993ms] [WARNING] Event request via fetch failed, reverting to iframe @ https://c.amazon-adsystem.com/aat/amzn.js:1
+[    5131ms] [INFO] Pinterest Tag Error: 'load' command was called multiple times.  Previously for tag id '%s', now for tag id '%s'. 2613681577949 2613681577949 @ https://s.pinimg.com/ct/lib/main.3c5b736e.js:0
+[    5562ms] [INFO] UPDATE MINI BASKET 1.12.0 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:15068
+[    6098ms] [INFO] UPDATE MINI BASKET 1.12.0 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:15068
+[    6100ms] [INFO] UPDATE MINI BASKET 1.12.0 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:15068
+[    6102ms] [INFO] UPDATE MINI BASKET 1.12.0 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:15068
+[    6105ms] [INFO] UPDATE MINI BASKET 1.12.0 @ https://ee.co.uk/exp/ge/bundle-contents-hydrate.js?8f6e21a784dea80c72ef8d8fd9244558:15068
+[   18189ms] [WARNING] The resource https://ee.co.uk/etc.clientlibs/settings/wcm/designs/ee-common-2015/clientlibs_base/resources/fonts/rubrik_regular.woff was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://ee.co.uk/mobile/pay-monthly-phones-gallery?search=%3AofferingsOrder%3AproductBrands%3Abrands_honor:0
+[   18189ms] [WARNING] The resource https://ee.co.uk/etc.clientlibs/settings/wcm/designs/ee-common-2015/clientlibs_base/resources/fonts/rubrik_semibold.woff was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://ee.co.uk/mobile/pay-monthly-phones-gallery?search=%3AofferingsOrder%3AproductBrands%3Abrands_honor:0
