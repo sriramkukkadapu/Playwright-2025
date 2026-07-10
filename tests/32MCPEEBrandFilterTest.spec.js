@@ -10,6 +10,9 @@ const brands = [
 
 test.describe('EE Mobile - Brand Filter Tests', () => {
 
+    // Skip in CI — ee.co.uk blocks GitHub Actions runners (geo-restrictions/Cloudflare)
+    test.skip(!!process.env.CI, 'Skipped in CI: ee.co.uk is geo-restricted');
+
     test.use({ viewport: { width: 1440, height: 900 } });
 
     for (const brand of brands) {

@@ -18,8 +18,7 @@ const config = ({
   workers: 10, // Use a specific number of workers(threads)
   testDir: './tests',
   // testMatch: './tests/*.spec.js',
-  /* Ignore tests that rely on geo-restricted external sites (e.g. ee.co.uk) in CI */
-  ...(process.env.CI && { testIgnore: /.*EE.*\.spec\.js/ }),
+
   fullyParallel: true, // each test in spec file is run independently
   timeout: 60*1000, //test timeout across entire project
   expect: { 
