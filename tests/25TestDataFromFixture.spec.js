@@ -11,5 +11,4 @@ testWithFixture('End to end journey with Special locators', async ({page, testDa
         await page.getByRole("button", {name: "Login"}).click();
 
         console.log(await page.title());
-
     });
