@@ -210,3 +210,144 @@ module.exports = config;
 - `viewport: null` + `--start-maximized` together = full screen browser
 - Pass `BASE_URL` at runtime: `BASE_URL=https://mysite.com npx playwright test`
 - `ignoreHttpsErrors: true` — useful when testing on staging with self-signed certs
+
+---
+
+## 9. Playwright Cheat Sheet
+
+A quick-reference for all major Playwright APIs organized by category.
+
+---
+
+### Installation & Setup
+
+| Command / File | Description |
+|----------------|-------------|
+| `npm init playwright@latest` | Scaffolds config, example tests, and installs browsers |
+| `npm i -D @playwright/test` then `npx playwright install` | Add to existing project |
+| `playwright.config.ts` | Defines projects, base URL, timeouts, reporters, and parallelism |
+| `npx playwright test` | Runs all spec files matching `testMatch` pattern |
+| `npx playwright test --ui` | Interactive test explorer with time-travel debugging (UI Mode) |
+| `npx playwright codegen <url>` | Records user actions and generates test code (Codegen) |
+
+---
+
+### Test Structure
+
+| Method | Description |
+|--------|-------------|
+| `test()` | Defines a single test case. Receives a `page` fixture by default |
+| `test.describe()` | Groups related tests into a named suite |
+| `test.beforeAll()` | Runs once before all tests in the suite |
+| `test.afterAll()` | Runs once after all tests in the suite |
+| `test.beforeEach()` | Runs before every individual test — ideal for navigation or login setup |
+| `test.afterEach()` | Runs after each test — used for cleanup or screenshots on failure |
+| `test.only()` | Runs only the focused test(s); useful during development |
+| `test.skip()` | Skips a test conditionally or unconditionally |
+
+---
+
+### Locators
+
+| Locator | Description |
+|---------|-------------|
+| `page.getByRole()` | Locates elements by ARIA role — most recommended for accessibility-first testing |
+| `page.getByText()` | Locates by visible text content, supports exact or regex matching |
+| `page.getByLabel()` | Finds form inputs associated with a label element |
+| `page.getByPlaceholder()` | Targets inputs by their placeholder attribute |
+| `page.getByTestId()` | Uses `data-testid` attributes — great for stable, semantic selectors |
+| `page.locator()` | CSS or XPath selector — flexible but less preferred than semantic locators |
+| `locator.filter()` | Narrows down a locator by text or sub-locator criteria |
+| `locator.nth()` | Selects the n-th match from a list of matching elements |
+
+---
+
+### Actions
+
+| Method | Description |
+|--------|-------------|
+| `click()` | Simulates a single left-click; waits for element to be actionable first |
+| `dblclick()` | Performs a double-click on the target element |
+| `fill()` | Clears and types a value into an input or textarea field |
+| `type()` | Types character by character — useful for triggering key events |
+| `press()` | Sends a keyboard key press (e.g., `'Enter'`, `'Tab'`) |
+| `hover()` | Moves the mouse pointer over an element to trigger hover states |
+| `selectOption()` | Selects a dropdown option by value, label, or index |
+| `check() / uncheck()` | Toggles checkboxes or radio buttons |
+| `uploadFile()` | Uploads a file to an `<input type="file">` element |
+| `dragTo()` | Drags an element and drops it onto a target element |
+
+---
+
+### Assertions (expect)
+
+| Assertion | Description |
+|-----------|-------------|
+| `toBeVisible()` | Asserts the element is visible in the DOM and not hidden |
+| `toBeHidden()` | Asserts the element is not visible or not in the DOM |
+| `toBeEnabled() / toBeDisabled()` | Checks the interactive state of form elements |
+| `toHaveText()` | Asserts the element's inner text matches a string or regex |
+| `toHaveValue()` | Checks the current value of an input or select element |
+| `toHaveURL()` | Validates that the page URL matches a string or regex pattern |
+| `toHaveTitle()` | Asserts the page `<title>` matches a string or regex |
+| `toHaveCount()` | Verifies the number of matching elements in a locator list |
+| `toHaveAttribute()` | Checks a specific HTML attribute and its value on an element |
+| `toHaveClass()` | Asserts that an element has a specific CSS class applied |
+| `toHaveScreenshot()` | Visual regression — compares against a saved screenshot baseline |
+
+---
+
+### Navigation & Page
+
+| Method | Description |
+|--------|-------------|
+| `page.goto()` | Navigates to a URL; waits for `load` event by default |
+| `page.reload()` | Reloads the current page |
+| `page.goBack() / goForward()` | Mimics browser back/forward navigation |
+| `page.waitForURL()` | Waits until the page URL matches the specified pattern |
+| `page.waitForLoadState()` | Waits for `load`, `domcontentloaded`, or `networkidle` |
+| `page.waitForSelector()` | Waits for a CSS/XPath selector to appear in the DOM |
+| `page.evaluate()` | Executes JavaScript in the browser context and returns the result |
+
+---
+
+### Browser & Context
+
+| API | Description |
+|-----|-------------|
+| `chromium / firefox / webkit` | Three browser engines supported out-of-the-box in Playwright |
+| `browser.newContext()` | Creates an isolated browser context — separate cookies, storage, and sessions |
+| `context.newPage()` | Opens a new tab/page within a browser context |
+| `storageState` | Save and reuse authentication state across tests to avoid repeated logins |
+| `browser.newPage()` | Shortcut — creates a default context and page in one call |
+| `context.addCookies()` | Injects cookies into the browser context before tests run |
+
+---
+
+### Fixtures & Configuration
+
+| Setting / API | Description |
+|---------------|-------------|
+| `test.extend()` | Creates custom fixtures to share setup logic (e.g., logged-in page) across tests |
+| `baseURL` | Set in config to prepend to all `page.goto()` calls automatically |
+| `use.trace` | Set to `'on'` or `'retain-on-failure'` to capture traces for debugging |
+| `use.screenshot` | Auto-capture screenshots on test failure with `'only-on-failure'` |
+| `use.video` | Record a video of the test run — helpful for CI debugging |
+| `workers` | Controls parallel test execution; set to `1` to run serially |
+| `retries` | Number of times to retry a failing test before marking it as failed |
+
+---
+
+### Network & API
+
+| Method | Description |
+|--------|-------------|
+| `page.route()` | Intercepts network requests — mock responses, block requests, or modify headers |
+| `page.unroute()` | Removes a previously registered network interception |
+| `request` fixture | Send raw HTTP requests (GET, POST, etc.) without a browser for API testing |
+| `page.waitForResponse()` | Waits for a network response matching a URL pattern or predicate |
+| `page.waitForRequest()` | Waits for an outgoing network request matching a given URL or predicate |
+
+---
+
+> **Quick Reference Priority:** `getByRole` > `getByText` > `getByTestId` > `getByLabel` > `getByPlaceholder` > `locator(css/xpath)`

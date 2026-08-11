@@ -246,23 +246,178 @@ test('navigate to Google', async ({ page }) => {
 
 ---
 
-## 4. Fixtures
+## 4. Fixtures (In-Depth)
 
-Fixtures are Playwright's dependency injection system. They provide pre-configured objects to your tests automatically.
+### 1. What is a Fixture?
 
-### Built-in Fixtures
+- Fixtures are **reusable pieces of code** that set up preconditions and share them across multiple tests
+- They help in managing test data, test environment, browser, context, pages, and other resources
+- Fixtures keep tests clean, DRY (Don't Repeat Yourself), and easy to maintain
+
+### 2. Why Use Fixtures?
+
+- ✓ Avoid code duplication
+- ✓ Improves readability and maintainability
+- ✓ Centralized setup and teardown
+- ✓ Share resources between tests
+- ✓ Better organization and scalability
+
+### 3. Built-in Fixtures
 
 | Fixture | Description |
 |---------|-------------|
-| `page` | A `Page` object representing a single browser tab, ready for interaction |
-| `context` | A `BrowserContext` — acts like an isolated incognito session |
-| `browser` | A `Browser` instance (Chromium, Firefox, or WebKit) |
-| `request` | An `APIRequestContext` for making direct HTTP calls (API testing or fast setup) |
-| `browserName` | A string indicating which browser is currently running |
+| `browser` | Browser instance (shared by all tests in the worker) |
+| `context` | BrowserContext (isolated session) |
+| `page` | Page object (new page in a context) |
+| `request` | APIRequestContext for API testing |
+| `testInfo` | Information about the current test |
+| `workerInfo` | Information about the worker |
 
-### Custom Fixtures
+### 4. Fixture Hierarchy
 
-You can create custom fixtures by extending the default Playwright test:
+```
+Test
+ ↓
+Worker (once per worker)
+ ↓
+Test (each test)
+```
+
+- **Worker fixtures** → run once per worker
+- **Test fixtures** → run for each test
+- **Auto fixtures** → run automatically for each test
+
+### 5. Using Built-in Fixtures Example
+
+```typescript
+// Using built-in fixtures
+import { test, expect } from '@playwright/test';
+
+test('Visit Playwright website', async ({ page }) => {
+  await page.goto('https://playwright.dev');
+  await expect(page).toHaveTitle(/Playwright/);
+});
+```
+
+### 6. Creating Custom Fixtures
+
+```typescript
+import { test as base } from '@playwright/test';
+
+type MyFixtures = {
+  login: (username: string, password: string) => Promise<void>
+};
+
+export const test = base.extend<MyFixtures>({
+  login: async ({ page }, use) => {
+    // setup
+    await page.goto('https://example.com/login');
+    await page.fill('#username', 'standard_user');
+    await page.fill('#password', 'secret_sauce');
+    await page.click('#login-button');
+
+    // provide the fixture to tests
+    await use(async (username, password) => {
+      // custom login logic if needed
+    });
+
+    // teardown (optional)
+    await page.goto('about:blank');
+  }
+});
+```
+
+**How fixtures work:**
+- Code **before** `use()` = **Setup** (runs before the test)
+- What you pass to `use()` = **What the test receives**
+- Code **after** `use()` = **Teardown** (runs after the test, even if test fails)
+
+### 7. Using Custom Fixture in Tests
+
+```typescript
+import { test, expect } from './fixtures';
+
+test('Products page after login', async ({ page, login }) => {
+  await login('standard_user', 'secret_sauce');
+  await expect(page.locator('.title')).toHaveText('Products');
+});
+```
+
+### 8. Fixture Scope
+
+| Scope | Runs | Use Case | Default |
+|-------|------|----------|---------|
+| `test` | Once for each test | Most tests | Yes |
+| `worker` | Once per worker process | Expensive setup (DB, auth, etc.) | No |
+| `auto` | Automatically for every test | Global setup (rarely used) | No |
+
+> Default scope for custom fixtures is `"test"`.
+
+### 9. Worker Scope Fixture Example
+
+Worker-scoped fixtures run **once per worker** — useful for expensive setup like database connections:
+
+```typescript
+export const test = base.extend({
+  db: [async ({}, use) => {
+    const connection = await createDBConnection();  // Runs once
+    await use(connection);                          // Shared across tests in this worker
+    await connection.close();                       // Cleanup once per worker
+  }, { scope: 'worker' }],
+});
+```
+
+### 10. Auto-use Fixture
+
+Auto fixtures run for **every test automatically** — no need to reference them in the test function:
+
+```typescript
+export const test = base.extend({
+  setViewport: [async ({ page }, use) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await use();   // Runs for every test automatically
+  }, { auto: true }],
+});
+```
+
+The test doesn't need to declare `setViewport` as a parameter — it just runs automatically before every test.
+
+### 11. TestInfo Fixture
+
+Access test metadata (name, status, etc.) using `testInfo`:
+
+```typescript
+import { test } from '@playwright/test';
+
+test('Screenshot on failure', async ({ page }, testInfo) => {
+  // ... test steps
+
+  if (testInfo.status !== testInfo.expectedStatus) {
+    await page.screenshot({
+      path: `screenshots/${testInfo.title.replace(/\s+/g, '_')}.png`
+    });
+  }
+});
+```
+
+### 12. Fixtures File Structure (Best Practice)
+
+```
+tests/
+├── fixtures/
+│   ├── index.ts          // Export custom fixtures
+│   ├── auth.fixture.ts   // Authentication fixture
+│   └── db.fixture.ts     // Database fixture
+├── example.spec.ts       // Test files import from fixtures
+└── playwright.config.ts
+```
+
+**Tips:**
+- Keep fixtures small and focused
+- Export `test` from fixtures file
+- Reuse across tests
+
+### 13. Test Data Fixture (How I use it)
 
 ```typescript
 // utils/test-base.ts
@@ -278,14 +433,13 @@ export const test = base.extend({
 });
 ```
 
-**Using the custom fixture in a test file:**
+**Using in a test:**
 
 ```typescript
-// tests/25TestDataFromFixture.spec.js
 import { expect } from '@playwright/test';
 import { test as testWithFixture } from './utils/test-base';
 
-testWithFixture('End to end journey with Special locators', async ({ page, testDataForLogin }) => {
+testWithFixture('End to end journey', async ({ page, testDataForLogin }) => {
   await page.goto("https://rahulshettyacademy.com/client");
   await page.getByPlaceholder("email@example.com").fill(testDataForLogin.email);
   await page.getByPlaceholder("enter your passsword").fill(testDataForLogin.password);
@@ -294,12 +448,29 @@ testWithFixture('End to end journey with Special locators', async ({ page, testD
 });
 ```
 
-**Key points:**
-- Import `test` from your custom fixture file (not from `@playwright/test`)
-- The fixture name (`testDataForLogin`) becomes available as a parameter in your test function
-- Playwright injects it automatically — no manual setup needed
+### 14. Do's and Don'ts
 
-**Real-world use case:** Perform login before every test using a fixture so you don't repeat login steps in every test file.
+**Do's ✓**
+- Use fixtures to remove duplication
+- Keep setup and teardown in fixtures
+- Use proper scope (test/worker/auto)
+- Keep fixtures independent
+- Close connections and clean resources
+
+**Don'ts ✗**
+- Don't put assertions in fixtures
+- Don't create complex logic in fixtures
+- Don't share mutable data via fixtures
+- Don't ignore teardown
+- Don't use heavy worker fixtures unnecessarily
+
+### Fixture Lifecycle (Visual Flow)
+
+```
+Setup (Preconditions) → Provide to Tests (Using Fixtures) → Run Tests (Using Resources) → Teardown (Cleanup) → Better Tests (Clean & Reusable)
+```
+
+> **Fixtures make your tests cleaner, maintainable and scalable. Use them wisely!**
 
 ---
 
@@ -390,6 +561,119 @@ Or override via CLI without changing config:
 ```bash
 npx playwright test --headed
 ```
+
+---
+
+## Playwright Codegen — Your Fastest Start, Not the Finish Line
+
+> Record. Generate. Understand. Optimize.
+
+### What is Codegen?
+
+Codegen is a Playwright tool that **automatically generates test scripts** for the actions you perform in the browser. It opens a browser, records your interactions, and converts them into Playwright code in real-time.
+
+### How Codegen Works
+
+```
+Run Codegen  →  Browser Opens  →  Code Generates  →  Save & Use
+```
+
+1. **Run Codegen** — `npx playwright codegen`
+2. **Browser Opens** — You interact with the application (click, type, navigate)
+3. **Code Generates** — Playwright code is generated in real-time as you interact
+4. **Save & Use** — Save the script and enhance it further
+
+### Command
+
+```bash
+# Basic usage
+npx playwright codegen
+
+# With a specific URL
+npx playwright codegen https://practice.automationtesting.in/
+
+# Save output to a file
+npx playwright codegen https://www.amazon.in -o ./tests/codegen_example.spec.js
+```
+
+### Why Do We Use It?
+
+- Quick test script creation
+- Explore locators easily
+- Understand Playwright syntax
+- Great for learning & prototyping
+- Speed up initial test development
+
+### How is It Helpful?
+
+- Saves time in writing repetitive steps
+- Helps identify the right locators
+- Real-time code generation boosts confidence
+- Ideal for POCs and demo scenarios
+- A great learning companion for beginners
+
+### Codegen Output Example
+
+When you interact with a login form, Codegen generates:
+
+```javascript
+test('example test', async ({ page }) => {
+  await page.goto('https://practice.automationtesting.in/');
+  await page.locator('#username').fill('testuser');
+  await page.locator('#password').fill('password');
+  await page.locator('#rememberme').check();
+  await page.locator('#submit').click();
+});
+```
+
+### Why Shouldn't We Use It Very Often?
+
+- Generates **non-maintainable** code
+- Locators may be too specific or flaky
+- **No validations or assertions** added
+- No structure (like POM, reusable methods)
+- Hard to maintain in the long run
+- Not scalable for real-world frameworks
+
+### Raw Codegen vs Refactored Code
+
+**Raw Codegen output (not ideal for production):**
+
+```javascript
+test('example test', async ({ page }) => {
+  await page.goto('https://practice.automationtesting.in/');
+  await page.locator('#username').fill('testuser');
+  await page.locator('#password').fill('password');
+  await page.locator('#rememberme').check();
+  await page.locator('#submit').click();
+});
+```
+
+**Refactored for Maintainability (what you should do):**
+
+```javascript
+test('valid login test', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('testuser', 'password');
+  await expect(loginPage.welcomeText).toBeVisible();
+});
+```
+
+| Raw Codegen | Refactored |
+|-------------|-----------|
+| Hard to maintain | ✓ Reusable |
+| No structure | ✓ Readable |
+| Fragile locators | ✓ Maintainable |
+| No assertions | ✓ Scalable |
+
+### Pro Tip
+
+> Use Codegen to **accelerate your start**, but always refactor the code to make it clean, reusable, and framework-ready.
+
+### Key Takeaway
+
+Playwright Codegen is a **powerful assistant, not a replacement** for good automation practices. Use it smartly, refactor wisely, and build frameworks that last!
 
 ---
 
@@ -1382,6 +1666,198 @@ npx playwright-cli show
 
 - **Playwright CLI** = best for coding agents in terminals (Claude Code, Copilot CLI, Kiro CLI) — low token cost, fast
 - **Playwright MCP** = best for IDE-integrated agents that need live browser context — richer but more expensive
+
+---
+
+## Trace Viewer
+
+Trace viewer helps to debug tests **step by step**. It records a full timeline of everything that happened — DOM snapshots, network calls, console messages, and screenshots.
+
+**Run test with trace:**
+
+```bash
+npx playwright test --trace on
+```
+
+**Then open the trace:**
+
+```bash
+npx playwright show-trace
+```
+
+This opens the Trace Viewer in the browser where you can:
+- See a timeline of all actions
+- Inspect DOM snapshots before/after each action
+- View network requests and responses
+- Check console messages
+- See screenshots at each step
+
+> Helps in debugging test failures!
+
+**Configure in config:**
+
+```javascript
+const config = ({
+  use: {
+    trace: 'on',                  // Always record
+    // trace: 'retain-on-failure', // Only keep if test fails
+    // trace: 'on-first-retry',    // Record only on retry
+  }
+});
+module.exports = config;
+```
+
+---
+
+## Retry & Failures
+
+Retry helps in handling flaky tests. When a test fails, Playwright can automatically re-run it.
+
+**Config example:**
+
+```javascript
+const config = ({
+  retries: 2,   // Retry failed tests up to 2 times
+  use: {
+    actionTimeout: 10000,       // Timeout for each action (click, fill, etc.) — 10s
+    navigationTimeout: 30000,   // Timeout for page navigation — 30s
+  }
+});
+module.exports = config;
+```
+
+**Key Points:**
+- `retries: 2` — retry a failing test 2 more times before marking it failed
+- `actionTimeout` — max time to wait for a single action (click, fill)
+- `navigationTimeout` — max time to wait for `page.goto()` to complete
+- Keep `retries` at top level, NOT inside `use`
+
+---
+
+## Environment Variables
+
+Use a `.env` file for storing sensitive or environment-specific data. Keeps secrets out of your code.
+
+**.env file:**
+
+```
+BASE_URL=https://example.com
+USERNAME=admin
+PASSWORD=admin123
+```
+
+**Access in config or tests using `process.env.VARIABLE_NAME`:**
+
+```javascript
+// In playwright.config.js
+const config = ({
+  use: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+  }
+});
+module.exports = config;
+```
+
+```javascript
+// In test file
+test('login test', async ({ page }) => {
+  await page.fill('#username', process.env.USERNAME);
+  await page.fill('#password', process.env.PASSWORD);
+});
+```
+
+**To load `.env` files automatically, install dotenv:**
+
+```bash
+npm install dotenv
+```
+
+Then in your config:
+
+```javascript
+require('dotenv').config();
+```
+
+Or pass variables directly in the command:
+
+```bash
+BASE_URL=https://staging.myapp.com npx playwright test
+```
+
+---
+
+## Global Setup
+
+Global setup runs **once before all tests** start. Useful for tasks like seeding a database, creating auth tokens, or any one-time setup.
+
+**Create a global-setup file:**
+
+```typescript
+// global-setup.ts
+export default async function globalSetup() {
+  console.log('Running global setup...');
+  // Example: Login and save auth state
+  // Example: Seed test database
+  // Example: Start a mock server
+}
+```
+
+**Register it in playwright.config.ts:**
+
+```javascript
+// playwright.config.js
+const config = ({
+  globalSetup: 'path/to/global-setup.ts',
+  // ...rest of config
+});
+module.exports = config;
+```
+
+**Common use cases:**
+- Authenticate once and save `storageState` for all tests to reuse
+- Set up test data via API before the suite runs
+- Start external services or mock servers
+
+**There's also `globalTeardown`** — runs once after all tests finish:
+
+```javascript
+const config = ({
+  globalSetup: './global-setup.ts',
+  globalTeardown: './global-teardown.ts',
+});
+```
+
+---
+
+## Best Practices
+
+Follow these to write reliable, maintainable Playwright tests:
+
+1. **Use meaningful test names** — describe what the test verifies, not how
+2. **Follow Page Object Model** — separate locators and actions from test logic
+3. **Keep tests independent** — no test should depend on another test's outcome or order
+4. **Avoid hard waits** — never use `page.waitForTimeout()`; rely on auto-waiting and assertions
+5. **Use assertions properly** — always verify expected outcomes; a passing test without assertions proves nothing
+6. **Maintain test data separately** — use JSON files, fixtures, or API setup; don't hardcode data in tests
+7. **Use proper locators** — prefer `getByRole()`, `getByText()`, `getByTestId()` over fragile CSS/XPath
+8. **Clean up after tests** — delete created data, close connections
+9. **Run tests in parallel** — design for isolation so tests can run concurrently
+10. **Keep tests fast** — use API for setup, block unnecessary resources, reuse auth state
+
+> Good practices → Reliable Tests.
+
+---
+
+## Useful Links
+
+| Resource | URL |
+|----------|-----|
+| Official Docs | [https://playwright.dev/](https://playwright.dev/) |
+| GitHub Repo | [https://github.com/microsoft/playwright](https://github.com/microsoft/playwright) |
+| Playwright API Reference | [https://playwright.dev/docs/api/class-playwright](https://playwright.dev/docs/api/class-playwright) |
+| Locators Guide | [https://playwright.dev/docs/locators](https://playwright.dev/docs/locators) |
+| Auto-Waiting | [https://playwright.dev/docs/actionability](https://playwright.dev/docs/actionability) |
+| Trace Viewer | [https://playwright.dev/docs/trace-viewer](https://playwright.dev/docs/trace-viewer) |
 
 ---
 
