@@ -1558,3 +1558,308 @@ function longestSubstring(s: string): number {
 ---
 
 *Good luck with your interview preparation!*
+
+---
+
+## Senior SDET — Real-World Playwright Questions
+
+If you're preparing for a Senior SDET / QA Automation / Playwright + TypeScript interview, don't just learn Playwright syntax. Be ready to explain how you **solve real automation problems**.
+
+---
+
+### How do you handle flaky tests in Playwright?
+
+**Answer:**
+
+I first identify the root cause instead of simply increasing retries. I check for:
+
+- Unstable locators
+- Hard-coded waits
+- Race conditions
+- Test data dependencies
+- Network/API delays
+- Shared state between tests
+
+Then I apply these solutions:
+
+- **Playwright auto-waiting** — every action auto-waits for actionability
+- **Reliable locators** — `getByRole()`, `getByTestId()` over fragile CSS
+- **Web-first assertions** — `expect(locator).toBeVisible()` auto-retries
+- **Isolated test data** — each test creates its own data, no shared state
+- **Proper synchronization** — `waitForResponse()`, `waitForURL()` where needed
+
+```typescript
+// Bad — hard wait, flaky
+await page.waitForTimeout(3000);
+await page.click('#btn');
+
+// Good — auto-waits, reliable
+await expect(page.locator('#btn')).toBeVisible();
+await page.click('#btn');
+```
+
+---
+
+### How do you handle authentication in Playwright?
+
+**Answer:**
+
+For large test suites, I prefer using **authentication state** instead of logging in before every test.
+
+```typescript
+// Save auth state after login (run once in global setup)
+await page.context().storageState({
+  path: 'playwright/.auth/user.json'
+});
+```
+
+The authenticated state is then reused across tests:
+
+```javascript
+// playwright.config.js
+const config = ({
+  use: {
+    storageState: 'playwright/.auth/user.json',
+  }
+});
+module.exports = config;
+```
+
+**Benefits:**
+- Faster execution — no login per test
+- Less duplicate login code
+- Better scalability
+- Reduced total test execution time
+
+---
+
+### How would you test both UI and API in the same Playwright framework?
+
+**Answer:**
+
+I use Playwright's built-in API capabilities alongside browser automation. This gives a single framework for both UI and API testing.
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('API + UI combined', async ({ page, request }) => {
+  // API: Create test data quickly
+  const response = await request.post('/api/orders', {
+    data: { product: 'Widget', quantity: 1 }
+  });
+  expect(response.ok()).toBeTruthy();
+  const { orderId } = await response.json();
+
+  // UI: Verify the order appears on the page
+  await page.goto(`/orders/${orderId}`);
+  await expect(page.locator('.order-status')).toHaveText('Pending');
+});
+```
+
+**API testing is used for:**
+- Backend validation
+- Test data creation (faster than UI)
+- Faster setup/teardown
+- Response validation (status codes, schemas, body)
+
+**UI tests then validate** the complete user journey end-to-end.
+
+---
+
+### How do you run Playwright tests in parallel?
+
+**Answer:**
+
+Playwright Test supports parallel execution using workers.
+
+```bash
+npx playwright test --workers=4
+```
+
+Or configure in config:
+
+```javascript
+const config = ({
+  workers: 10,
+  fullyParallel: true,
+});
+module.exports = config;
+```
+
+Parallel execution can significantly reduce regression time — but tests **must be independent** and free from shared-state dependencies.
+
+**Key rules for parallel tests:**
+- Each test creates its own data
+- No test depends on another test's outcome
+- Use unique identifiers (timestamps, worker index)
+- Don't share mutable variables across tests
+
+---
+
+### How would you design a scalable Playwright framework?
+
+**Answer:**
+
+My framework structure:
+
+```
+framework/
+├── pages/              # Page Objects
+├── fixtures/           # Custom fixtures (auth, data, pages)
+├── testData/           # JSON files, environment configs
+├── api/                # API client utilities
+├── utils/              # Helpers (date, string, file utils)
+├── config/             # Environment management
+├── auth/               # Storage state files per role
+├── tests/              # Test spec files
+├── reports/            # HTML, Allure, screenshots
+└── .github/workflows/  # CI/CD pipeline
+```
+
+**Design principles I focus on:**
+
+| Principle | How |
+|-----------|-----|
+| Reusability | Page Objects + shared fixtures |
+| Test isolation | Fresh context per test, unique data |
+| Parallel execution | Independent tests, no shared state |
+| Maintainability | POM pattern, DRY, clean structure |
+| Reliable reporting | HTML reports, screenshots on failure, trace on retry |
+| UI + API coverage | Combined in one framework using `request` fixture |
+| CI/CD integration | GitHub Actions / Jenkins with sharding |
+
+---
+
+### Bonus: What is the biggest mistake in Playwright automation?
+
+**Answer:**
+
+> Writing tests that work on your machine but are unreliable in CI.
+
+A good automation engineer designs for:
+
+- **Local execution** — headed mode, debugging
+- **CI execution** — headless, no display server
+- **Parallel execution** — isolated tests, no shared state
+- **Cross-browser execution** — Chromium + Firefox + WebKit
+
+**Common mistakes that cause CI failures:**
+- Hard-coded timeouts that work locally but not on slower CI machines
+- Tests depending on screen resolution or viewport size
+- Shared test data that causes conflicts in parallel
+- Relying on network speed (mock external APIs instead)
+- Screenshots/videos not configured for failure debugging
+
+**The fix:** Always run tests in CI-like conditions locally before pushing — headless, parallel, with retries off.
+
+---
+
+## Reducing CI/CD Pipeline Execution Time
+
+### "Your Playwright test suite takes 4 hours to run in the CI/CD pipeline. How would you reduce the execution time?"
+
+This is not just a Playwright question — it tests your understanding of test architecture, parallel execution, CI/CD, and optimization.
+
+---
+
+#### 1. Enable Parallel Execution
+
+Run independent tests across multiple workers instead of executing them sequentially.
+
+```javascript
+workers: 4
+```
+
+This can significantly reduce total execution time.
+
+---
+
+#### 2. Use Sharding
+
+Distribute the test suite across multiple CI machines.
+
+```bash
+npx playwright test --shard=1/4
+npx playwright test --shard=2/4
+npx playwright test --shard=3/4
+npx playwright test --shard=4/4
+```
+
+Instead of: ⏱️ 4 hours on 1 machine
+
+You could achieve: ⚡ ~1 hour across 4 machines
+
+---
+
+#### 3. Avoid Unnecessary UI Tests
+
+Not everything needs to be validated through the UI.
+
+Use **API testing** for backend validations and test setup wherever appropriate. UI tests should focus on actual user journeys — not verifying data that an API call can confirm in milliseconds.
+
+---
+
+#### 4. Optimize Test Data & Setup
+
+Avoid creating the same test data repeatedly. Use:
+
+- API-based setup (create data via REST calls, not clicking through UI)
+- Fixtures (reusable setup logic)
+- Storage state (authenticate once, reuse everywhere)
+- Reusable authentication (no login per test)
+
+---
+
+#### 5. Reduce Unnecessary Waits
+
+Avoid hard waits like:
+
+```typescript
+// ❌ Never do this
+await page.waitForTimeout(5000);
+```
+
+Prefer Playwright's auto-waiting and condition-based waits:
+
+```typescript
+// ✅ Auto-retries until condition met
+await expect(page.locator('.result')).toBeVisible();
+```
+
+---
+
+#### 6. Run Tests Based on Purpose
+
+Instead of running the entire suite on every pipeline trigger:
+
+| Trigger | What to run |
+|---------|-------------|
+| **PR / Merge Request** | Smoke tests + impacted tests only |
+| **Daily (nightly)** | Full regression suite |
+| **Release** | Full regression + cross-browser |
+
+This prevents unnecessary full-suite runs on every code change.
+
+---
+
+#### 7. Identify Slow Tests
+
+Use Playwright reports and CI metrics to find:
+
+- 🐌 Slow tests (taking disproportionately long)
+- ❌ Frequently failing tests (causing unnecessary retries)
+- 🔁 Tests with unnecessary retries (masking real issues)
+
+Then optimize the biggest bottlenecks first — often 20% of tests cause 80% of the execution time.
+
+---
+
+#### Interview Answer
+
+> "I wouldn't simply increase the number of workers. First, I would identify where the 4 hours are being spent. Then I would use parallel execution and sharding, optimize test data and authentication setup, replace unnecessary UI validations with API checks, remove hard waits, and create different execution strategies for PR, nightly, and release pipelines."
+
+---
+
+#### Key Takeaway
+
+> Good automation is not just about writing more tests. It's about building a test suite that is **fast, reliable, maintainable, and scalable**.
