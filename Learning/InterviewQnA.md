@@ -1863,3 +1863,543 @@ Then optimize the biggest bottlenecks first — often 20% of tests cause 80% of 
 #### Key Takeaway
 
 > Good automation is not just about writing more tests. It's about building a test suite that is **fast, reliable, maintainable, and scalable**.
+
+
+---
+
+## Capgemini Interview — Playwright + JavaScript (10-08-2026)
+
+---
+
+### 1. Introduce yourself and explain your current project and automation framework.
+
+*(Refer to Section 1 — Introduction & Self-Presentation for a detailed sample answer)*
+
+---
+
+### 2. Why are we using Playwright nowadays instead of Selenium?
+
+**Answer:**
+
+| Aspect | Selenium | Playwright |
+|--------|----------|-----------|
+| Architecture | HTTP-based (WebDriver protocol) — slow | WebSocket (DevTools Protocol) — fast |
+| Browser drivers | Requires separate chromedriver, geckodriver etc. | Bundles browser binaries — no driver mismatch |
+| Auto-waiting | No — manual explicit/implicit waits | Yes — built into every action |
+| Multi-browser | Needs separate setup per browser | Chromium + Firefox + WebKit in one API |
+| Network interception | Needs BrowserMob Proxy | Built-in `page.route()` |
+| Parallel execution | Needs Selenium Grid or TestNG config | Native workers out of the box |
+| Debugging | Limited | Trace Viewer, Codegen, Inspector, UI Mode |
+| Context isolation | New browser instance (heavy) | BrowserContext (lightweight, instant) |
+| iFrames | `switchTo().frame()` — verbose | `frameLocator()` — chainable |
+| Mobile emulation | Limited | Built-in device descriptors |
+
+**Why teams are switching:**
+- Faster test execution (WebSocket vs HTTP)
+- Less flaky tests (auto-waiting eliminates timing issues)
+- Better developer experience (Trace Viewer, Codegen, UI Mode)
+- Single framework for UI + API testing
+- No driver management headaches
+
+---
+
+### 3. What are fixtures in Playwright? How do you create a custom fixture?
+
+**Answer:**
+
+Fixtures are Playwright's **dependency injection system** — they provide pre-configured, isolated resources to your tests automatically with built-in setup and teardown.
+
+**Built-in fixtures:** `page`, `context`, `browser`, `request`
+
+**Creating a custom fixture:**
+
+```javascript
+// fixtures/test-base.js
+import { test as base } from '@playwright/test';
+
+export const test = base.extend({
+  // Custom fixture: authenticated page
+  authenticatedPage: async ({ page }, use) => {
+    // Setup — runs before test
+    await page.goto('https://myapp.com/login');
+    await page.fill('#username', 'admin');
+    await page.fill('#password', 'password');
+    await page.click('#login-btn');
+    await page.waitForURL('**/dashboard');
+
+    // Provide to test
+    await use(page);
+
+    // Teardown — runs after test (even if test fails)
+    await page.goto('about:blank');
+  }
+});
+
+export { expect } from '@playwright/test';
+```
+
+**Using it in a test:**
+
+```javascript
+import { test } from './fixtures/test-base';
+
+test('dashboard shows welcome', async ({ authenticatedPage }) => {
+  await expect(authenticatedPage.locator('.welcome')).toBeVisible();
+});
+```
+
+**Key points:**
+- Code before `use()` = setup
+- What you pass to `use()` = what the test receives
+- Code after `use()` = teardown (automatic cleanup)
+
+---
+
+### 4. How do you handle merge conflicts in Git?
+
+**Answer:**
+
+```bash
+# 1. Pull the latest changes from the target branch
+git pull origin main
+
+# 2. If conflicts occur, Git marks them in the files like:
+<<<<<<< HEAD
+  your changes
+=======
+  incoming changes
+>>>>>>> main
+
+# 3. Manually resolve — decide what to keep
+# 4. Stage resolved files
+git add <resolved-file>
+
+# 5. Commit the merge
+git commit -m "Resolved merge conflicts"
+
+# 6. Push
+git push
+```
+
+**My approach:**
+- I use VS Code's built-in merge editor — it shows both versions side by side
+- For test files, I usually keep both changes (new tests from both branches)
+- For config files, I carefully review what changed and merge manually
+- I always run the full test suite after resolving conflicts to ensure nothing broke
+
+**Prevention:**
+- Frequent small PRs (less chance of conflicts)
+- Communicate with team about shared files
+- Rebase feature branches regularly
+
+---
+
+### 5. About flaky tests? Explain with an example.
+
+**Answer:**
+
+A **flaky test** is a test that sometimes passes and sometimes fails without any code changes. It's unreliable and erodes confidence in the test suite.
+
+**Example of a flaky test:**
+
+```javascript
+// ❌ FLAKY — race condition
+test('add item to cart', async ({ page }) => {
+  await page.goto('/products');
+  await page.click('.add-to-cart');
+
+  // This might fail if the cart update is async and hasn't completed yet
+  const count = await page.locator('.cart-count').textContent();
+  expect(count).toBe('1'); // Sometimes '0' because cart hasn't updated yet!
+});
+```
+
+**Why it's flaky:** The cart count updates asynchronously after clicking. Sometimes the assertion runs before the DOM updates.
+
+**Fixed version:**
+
+```javascript
+// ✅ STABLE — uses auto-retrying assertion
+test('add item to cart', async ({ page }) => {
+  await page.goto('/products');
+  await page.click('.add-to-cart');
+
+  // Auto-retries until condition is met or timeout
+  await expect(page.locator('.cart-count')).toHaveText('1');
+});
+```
+
+**Common causes of flakiness:**
+- Hard-coded waits (`waitForTimeout`)
+- Race conditions (asserting before async updates)
+- Shared test data (tests interfere with each other in parallel)
+- Network instability (external API calls)
+- Animation timing
+
+---
+
+### 6. How do you debug flaky or intermittent test failures?
+
+**Answer:**
+
+**Step-by-step approach:**
+
+1. **Reproduce** — Run the test multiple times:
+   ```bash
+   npx playwright test --repeat-each=10 tests/flaky.spec.js
+   ```
+
+2. **Enable traces** — Capture what happened:
+   ```javascript
+   use: { trace: 'on' }
+   ```
+   Then: `npx playwright show-trace`
+
+3. **Check the Trace Viewer** — Look at DOM snapshots, network calls, and timing
+
+4. **Isolate** — Run the test alone to rule out shared state:
+   ```bash
+   npx playwright test tests/flaky.spec.js --workers=1
+   ```
+
+5. **Add logging** — Capture browser console and network:
+   ```javascript
+   page.on('console', msg => console.log('BROWSER:', msg.text()));
+   page.on('requestfailed', req => console.log('FAILED:', req.url()));
+   ```
+
+6. **Fix root cause:**
+   - Replace `waitForTimeout` with assertions
+   - Use `waitForResponse()` for API-dependent UI
+   - Isolate test data
+   - Mock unstable external services
+
+---
+
+### 7. CI/CD — Script passing locally but failing in pipeline?
+
+**Answer:**
+
+**My troubleshooting approach:**
+
+| Check | What to look for |
+|-------|------------------|
+| **Screenshots/Traces** | Enable `screenshot: 'on'` and `trace: 'on'` in CI config — download artifacts |
+| **Headless vs Headed** | Locally you might run headed; CI is headless — some rendering differences |
+| **Viewport/Resolution** | CI might have different default viewport — set explicitly in config |
+| **Timing** | CI machines are often slower — avoid hard waits, rely on auto-waiting |
+| **Environment** | Different base URLs, missing env vars, network restrictions |
+| **Dependencies** | Browser binaries not installed — ensure `npx playwright install` runs in CI |
+| **File paths** | OS differences (Windows vs Linux in CI) — use `path.join()` |
+| **Parallelism** | Tests might be isolated locally but conflict in parallel on CI |
+
+**Concrete steps:**
+
+```bash
+# 1. Run locally in headless mode (simulate CI)
+npx playwright test --workers=4
+
+# 2. Check CI logs for the exact error message
+
+# 3. Download trace artifacts from CI and open locally
+npx playwright show-trace downloaded-trace.zip
+
+# 4. Verify env vars are set in CI pipeline
+
+# 5. Check if browser install step exists in CI config
+```
+
+**CI/CD tools I've used:** GitHub Actions, Jenkins, GitLab CI
+
+---
+
+### 8. Strategies to keep test scripts reusable and maintainable as the project grows?
+
+**Answer:**
+
+1. **Page Object Model (POM)** — Separate locators and actions from tests
+2. **Custom fixtures** — Reusable setup logic (auth, navigation, data)
+3. **Utility functions** — Common helpers (date formatting, data generation)
+4. **Test data separation** — JSON files or fixtures, not hardcoded in tests
+5. **Meaningful naming** — Test names describe WHAT, not HOW
+6. **DRY principle** — Extract repeated logic into shared functions
+7. **Small, focused tests** — Each test verifies one thing
+8. **Consistent structure** — Standard folder organization across the team
+9. **Code reviews** — Catch duplication and bad patterns early
+10. **Documentation** — README with framework setup and conventions
+
+**Folder structure:**
+
+```
+tests/
+├── pages/          # Page Objects
+├── fixtures/       # Custom fixtures
+├── testData/       # JSON test data
+├── utils/          # Helpers
+├── specs/          # Test files (grouped by feature)
+└── playwright.config.js
+```
+
+---
+
+### 9. Can you launch a browser without using Playwright's built-in fixtures?
+
+**Answer:**
+
+Yes. You can manually launch a browser using Playwright's library API directly:
+
+```javascript
+import { chromium } from 'playwright';
+
+async function launchManually() {
+  // Launch browser manually (no fixture)
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  await page.goto('https://example.com');
+  console.log(await page.title());
+
+  // Must manually close
+  await browser.close();
+}
+
+launchManually();
+```
+
+**When you'd do this:**
+- Standalone scripts (not using `@playwright/test` runner)
+- Custom automation tools
+- Web scraping
+- When you need full control over browser lifecycle
+
+**But in test files, always prefer fixtures** — they handle isolation, cleanup, and parallel safety automatically.
+
+---
+
+### 10. page.locator() vs page.frameLocator()
+
+**Answer:**
+
+| Method | Purpose | Scope |
+|--------|---------|-------|
+| `page.locator()` | Finds elements on the main page DOM | Main page |
+| `page.frameLocator()` | Finds elements INSIDE an iframe | Within a specific iframe |
+
+**page.locator() — for main page elements:**
+
+```javascript
+// Element is on the main page
+await page.locator('#username').fill('admin');
+await page.locator('button[type="submit"]').click();
+```
+
+**page.frameLocator() — for elements inside an iframe:**
+
+```javascript
+// Element is INSIDE an iframe
+const frame = page.frameLocator('#payment-iframe');
+await frame.locator('#card-number').fill('4242424242424242');
+await frame.locator('#expiry').fill('12/25');
+await frame.locator('#pay-btn').click();
+```
+
+**Nested iframes:**
+
+```javascript
+const outerFrame = page.frameLocator('#outer');
+const innerFrame = outerFrame.frameLocator('#inner');
+await innerFrame.locator('button').click();
+```
+
+**Key difference:** You cannot use `page.locator()` to access elements inside an iframe — the iframe has its own separate DOM. You must use `frameLocator()` to "enter" the iframe first.
+
+---
+
+### 11. Explain Promise.all() with an example. Where have you used it?
+
+**Answer:**
+
+`Promise.all()` executes multiple promises **concurrently** and waits for all of them to resolve. If any one fails, the whole thing fails.
+
+**Basic example:**
+
+```javascript
+const [result1, result2, result3] = await Promise.all([
+  fetch('/api/users'),
+  fetch('/api/orders'),
+  fetch('/api/products')
+]);
+// All 3 API calls run at the same time, not one after another
+```
+
+**Where I use it in Playwright — handling new tabs/popups:**
+
+```javascript
+test('handle new tab', async ({ context, page }) => {
+  await page.goto('https://example.com');
+
+  // Click opens a new tab — we need to wait for it AND click simultaneously
+  const [newPage] = await Promise.all([
+    context.waitForEvent('page'),   // Wait for new tab to open
+    page.locator('#external-link').click()  // Click that triggers new tab
+  ]);
+
+  await newPage.waitForLoadState();
+  console.log(await newPage.title());
+});
+```
+
+**Why Promise.all() here?**
+- `context.waitForEvent('page')` needs to be listening BEFORE the click happens
+- The click triggers the new tab
+- Both must happen concurrently — if you click first, you might miss the event
+
+**Other Playwright uses:**
+- Waiting for download + clicking download button
+- Waiting for dialog + triggering the dialog
+- Waiting for network response + performing the action
+
+---
+
+### 12. Open URL in Firefox, handle popup, validate popup text
+
+**Answer (on-screen coding):**
+
+```javascript
+import { test, expect, firefox } from '@playwright/test';
+
+test('handle popup in Firefox', async () => {
+  // Launch Firefox manually
+  const browser = await firefox.launch({ headless: false });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  // Navigate to URL
+  await page.goto('https://example.com/popup-demo');
+
+  // Register dialog handler BEFORE triggering the popup
+  page.on('dialog', async (dialog) => {
+    // Validate popup text
+    console.log('Popup message:', dialog.message());
+    expect(dialog.message()).toContain('Are you sure');
+
+    // Accept the popup (click OK)
+    await dialog.accept();
+    // Or dismiss: await dialog.dismiss();
+  });
+
+  // Click button that triggers the popup
+  await page.locator('#popup-trigger').click();
+
+  await browser.close();
+});
+```
+
+**Using Playwright Test config (project-based approach):**
+
+```javascript
+// playwright.config.js — run in Firefox
+const config = ({
+  projects: [
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox' }
+    }
+  ]
+});
+module.exports = config;
+```
+
+```javascript
+// Test file — uses fixture (simpler)
+test('handle popup', async ({ page }) => {
+  await page.goto('https://example.com/popup-demo');
+
+  page.on('dialog', async (dialog) => {
+    expect(dialog.message()).toContain('Are you sure');
+    await dialog.accept();
+  });
+
+  await page.locator('#popup-trigger').click();
+});
+```
+
+**Key point:** Always register the dialog handler BEFORE the action that triggers it — dialogs are synchronous and blocking.
+
+---
+
+### 13. Print only non-duplicate characters from a string
+
+**Input:** `"roshan is automation tester & roshan is ui tester"`
+**Expected Output:** `automation & ui`
+
+**JavaScript Solution:**
+
+```javascript
+function getNonDuplicateWords(str) {
+  const words = str.split(' ');
+  const wordCount = {};
+
+  // Count occurrences of each word
+  for (const word of words) {
+    wordCount[word] = (wordCount[word] || 0) + 1;
+  }
+
+  // Filter words that appear only once
+  const unique = words.filter(word => wordCount[word] === 1);
+  return unique.join(' ');
+}
+
+const input = "roshan is automation tester & roshan is ui tester";
+console.log(getNonDuplicateWords(input));
+// Output: "automation & ui"
+```
+
+**Explanation:**
+1. Split the string into words
+2. Count how many times each word appears
+3. Keep only words with count === 1 (non-duplicate)
+4. Join them back into a string
+
+**Complexity:** Time O(n), Space O(n)
+
+---
+
+### 14. Find the last non-repeating character in a string
+
+**JavaScript Solution:**
+
+```javascript
+function lastNonRepeatingChar(str) {
+  const charCount = {};
+
+  // Count frequency of each character
+  for (const char of str) {
+    charCount[char] = (charCount[char] || 0) + 1;
+  }
+
+  // Traverse from the END to find last non-repeating
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (charCount[str[i]] === 1) {
+      return str[i];
+    }
+  }
+
+  return null; // No non-repeating character found
+}
+
+// Examples
+console.log(lastNonRepeatingChar("automation")); // 'n'
+console.log(lastNonRepeatingChar("aabbcc"));     // null
+console.log(lastNonRepeatingChar("abcabc"));     // null
+console.log(lastNonRepeatingChar("abcdef"));     // 'f'
+console.log(lastNonRepeatingChar("stress"));     // 't'
+```
+
+**Explanation:**
+1. Count frequency of every character
+2. Loop from the END of the string backwards
+3. Return the first character (from the end) that has count === 1
+
+**Complexity:** Time O(n), Space O(1) for fixed character set
