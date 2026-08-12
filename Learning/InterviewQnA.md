@@ -33,6 +33,7 @@ A comprehensive guide covering Playwright interview topics — from fundamentals
 25. [Coding Questions](#25-coding-questions)
 26. [Managerial Questions](#26-managerial-questions)
 27. [Tips for Interview Success](#27-tips-for-interview-success)
+28. [Capgemini Interview — Playwright + JavaScript (10-08-2026)](#28-capgemini-interview--playwright--javascript-10-08-2026)
 
 ---
 
@@ -1867,7 +1868,7 @@ Then optimize the biggest bottlenecks first — often 20% of tests cause 80% of 
 
 ---
 
-## Capgemini Interview — Playwright + JavaScript (10-08-2026)
+## 28. Capgemini Interview — Playwright + JavaScript (10-08-2026)
 
 ---
 
