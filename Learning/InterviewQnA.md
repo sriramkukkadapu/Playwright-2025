@@ -34,6 +34,8 @@ A comprehensive guide covering Playwright interview topics — from fundamentals
 26. [Managerial Questions](#26-managerial-questions)
 27. [Tips for Interview Success](#27-tips-for-interview-success)
 28. [Capgemini Interview — Playwright + JavaScript (10-08-2026)](#28-capgemini-interview--playwright--javascript-10-08-2026)
+29. [CGI Interview Questions — Playwright](#29-cgi-interview-questions--playwright)
+30. [PwC SDET Interview — Playwright MCP](#30-pwc-sdet-interview--playwright-mcp)
 
 ---
 
@@ -2404,3 +2406,557 @@ console.log(lastNonRepeatingChar("stress"));     // 't'
 3. Return the first character (from the end) that has count === 1
 
 **Complexity:** Time O(n), Space O(1) for fixed character set
+
+
+---
+
+## 29. CGI Interview Questions — Playwright
+
+---
+
+### Round 1 (20–30 Mins)
+
+---
+
+#### 1. Introduction & How do you capture network requests and responses in Playwright?
+
+**Answer:**
+
+```javascript
+test('capture network traffic', async ({ page }) => {
+  // Listen to all requests
+  page.on('request', (request) => {
+    console.log(`${request.method()} ${request.url()}`);
+  });
+
+  // Listen to all responses
+  page.on('response', (response) => {
+    console.log(`${response.url()} → ${response.status()}`);
+  });
+
+  await page.goto('https://example.com');
+});
+```
+
+**Wait for a specific API response:**
+
+```javascript
+const responsePromise = page.waitForResponse(
+  (resp) => resp.url().includes('/api/users') && resp.status() === 200
+);
+await page.click('#load-users');
+const response = await responsePromise;
+const data = await response.json();
+```
+
+**Key Points:**
+- `page.on('request')` — fires for every outgoing request
+- `page.on('response')` — fires for every received response
+- `page.waitForResponse()` — waits for specific API call to complete
+- Can capture headers, body, status codes
+
+---
+
+#### 2. How can you mock API responses using Playwright?
+
+**Answer:**
+
+```javascript
+test('mock API', async ({ page }) => {
+  // Intercept and return mock data
+  await page.route('**/api/users', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ users: [{ id: 1, name: 'Alice' }] }),
+    });
+  });
+
+  await page.goto('https://example.com/users');
+  await expect(page.locator('.user-card')).toHaveCount(1);
+});
+```
+
+**Other options:**
+- `route.fulfill()` — return custom response (no server hit)
+- `route.abort()` — block the request entirely
+- `route.fetch()` + `route.fulfill()` — modify real response
+- `route.continue()` — let request proceed with modified headers
+
+---
+
+#### 3. How do you take screenshots and videos in Playwright?
+
+**Answer:**
+
+```javascript
+// Full page screenshot
+await page.screenshot({ path: 'screenshots/full.png', fullPage: true });
+
+// Element screenshot
+await page.locator('.hero').screenshot({ path: 'screenshots/hero.png' });
+```
+
+**Config for auto-capture:**
+
+```javascript
+const config = ({
+  use: {
+    screenshot: 'on',           // 'on', 'only-on-failure', 'off'
+    video: 'on-first-retry',    // 'on', 'off', 'on-first-retry'
+  }
+});
+module.exports = config;
+```
+
+**Key Points:**
+- `fullPage: true` captures entire scrollable page
+- Videos saved as `.webm` files
+- `retain-on-failure` saves disk space in CI
+
+---
+
+#### 4. How do you handle authentication in Playwright (Basic Auth, Token-based, OAuth)?
+
+**Answer:**
+
+**Basic Auth:**
+
+```javascript
+const context = await browser.newContext({
+  httpCredentials: { username: 'admin', password: 'pass123' }
+});
+```
+
+**Token-based (storageState — recommended):**
+
+```javascript
+// global-setup.js — login once, save session
+await page.goto('/login');
+await page.fill('#user', 'admin');
+await page.fill('#pass', 'password');
+await page.click('#login-btn');
+await page.context().storageState({ path: './auth/state.json' });
+```
+
+```javascript
+// Config — reuse across all tests
+use: { storageState: './auth/state.json' }
+```
+
+**OAuth:** Save session state after OAuth flow completes, then reuse via `storageState`.
+
+---
+
+#### 5. How do you configure retries and test retries in Playwright?
+
+**Answer:**
+
+```javascript
+const config = ({
+  retries: 2, // Top level — NOT inside `use`
+});
+module.exports = config;
+```
+
+**Per-test override:**
+
+```javascript
+test.describe.configure({ retries: 3 });
+```
+
+**CLI:**
+
+```bash
+npx playwright test --retries=3
+```
+
+**Key Points:**
+- Retries re-run entire test including `beforeEach`
+- Each retry gets a fresh browser context
+- Combine with `video: 'on-first-retry'` to capture only on retries
+- `testInfo.retry` gives current retry count in test code
+
+---
+
+### Round 2 (30–45 Mins)
+
+---
+
+#### 1. What strategies do you use to debug flaky Playwright tests?
+
+**Answer:**
+
+1. **Reproduce:** `npx playwright test --repeat-each=10`
+2. **Trace Viewer:** `use: { trace: 'on-first-retry' }` then `npx playwright show-trace`
+3. **Debug mode:** `npx playwright test --debug`
+4. **Logging:** `page.on('console')`, `page.on('requestfailed')`
+5. **Isolate:** Run with `--workers=1` to rule out shared state
+6. **Fix root cause:** Replace hard waits with assertions, mock unstable APIs, isolate test data
+
+---
+
+#### 2. How do you optimize execution speed in Playwright?
+
+**Answer:**
+
+1. Parallel execution — `workers: 10`, `fullyParallel: true`
+2. Reuse auth state — `storageState` (saves 2-5s per test)
+3. API for setup — create data via API, not UI clicks
+4. Block resources — `page.route('**/*.{png,jpg}', r => r.abort())`
+5. Sharding in CI — `--shard=1/4` across machines
+6. Disable unused features — `video: 'off'`, `trace: 'on-first-retry'`
+
+---
+
+#### 3. How do you handle dynamic elements in Playwright?
+
+**Answer:**
+
+- Use stable locators: `getByRole()`, `getByTestId()` instead of dynamic IDs
+- Auto-retrying assertions: `await expect(locator).toHaveText('value')`
+- Polling: `await expect(async () => { ... }).toPass()`
+- Locators are "lazy" — re-query DOM on every action, never go stale
+
+---
+
+#### 4. What is the difference between locator and page.$ methods?
+
+**Answer:**
+
+| Feature | `page.locator()` | `page.$()` |
+|---------|-----------------|------------|
+| Type | Lazy reference | Eager ElementHandle |
+| Auto-waiting | Yes | No |
+| Re-evaluation | Re-queries DOM each time | Goes stale after DOM change |
+| Recommended | Yes — modern API | No — legacy |
+
+Always use `locator()` in modern Playwright.
+
+---
+
+#### 5. How do you use trace viewer in Playwright for debugging?
+
+**Answer:**
+
+```javascript
+use: { trace: 'on-first-retry' }
+```
+
+```bash
+npx playwright show-trace test-results/trace.zip
+```
+
+Shows: timeline, DOM snapshots, network calls, console logs, action screenshots.
+
+---
+
+#### 6. Share a scenario where Playwright is a better choice than Selenium.
+
+**Answer:**
+
+Multi-user collaboration testing (e.g., Google Docs):
+- Playwright: Two `BrowserContexts` in one test, native WebSocket support, network interception
+- Selenium: Needs two WebDriver instances, no network mocking, manual synchronization
+
+Also better for: file downloads, mobile emulation, iframe handling, auth state reuse.
+
+---
+
+#### 7. How do you implement Page Object Model (POM) in Playwright?
+
+**Answer:**
+
+```javascript
+// pages/LoginPage.js
+export class LoginPage {
+  constructor(page) {
+    this.page = page;
+    this.username = page.getByPlaceholder('email');
+    this.password = page.getByPlaceholder('password');
+    this.loginBtn = page.getByRole('button', { name: 'Login' });
+  }
+  async login(user, pass) {
+    await this.username.fill(user);
+    await this.password.fill(pass);
+    await this.loginBtn.click();
+  }
+}
+```
+
+Use with fixtures for injection:
+
+```javascript
+export const test = base.extend({
+  loginPage: async ({ page }, use) => { await use(new LoginPage(page)); }
+});
+```
+
+---
+
+#### 8. How do you manage test data in Playwright?
+
+**Answer:**
+
+- JSON files for static data
+- Data-driven tests with `for...of` loops
+- Fixtures for injecting test data
+- API-based setup/teardown for dynamic data
+- Environment variables for sensitive data
+
+---
+
+#### 9. What are Playwright's parallel execution capabilities?
+
+**Answer:**
+
+- `workers: N` — N test files run simultaneously
+- `fullyParallel: true` — individual tests within files also run in parallel
+- Each worker = isolated browser (no shared state)
+- Sharding: `--shard=1/4` distributes across CI machines
+- `test.describe.configure({ mode: 'serial' })` for dependent tests
+
+---
+
+#### 10. What is the difference between page, browser, and context in Playwright?
+
+**Answer:**
+
+```
+Browser (one instance per worker)
+├── BrowserContext 1 (isolated session — cookies, storage)
+│   ├── Page 1 (tab — shares session with Page 2)
+│   └── Page 2
+└── BrowserContext 2 (completely separate session)
+    └── Page 3
+```
+
+- **Browser** = application instance
+- **Context** = isolated session (like incognito window)
+- **Page** = a tab within a context
+
+Pages in same context share cookies. Different contexts are fully isolated.
+
+---
+
+#### 11. How do you launch a browser in headless and non-headless modes?
+
+**Answer:**
+
+```javascript
+// Config
+use: { headless: true }   // Default — no browser UI
+
+// CLI override
+// npx playwright test --headed
+```
+
+Headless = faster, for CI. Headed = visible, for debugging.
+
+---
+
+#### 12. What are Playwright fixtures, and how are they useful?
+
+**Answer:**
+
+Fixtures are dependency injection — provide pre-configured objects to tests with automatic setup/teardown.
+
+- Built-in: `page`, `context`, `browser`, `request`
+- Custom: `test.extend()` to create your own
+- Benefits: isolation, no boilerplate, automatic cleanup, lazy initialization
+
+---
+
+#### 13. How do you handle dropdowns, frames, and alerts in Playwright?
+
+**Answer:**
+
+**Dropdown:** `await page.selectOption('#country', { label: 'India' });`
+
+**Frame:** `const frame = page.frameLocator('#iframe'); await frame.locator('#btn').click();`
+
+**Alert:**
+```javascript
+page.on('dialog', async (d) => { await d.accept(); });
+await page.click('#alert-btn');
+```
+
+Register handler BEFORE the action — dialogs are synchronous and blocking.
+
+---
+
+#### 14. How does Playwright handle waits differently compared to Selenium?
+
+**Answer:**
+
+- **Selenium:** Manual explicit/implicit waits, `Thread.sleep()` anti-pattern
+- **Playwright:** Auto-waiting built into every action (checks attached, visible, stable, enabled, not obscured)
+
+Assertions auto-retry: `await expect(locator).toHaveText('value')` polls until condition met or timeout.
+
+Almost zero `waitForTimeout()` calls needed in a good Playwright framework.
+
+---
+
+### Round 3 (Coding + Managerial)
+
+---
+
+#### 1. Count and print number of vowels and consonants in your name
+
+```javascript
+function countVowelsConsonants(name) {
+  let vowels = 0, consonants = 0;
+  for (const char of name.toLowerCase()) {
+    if (char >= 'a' && char <= 'z') {
+      'aeiou'.includes(char) ? vowels++ : consonants++;
+    }
+  }
+  console.log(`Vowels: ${vowels}, Consonants: ${consonants}`);
+}
+countVowelsConsonants('Sriram Kukkadapu'); // Vowels: 6, Consonants: 9
+```
+
+---
+
+#### 2. Unique and duplicates in your name without using Collections in Java
+
+```java
+String name = "SriramKukkadapu".toLowerCase();
+int[] count = new int[26]; // No Collections — just an array
+
+for (int i = 0; i < name.length(); i++)
+    count[name.charAt(i) - 'a']++;
+
+System.out.print("Unique: ");
+for (int i = 0; i < 26; i++)
+    if (count[i] == 1) System.out.print((char)(i + 'a') + " ");
+
+System.out.print("\nDuplicate: ");
+for (int i = 0; i < 26; i++)
+    if (count[i] > 1) System.out.print((char)(i + 'a') + "(" + count[i] + ") ");
+// Unique: d i m p s u | Duplicate: a(3) k(3) r(2)
+```
+
+---
+
+#### 3. Longest Substring without repeating characters
+
+```javascript
+function longestSubstring(s) {
+  const lastIndex = new Map();
+  let maxLen = 0, start = 0;
+
+  for (let end = 0; end < s.length; end++) {
+    if (lastIndex.has(s[end]) && lastIndex.get(s[end]) >= start) {
+      start = lastIndex.get(s[end]) + 1;
+    }
+    lastIndex.set(s[end], end);
+    maxLen = Math.max(maxLen, end - start + 1);
+  }
+  return maxLen;
+}
+console.log(longestSubstring('abcabcbb')); // 3 ("abc")
+console.log(longestSubstring('pwwkew'));   // 3 ("wke")
+```
+
+---
+
+#### 4. How do you distribute tasks to teammates when deadline is near?
+
+**Answer:**
+
+1. **Assess** — List remaining work, identify blockers
+2. **Prioritize** — Must-have (P0) vs nice-to-have (P2)
+3. **Match to strengths** — Complex tasks → senior members
+4. **Communicate** — Daily 15-min syncs, shared board with ownership
+5. **Risk mitigation** — Biggest risk assigned first, backup plan ready
+6. **Scope negotiation** — Communicate cuts early to stakeholders
+
+> "I first list all remaining work and prioritize ruthlessly. I match tasks to strengths, assign highest-risk items to experienced people, take on blockers myself, set up daily syncs, and communicate transparently with stakeholders about what's realistic."
+
+
+---
+
+## 30. PwC SDET Interview — Playwright MCP
+
+---
+
+### Have you used Playwright MCP?
+
+**Answer:**
+
+Yes, I have used Playwright MCP.
+
+Playwright MCP allows AI assistants and AI agents to interact with web applications through Playwright. It can help an AI agent:
+- Navigate a browser
+- Inspect elements
+- Perform actions
+- Understand the current page state
+- Execute application workflows
+
+**In simple terms:**
+
+```
+AI Agent → Playwright MCP → Browser → Web Application
+```
+
+The AI agent communicates via MCP protocol (JSON-RPC tool calls) and Playwright runs as a background MCP server that controls the browser.
+
+---
+
+### What is MCP?
+
+**Answer:**
+
+MCP stands for **Model Context Protocol**.
+
+It is a standardized protocol that allows AI models to interact with external tools, applications, and data sources. Instead of creating separate integrations between an AI model and every tool, MCP provides a **common interface**.
+
+**In simple terms:**
+
+```
+AI Model → MCP → External Tools and Systems
+```
+
+Think of MCP like a USB-C port — one standard connection that works with many different devices (browsers, databases, APIs, file systems, etc.).
+
+---
+
+### How does MCP improve automation?
+
+**Answer:**
+
+MCP makes automation more **AI-driven** by allowing an AI agent to interact with tools and applications based on the current context.
+
+**For example, with Playwright MCP:**
+
+```
+AI Agent → Understands the requirement
+AI Agent → Interacts with the browser
+AI Agent → Identifies elements
+AI Agent → Performs actions
+AI Agent → Observes the result
+AI Agent → Decides the next action
+```
+
+**This can help with:**
+
+| Use Case | How MCP Helps |
+|----------|--------------|
+| **Test case generation** | Create test scenarios from requirements |
+| **Test execution** | Allow AI agents to execute browser workflows |
+| **Exploratory testing** | Dynamically explore application behavior |
+| **Debugging** | Analyze failures and application state |
+| **Test maintenance** | Identify changes in UI elements and workflows |
+
+**Traditional automation vs MCP-based automation:**
+
+| Traditional Automation | MCP-Based Automation |
+|----------------------|---------------------|
+| Follows predefined scripts | AI agents interact dynamically based on current state |
+| Breaks when UI changes | Can adapt to changes by observing the DOM |
+| Manual test creation | AI can generate tests from requirements |
+| Fixed execution flow | Context-aware decision making |
+
+This is why Playwright MCP and MCP are becoming important topics for modern SDET interviews — they represent the shift toward **AI-assisted test automation**.
