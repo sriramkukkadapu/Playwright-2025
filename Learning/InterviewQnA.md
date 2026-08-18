@@ -36,6 +36,8 @@ A comprehensive guide covering Playwright interview topics — from fundamentals
 28. [Capgemini Interview — Playwright + JavaScript (10-08-2026)](#28-capgemini-interview--playwright--javascript-10-08-2026)
 29. [CGI Interview Questions — Playwright](#29-cgi-interview-questions--playwright)
 30. [PwC SDET Interview — Playwright MCP](#30-pwc-sdet-interview--playwright-mcp)
+31. [Accenture SDET Interview — JavaScript + Playwright + API Testing](#31-accenture-sdet-interview--javascript--playwright--api-testing)
+32. [Accenture Interview Questions — Playwright focused](#32-accenture-interview-questions--playwright-focused)
 
 ---
 
@@ -2960,3 +2962,1451 @@ AI Agent → Decides the next action
 | Fixed execution flow | Context-aware decision making |
 
 This is why Playwright MCP and MCP are becoming important topics for modern SDET interviews — they represent the shift toward **AI-assisted test automation**.
+
+---
+
+## 31. Accenture SDET Interview — JavaScript + Playwright + API Testing
+
+**Role:** SDET / Automation Engineer (3–6 Yrs Experience)  
+**Duration:** ~50 mins  
+**Key Focus Areas:** JavaScript Core Concepts, Playwright Automation, API Testing  
+
+---
+
+### JavaScript – Core Concepts
+
+---
+
+#### 1. Remove duplicates from an array without using Set
+
+**Answer:**
+
+There are multiple ways to remove duplicates from an array in JavaScript without using `Set`.
+
+##### Approach 1: Using `filter()` + `indexOf()` (Most Common & Idiomatic)
+`indexOf()` returns the index of the **first occurrence** of an element. If the current index doesn't match `indexOf()`, it is a duplicate.
+
+```javascript
+function removeDuplicatesFilter(arr) {
+  return arr.filter((item, index) => arr.indexOf(item) === index);
+}
+
+const numbers = [1, 2, 3, 2, 4, 1, 5, 6, 5];
+console.log(removeDuplicatesFilter(numbers)); // [1, 2, 3, 4, 5, 6]
+```
+- **Time Complexity:** $O(n^2)$ (due to nested search with `indexOf`)
+- **Space Complexity:** $O(n)$
+
+##### Approach 2: Using `reduce()` + `includes()`
+Accumulate elements in a new array only if they are not already included.
+
+```javascript
+function removeDuplicatesReduce(arr) {
+  return arr.reduce((unique, item) => {
+    return unique.includes(item) ? unique : [...unique, item];
+  }, []);
+}
+
+console.log(removeDuplicatesReduce([10, 20, 10, 30, 40, 20])); // [10, 20, 30, 40]
+```
+
+##### Approach 3: Using a Hash Map / Object Lookup (Fastest: $O(n)$ Time)
+Using a hash map / object lookup to store seen keys in $O(1)$ lookup time:
+
+```javascript
+function removeDuplicatesHash(arr) {
+  const seen = {};
+  const result = [];
+  for (let i = 0; i < arr.length; i++) {
+    const item = arr[i];
+    if (!seen[item]) {
+      seen[item] = true;
+      result.push(item);
+    }
+  }
+  return result;
+}
+
+console.log(removeDuplicatesHash(['apple', 'banana', 'apple', 'orange'])); 
+// ['apple', 'banana', 'orange']
+```
+- **Time Complexity:** $O(n)$
+- **Space Complexity:** $O(n)$
+
+##### Approach 4: Traditional Nested For-Loops (No High-Order Functions)
+
+```javascript
+function removeDuplicatesLoops(arr) {
+  const result = [];
+  for (let i = 0; i < arr.length; i++) {
+    let isDuplicate = false;
+    for (let j = 0; j < result.length; j++) {
+      if (arr[i] === result[j]) {
+        isDuplicate = true;
+        break;
+      }
+    }
+    if (!isDuplicate) {
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
+```
+
+---
+
+#### 2. Closures and Hoisting
+
+**Answer:**
+
+##### A. Closures
+A **closure** is a function bundled together with references to its surrounding state (lexical environment). In other words, an inner function has access to the outer function’s variables and scope even **after the outer function has finished executing**.
+
+```javascript
+function createCounter(initialValue = 0) {
+  let count = initialValue; // Private variable enclosed in outer scope
+
+  return {
+    increment: function() {
+      count++;
+      return count;
+    },
+    decrement: function() {
+      count--;
+      return count;
+    },
+    getCount: function() {
+      return count;
+    }
+  };
+}
+
+const counter = createCounter(10);
+console.log(counter.increment()); // 11
+console.log(counter.increment()); // 12
+console.log(counter.decrement()); // 11
+console.log(counter.getCount());  // 11
+```
+
+**Real-world Automation Use Cases for Closures:**
+- **Custom test loggers / metrics trackers**: Encapsulating step counters or test step timings.
+- **Unique Test Data Generators**: Maintaining private sequences (e.g. `generateUser()` incrementing an internal ID).
+- **Environment Configuration**: Storing base URLs or authorization headers in private scope.
+
+---
+
+##### B. Hoisting
+**Hoisting** is JavaScript's default behavior of moving declarations (variable and function declarations) to the top of their containing scope during the compilation phase before code execution.
+
+| Declaration | Hoisted? | Initialized Value | Accessible Before Declaration? |
+|-------------|----------|-------------------|--------------------------------|
+| `var` | Yes | `undefined` | Yes (returns `undefined`) |
+| `let` / `const` | Yes | Uninitialized (Temporal Dead Zone - TDZ) | No (`ReferenceError`) |
+| Function Declaration (`function foo() {}`) | Yes | Full function definition | Yes (can be invoked before declaration) |
+| Function Expression (`var foo = function() {}`) | Only variable hoisted | `undefined` | No (`TypeError: foo is not a function`) |
+
+**Code Example:**
+
+```javascript
+// 1. var Hoisting:
+console.log(a); // undefined (declaration hoisted, assignment stays here)
+var a = 10;
+
+// 2. let/const in Temporal Dead Zone (TDZ):
+// console.log(b); // ReferenceError: Cannot access 'b' before initialization
+let b = 20;
+
+// 3. Function Declaration Hoisting:
+greet(); // Output: "Hello from Playwright!" (Works!)
+function greet() {
+  console.log("Hello from Playwright!");
+}
+
+// 4. Function Expression Hoisting:
+// sayBye(); // TypeError: sayBye is not a function
+var sayBye = function() {
+  console.log("Bye!");
+};
+```
+
+---
+
+#### 3. `==` vs `===`
+
+**Answer:**
+
+In JavaScript, `==` (Loose / Abstract Equality) and `===` (Strict Equality) are comparison operators with fundamentally different behavior regarding type conversion.
+
+| Feature | `==` (Loose Equality) | `===` (Strict Equality) |
+|---------|-----------------------|-------------------------|
+| **Type Coercion** | Performs implicit type coercion before comparison | No type coercion |
+| **Comparison** | Converts operands to a common type, then compares value | Compares both **value** and **data type** |
+| **Performance** | Slightly slower due to conversion logic | Faster (direct comparison) |
+| **Predictability** | Prone to bugs and edge cases | Predictable and reliable |
+
+##### Comparison Examples:
+
+```javascript
+// 1. Primitive comparisons:
+5 == '5'        // true (string '5' coerced to number 5)
+5 === '5'       // false (number !== string)
+
+0 == false      // true (false coerced to 0)
+0 === false     // false (number !== boolean)
+
+null == undefined   // true (special rule in JS spec)
+null === undefined  // false (object/null !== undefined)
+
+'' == 0         // true (empty string coerced to 0)
+'' === 0        // false
+
+// 2. Object & Array comparisons (Reference equality):
+[1, 2] == [1, 2]    // false (different references in memory)
+[1, 2] === [1, 2]   // false (different references in memory)
+```
+
+**SDET Recommendation:**
+Always use `===` and `!==` in test automation assertions and logic to prevent unexpected false positives caused by implicit type coercion.
+
+---
+
+#### 4. Promises vs Async/Await
+
+**Answer:**
+
+Both Promises and `async/await` handle asynchronous operations in JavaScript, but `async/await` is modern syntactic sugar built on top of Promises (introduced in ES2017).
+
+##### Key Differences:
+
+| Aspect | Promises (`.then` / `.catch`) | `async/await` |
+|--------|-------------------------------|---------------|
+| **Syntax** | Method chaining with `.then()`, `.catch()`, `.finally()` | Synchronous-looking code using `async` keyword and `await` operator |
+| **Error Handling** | Handled using `.catch()` callback | Handled using standard `try { ... } catch (error) { ... }` blocks |
+| **Readability** | Can lead to "Promise Chaining Hell" with nested steps | Clean, linear, and easy to read / maintain |
+| **Conditionals / Loops** | Awkward in `for` loops, often requires `Promise.all` or recursion | Natural integration with `for...of`, `if/else`, and `try/catch` |
+| **Debugging** | Stack traces can be fragmented across callback boundaries | Cleaner stack traces matching line-by-line execution |
+
+##### Code Comparison:
+
+**Using Promises:**
+```javascript
+function fetchUserData() {
+  return api.getUser()
+    .then(user => {
+      return api.getOrders(user.id)
+        .then(orders => {
+          return { user, orders };
+        });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      throw error;
+    });
+}
+```
+
+**Using Async/Await (Playwright Standard):**
+```javascript
+async function fetchUserData() {
+  try {
+    const user = await api.getUser();
+    const orders = await api.getOrders(user.id);
+    return { user, orders };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+```
+
+##### Playwright Example with `Promise.all()`
+When an action (like a click) triggers an async event (like a popup or navigation), Playwright uses `Promise.all` to avoid race conditions:
+
+```javascript
+test('wait for popup and click concurrently', async ({ page }) => {
+  const [newPage] = await Promise.all([
+    page.context().waitForEvent('page'),
+    page.click('#open-new-tab-button'), // Triggers the popup
+  ]);
+  await newPage.waitForLoadState();
+  await expect(newPage).toHaveTitle('Dashboard');
+});
+```
+
+---
+
+### Playwright – Automation
+
+---
+
+#### 1. Explain your Playwright framework structure
+
+**Answer:**
+
+"In my current project, we have designed an enterprise-grade, modular end-to-end testing framework using Playwright with JavaScript/TypeScript following the Page Object Model (POM) and Custom Fixtures design pattern."
+
+##### Directory Architecture:
+
+```
+playwright-automation/
+├── .github/
+│   └── workflows/
+│       └── playwright-ci.yml       # CI/CD pipeline (GitHub Actions)
+├── config/
+│   ├── env.qa.json                 # QA environment endpoints & configs
+│   ├── env.stage.json              # Staging environment configs
+│   └── playwright.config.js        # Global configuration (workers, projects, retries)
+├── pages/                          # Page Object Model classes
+│   ├── BasePage.js                 # Common methods (navigate, wait, assertions)
+│   ├── LoginPage.js                # Login page locators and user actions
+│   ├── DashboardPage.js            # Dashboard components and flows
+│   └── CheckoutPage.js             # Checkout actions and validations
+├── fixtures/                       # Custom Playwright Fixtures
+│   └── customFixture.js            # Injected Page Objects, API clients, auth state
+├── testData/                       # Static & Dynamic test data
+│   ├── users.json                  # User credentials & roles
+│   └── orderData.json              # Payload templates
+├── utils/                          # Utility & Helper functions
+│   ├── APIUtils.js                 # REST API helper methods (token generation, setup)
+│   ├── DBUtils.js                  # Database verification helpers
+│   └── DataGenerator.js            # Dynamic test data (faker.js)
+├── tests/                          # Test suites (Spec files)
+│   ├── e2e/
+│   │   ├── auth.spec.js
+│   │   └── checkout.spec.js
+│   └── api/
+│       └── userApi.spec.js
+├── auth/                           # Saved session states
+│   └── userState.json              # storageState cookies & localStorage
+├── test-results/                   # Test execution artifacts
+├── playwright-report/              # Generated HTML test reports
+└── package.json                    # Project dependencies & scripts
+```
+
+##### Key Highlights of the Framework:
+1. **Fixtures-Driven POM:** Pages are instantiated via Playwright fixtures (`test.extend`), eliminating manual `new PageObject(page)` boilerplate in tests.
+2. **Session Reuse (`storageState`):** Authentication runs once during global setup or API setup, saving 3–5 seconds per test case.
+3. **Environment Agnostic:** Dynamic config loading for Dev, QA, Stage, and Prod via environment variables.
+4. **CI/CD Integration:** Runs parallelized suites with HTML reporting, Trace Viewer on first retry, and automatic artifact uploading upon failure.
+
+---
+
+#### 2. How do you handle dynamic elements?
+
+**Answer:**
+
+In modern web applications (React, Angular, Vue), IDs, classes, and attributes are often auto-generated (e.g., `<button id="btn_9f82d1_submit">`). Here is how we handle them in Playwright:
+
+##### 1. Use User-Facing & Resilient Role Locators (Best Practice)
+Playwright recommends locating elements by their accessibility semantics rather than volatile CSS selectors or dynamic IDs:
+
+```javascript
+// Locate by accessible role and accessible name
+await page.getByRole('button', { name: 'Submit' }).click();
+
+// Locate by label text associated with an input
+await page.getByLabel('User Email').fill('test@accenture.com');
+
+// Locate by placeholder text
+await page.getByPlaceholder('Enter your password').fill('SecurePass123');
+
+// Locate by data-testid attribute (dedicated automation attribute)
+await page.getByTestId('order-submit-btn').click();
+```
+
+##### 2. Locator Filtering and Chaining
+When multiple dynamic cards or table rows exist, filter by child element or unique text:
+
+```javascript
+// Filter a dynamic product list by text and child button
+await page.locator('.product-card')
+  .filter({ hasText: 'iPhone 15 Pro' })
+  .getByRole('button', { name: 'Add to Cart' })
+  .click();
+```
+
+##### 3. Handling Dynamic Text with Regex
+Match dynamic or partial text (e.g., "Order #98234 created"):
+
+```javascript
+await expect(page.locator('.order-status')).toHaveText(/Order #\d+ created/);
+```
+
+##### 4. Polling Assertions with `expect.toPass()`
+For elements whose values update asynchronously (e.g., stock price, status ticker):
+
+```javascript
+await expect(async () => {
+  const status = await page.locator('.badge-status').textContent();
+  expect(status.trim()).toBe('Completed');
+}).toPass({
+  intervals: [500, 1000, 2000],
+  timeout: 15000,
+});
+```
+
+##### 5. Playwright's Lazy Locators & Auto-Waiting
+Playwright Locators are **lazy** — they re-evaluate the DOM every time an action or assertion is performed. This completely eliminates Selenium's `StaleElementReferenceException`.
+
+---
+
+#### 3. How do you handle flaky tests?
+
+**Answer:**
+
+"Flaky tests erode trust in automation. In our Playwright framework, we address flakiness systematically at the architecture, test design, and execution levels."
+
+##### Key Strategies:
+
+1. **Leverage Playwright's Built-In Auto-Waiting & Auto-Retrying Assertions:**
+   - Playwright automatically checks actionability (visible, attached, enabled, stable, receive events) before performing actions.
+   - Use web-first assertions (`await expect(locator).toBeVisible()`) instead of non-retrying boolean checks (`expect(await locator.isVisible()).toBe(true)`).
+
+2. **Eliminate Hardcoded Sleep (`page.waitForTimeout`):**
+   - Hardcoded sleeps cause false failures when networks slow down, and waste time when networks are fast.
+   - Replace with event-driven waits: `page.waitForResponse()`, `page.waitForURL()`, or `expect().toPass()`.
+
+3. **Diagnose with Playwright Trace Viewer:**
+   - Configure traces to capture on failure or retry:
+     ```javascript
+     use: {
+       trace: 'on-first-retry', // Collects DOM snapshot, network calls, console logs, and action timeline
+       screenshot: 'only-on-failure',
+       video: 'retain-on-failure'
+     }
+     ```
+   - Open trace with `npx playwright show-trace test-results/.../trace.zip` to step back and forward through execution time.
+
+4. **Ensure Complete Test Isolation:**
+   - Never make Test B depend on data created by Test A.
+   - Use distinct user accounts or create dynamic test data via API (`beforeEach` / custom fixtures).
+   - Playwright automatically provides a fresh `BrowserContext` per test so cookies and caches don't leak.
+
+5. **Configured Automatic Retries in CI:**
+   ```javascript
+   retries: process.env.CI ? 2 : 0, // Retry failed tests up to 2 times in CI pipeline
+   ```
+
+6. **Network & Clock Mocking:**
+   - Mock unstable 3rd-party dependencies (e.g., payment gateways, analytics) using `page.route()`.
+
+---
+
+#### 4. Parallel execution across browsers
+
+**Answer:**
+
+Playwright has native, out-of-the-box parallel execution without needing external grids or plugins.
+
+##### 1. Configuration in `playwright.config.js`:
+
+```javascript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true, // Runs all test cases inside files in parallel
+  workers: process.env.CI ? 4 : '50%', // 4 workers on CI, 50% CPU cores locally
+  retries: 2,
+  
+  projects: [
+    {
+      name: 'Chromium - Desktop',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'Firefox - Desktop',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'WebKit - Safari',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'Mobile Chrome - Pixel 7',
+      use: { ...devices['Pixel 7'] },
+    },
+  ],
+});
+```
+
+##### 2. Controlling Parallelism at File / Suite Level:
+
+```javascript
+// Run all tests in this file in parallel
+test.describe.configure({ mode: 'parallel' });
+
+// Run sequentially when tests must share sequential state
+test.describe.configure({ mode: 'serial' });
+```
+
+##### 3. CI/CD Sharding:
+Distribute test execution across multiple CI machines to reduce execution time linearly:
+```bash
+# Machine 1:
+npx playwright test --shard=1/3
+
+# Machine 2:
+npx playwright test --shard=2/3
+
+# Machine 3:
+npx playwright test --shard=3/3
+```
+
+---
+
+#### 5. Page Object Model (POM) implementation
+
+**Answer:**
+
+"In Playwright, POM encapsulates UI locators and actions within classes, and we integrate them with custom fixtures for clean dependency injection."
+
+##### 1. Page Object Class (`pages/LoginPage.js`):
+
+```javascript
+export class LoginPage {
+  /**
+   * @param {import('@playwright/test').Page} page
+   */
+  constructor(page) {
+    this.page = page;
+    this.usernameInput = page.getByLabel('Username');
+    this.passwordInput = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: 'Sign In' });
+    this.errorMessage = page.locator('.error-banner');
+  }
+
+  async goto() {
+    await this.page.goto('/login');
+  }
+
+  async login(username, password) {
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async getErrorMessage() {
+    return await this.errorMessage.textContent();
+  }
+}
+```
+
+##### 2. Custom Fixture Setup (`fixtures/pomFixture.js`):
+
+```javascript
+import { test as base } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { DashboardPage } from '../pages/DashboardPage';
+
+export const test = base.extend({
+  loginPage: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+    await use(loginPage);
+  },
+  dashboardPage: async ({ page }, use) => {
+    const dashboardPage = new DashboardPage(page);
+    await use(dashboardPage);
+  },
+});
+
+export { expect } from '@playwright/test';
+```
+
+##### 3. Test Implementation (`tests/login.spec.js`):
+
+```javascript
+import { test, expect } from '../fixtures/pomFixture';
+
+test('valid user can log in successfully', async ({ loginPage, dashboardPage }) => {
+  await loginPage.goto();
+  await loginPage.login('sriram@accenture.com', 'ValidPass123');
+  await expect(dashboardPage.welcomeHeader).toHaveText('Welcome, Sriram');
+});
+```
+
+---
+
+### API Testing
+
+---
+
+#### 1. How do you automate REST APIs in Playwright?
+
+**Answer:**
+
+Playwright provides a built-in `APIRequestContext` via the `request` fixture that enables fast, isolated REST API automation without needing third-party libraries like Axios, Supertest, or RestAssured.
+
+##### Advantages:
+- Built into Playwright — no external dependencies.
+- Shares cookie storage, base URLs, and authentication states with browser tests.
+- High performance (executes directly over Node.js HTTP layer).
+
+##### Basic HTTP Methods Example:
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test.describe('CRUD Operations with Playwright APIRequestContext', () => {
+  const baseURL = 'https://jsonplaceholder.typicode.com';
+
+  // GET Request
+  test('GET - Fetch post by ID', async ({ request }) => {
+    const response = await request.get(`${baseURL}/posts/1`);
+    expect(response.status()).toBe(200);
+    expect(response.ok()).toBeTruthy();
+
+    const body = await response.json();
+    expect(body.id).toBe(1);
+    expect(body).toHaveProperty('title');
+  });
+
+  // POST Request
+  test('POST - Create new post', async ({ request }) => {
+    const payload = {
+      title: 'Playwright API Testing',
+      body: 'Automating REST APIs with Playwright',
+      userId: 101,
+    };
+
+    const response = await request.post(`${baseURL}/posts`, {
+      data: payload,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    expect(response.status()).toBe(201);
+    const responseBody = await response.json();
+    expect(responseBody.title).toBe(payload.title);
+    expect(responseBody.id).toBeDefined();
+  });
+
+  // PUT Request
+  test('PUT - Update existing post', async ({ request }) => {
+    const updatePayload = {
+      id: 1,
+      title: 'Updated Title',
+      body: 'Updated Body',
+      userId: 1,
+    };
+
+    const response = await request.put(`${baseURL}/posts/1`, {
+      data: updatePayload,
+    });
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.title).toBe('Updated Title');
+  });
+
+  // DELETE Request
+  test('DELETE - Delete post', async ({ request }) => {
+    const response = await request.delete(`${baseURL}/posts/1`);
+    expect(response.status()).toBe(200);
+  });
+});
+```
+
+---
+
+#### 2. API chaining – practical example
+
+**Answer:**
+
+**API Chaining** is a testing pattern where data extracted from the response of one API request (like an `id`, `token`, or `orderId`) is dynamically passed as an input parameter or header into subsequent API requests.
+
+##### Scenario: User Lifecycle Management
+1. **POST `/api/users`** → Create user, extract generated `userId`.
+2. **GET `/api/users/{userId}`** → Fetch details using `userId`, verify attributes.
+3. **PUT `/api/users/{userId}`** → Update user details (e.g. email/status).
+4. **DELETE `/api/users/{userId}`** → Delete user by `userId`.
+5. **GET `/api/users/{userId}`** → Verify user no longer exists (404 Not Found).
+
+##### Complete Working Playwright Test:
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test('API Chaining: Create -> Read -> Update -> Delete User Lifecycle', async ({ request }) => {
+  const baseURL = 'https://reqres.in/api';
+  let createdUserId;
+
+  // Step 1: POST Request - Create User
+  await test.step('Step 1: Create a new user', async () => {
+    const createResponse = await request.post(`${baseURL}/users`, {
+      data: {
+        name: 'Sriram SDET',
+        job: 'Lead Automation Engineer',
+      },
+    });
+
+    expect(createResponse.status()).toBe(201);
+    const createBody = await createResponse.json();
+    expect(createBody.name).toBe('Sriram SDET');
+    
+    // Extract ID for chaining
+    createdUserId = createBody.id;
+    console.log(`Created User ID: ${createdUserId}`);
+    expect(createdUserId).toBeDefined();
+  });
+
+  // Step 2: PUT Request - Update User using chained ID
+  await test.step('Step 2: Update user details', async () => {
+    const updateResponse = await request.put(`${baseURL}/users/${createdUserId}`, {
+      data: {
+        name: 'Sriram SDET',
+        job: 'Principal SDET',
+      },
+    });
+
+    expect(updateResponse.status()).toBe(200);
+    const updateBody = await updateResponse.json();
+    expect(updateBody.job).toBe('Principal SDET');
+  });
+
+  // Step 3: DELETE Request - Delete user using chained ID
+  await test.step('Step 3: Delete user', async () => {
+    const deleteResponse = await request.delete(`${baseURL}/users/${createdUserId}`);
+    expect(deleteResponse.status()).toBe(204);
+  });
+});
+```
+
+---
+
+#### 3. Authentication & token handling
+
+**Answer:**
+
+"In our automation framework, we handle various authentication mechanisms such as Bearer Tokens (JWT), Basic Auth, API Keys, and Session Cookies."
+
+##### 1. Bearer Token (JWT) Handling:
+Generate token in setup / helper, then pass in `Authorization` header:
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test('Bearer token authentication', async ({ request }) => {
+  // 1. Obtain Token via Auth Endpoint
+  const authResponse = await request.post('https://api.myapp.com/auth/login', {
+    data: {
+      username: process.env.API_USERNAME,
+      password: process.env.API_PASSWORD,
+    },
+  });
+
+  expect(authResponse.status()).toBe(200);
+  const { token } = await authResponse.json();
+
+  // 2. Pass Token to Authorized Endpoint
+  const profileResponse = await request.get('https://api.myapp.com/user/profile', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    },
+  });
+
+  expect(profileResponse.status()).toBe(200);
+  const profile = await profileResponse.json();
+  expect(profile.email).toBeDefined();
+});
+```
+
+##### 2. Global Token / Context Configuration:
+Create a dedicated `APIRequestContext` with pre-configured headers:
+
+```javascript
+import { request } from '@playwright/test';
+
+async function createAuthenticatedClient(token) {
+  return await request.newContext({
+    baseURL: 'https://api.myapp.com',
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+```
+
+##### 3. Hybrid UI + API Authentication (Fastest Test Execution):
+Bypass slow UI login pages by making an API call and injecting the session into `BrowserContext`:
+
+```javascript
+test('Hybrid Auth - Login via API and inject storageState into UI', async ({ request, context, page }) => {
+  // Login via fast API call (< 200ms)
+  const loginRes = await request.post('https://myapp.com/api/login', {
+    data: { user: 'sriram', pass: 'secret' }
+  });
+  const { authToken } = await loginRes.json();
+
+  // Inject token directly into browser's localStorage
+  await page.addInitScript((token) => {
+    window.localStorage.setItem('jwtToken', token);
+  }, authToken);
+
+  // Navigate directly to protected dashboard — already logged in!
+  await page.goto('https://myapp.com/dashboard');
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+});
+```
+
+---
+
+#### 4. Response validation and negative scenarios
+
+**Answer:**
+
+Comprehensive API automation requires validating not only happy paths (status 200/201), but also status codes, response headers, response time, payload schemas, and negative boundary cases.
+
+##### 1. Schema & Detailed Body Validation:
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test('Comprehensive Response Validation', async ({ request }) => {
+  const startTime = Date.now();
+  const response = await request.get('https://jsonplaceholder.typicode.com/users/1');
+  const responseTime = Date.now() - startTime;
+
+  // 1. Status Code & Status Text Validation
+  expect(response.status()).toBe(200);
+  expect(response.statusText()).toBe('OK');
+  expect(response.ok()).toBeTruthy();
+
+  // 2. Response Time Performance Assertion (< 2000ms)
+  expect(responseTime).toBeLessThan(2000);
+
+  // 3. Response Headers Validation
+  const headers = response.headers();
+  expect(headers['content-type']).toContain('application/json');
+
+  // 4. Detailed Body / Field-Level Validation
+  const body = await response.json();
+  expect(body.id).toBe(1);
+  expect(body.name).toEqual('Leanne Graham');
+  expect(body.email).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/); // Regex email validation
+  expect(body.address).toHaveProperty('geo');
+  expect(typeof body.address.city).toBe('string');
+});
+```
+
+##### 2. Negative Test Scenarios:
+
+```javascript
+test.describe('API Negative Test Scenarios', () => {
+  const baseURL = 'https://reqres.in/api';
+
+  // Negative Scenario 1: 400 Bad Request - Missing mandatory fields
+  test('400 Bad Request when password is missing in registration', async ({ request }) => {
+    const response = await request.post(`${baseURL}/register`, {
+      data: {
+        email: 'sydney@fife', // password omitted deliberately
+      },
+    });
+
+    expect(response.status()).toBe(400);
+    const body = await response.json();
+    expect(body.error).toBe('Missing password');
+  });
+
+  // Negative Scenario 2: 401 Unauthorized - Invalid or expired token
+  test('401 Unauthorized when invalid token provided', async ({ request }) => {
+    const response = await request.get('https://api.myapp.com/secure-data', {
+      headers: {
+        Authorization: 'Bearer INVALID_EXPIRED_TOKEN_123',
+      },
+    });
+
+    expect(response.status()).toBe(401);
+  });
+
+  // Negative Scenario 3: 404 Not Found - Resource does not exist
+  test('404 Not Found for non-existent user ID', async ({ request }) => {
+    const response = await request.get(`${baseURL}/users/999999`);
+    expect(response.status()).toBe(404);
+  });
+
+  // Negative Scenario 4: 415 / 400 Unsupported Media Type / Bad Content-Type
+  test('415 / 400 on incorrect Content-Type payload format', async ({ request }) => {
+    const response = await request.post(`${baseURL}/users`, {
+      headers: { 'Content-Type': 'text/plain' },
+      data: 'invalid plain text payload where json is expected',
+    });
+
+    expect([400, 415]).toContain(response.status());
+  });
+});
+```
+
+---
+
+## 32. Accenture Interview Questions — Playwright focused
+
+**Role:** Test Automation Engineer / SDET  
+**Company:** Accenture  
+**Focus:** Playwright, JavaScript/TypeScript, Framework Architecture, Debugging & CI/CD  
+
+---
+
+### 1. Tell me about yourself and walk through your project
+
+**Answer:**
+
+"Hi, I am a QA Automation Engineer / SDET with over [X] years of experience specializing in test automation, framework development, and CI/CD quality engineering.
+
+**My Core Responsibilities:**
+- Architecting and maintaining robust, scalable end-to-end automation frameworks using **Playwright with JavaScript/TypeScript**.
+- Implementing the **Page Object Model (POM)** pattern enhanced with **custom fixtures** for seamless dependency injection.
+- Integrating UI and API tests into CI/CD pipelines (**GitHub Actions / Jenkins**) with parallel worker execution, sharding, and automated reporting.
+- Optimizing test execution speed using **Playwright `storageState` session reuse**, network mocking, and API-driven test setups.
+- Collaborating with cross-functional Agile teams to enable in-sprint automation and reduce defect escape rates.
+
+**Key Achievements:**
+- Reduced regression test execution time by **60%** by transitioning legacy suites to Playwright with parallel execution and CI sharding.
+- Achieved a **98%+ test stability rate** by replacing arbitrary waits with Playwright's built-in auto-waiting and web-first assertions.
+- Implemented API test setup utilities to seed test data before UI tests run, decreasing UI test duration by 40%."
+
+---
+
+### 2. Which IDE do you use, and your Git version?
+
+**Answer:**
+
+- **IDE:** **Visual Studio Code (VS Code)**
+  - *Why VS Code for Playwright:*
+    - **Playwright Test for VS Code Extension:** Provides native test running/debugging, step-by-step execution, locator picking, interactive DOM inspection, and automatic code generation (Codegen).
+    - **Integrated Debugger:** Breakpoint debugging with direct inspection of Playwright's `page` and locator objects.
+    - **Extensions:** ESLint, Prettier (code formatting), GitLens (version control history), and Playwright Trace Viewer integration.
+- **Git Version & Workflow:**
+  - Git version: **Git 2.4x+**
+  - Workflow: Feature-branching / Gitflow workflow (`feature/`, `bugfix/`, `release/`, `main`).
+  - Pull Request (PR) automation: Pre-merge validation runs Playwright smoke suites in GitHub Actions before code is merged into `main`.
+
+---
+
+### 3. How do you run test files in a CI/CD pipeline?
+
+**Answer:**
+
+In our CI/CD pipeline (e.g., GitHub Actions / Jenkins), tests are executed in a headless, containerized Linux environment with parallel workers, artifact preservation, and automated reporting.
+
+#### Sample GitHub Actions Workflow (`.github/workflows/playwright.yml`):
+
+```yaml
+name: Playwright Test Automation Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 2 * * *' # Nightly regression at 2 AM UTC
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    # Run tests across multiple parallel matrix shards
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers with OS dependencies
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright Tests (Sharded)
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.QA_BASE_URL }}
+          AUTH_TOKEN: ${{ secrets.QA_AUTH_TOKEN }}
+
+      - name: Upload HTML Test Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.shardIndex }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload Trace & Failure Artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.shardIndex }}
+          path: test-results/
+          retention-days: 7
+```
+
+**Key Pipeline Best Practices:**
+1. Use `npm ci` for deterministic, clean installs.
+2. Install browser binaries via `npx playwright install --with-deps`.
+3. Use `--shard=x/y` to distribute test files across multiple CI agent machines.
+4. Capture and upload `playwright-report/` and `test-results/` (traces/videos/screenshots) on failure.
+
+---
+
+### 4. A test fails in parallel execution but passes when run alone — how do you handle it?
+
+**Answer:**
+
+"When a test passes in isolation but fails during parallel execution, it is almost always caused by **shared state, test data collision, or environmental race conditions**."
+
+#### Systematic Root Cause & Resolution Steps:
+
+| Cause | Why it Fails in Parallel | How to Fix |
+|-------|--------------------------|------------|
+| **Shared Test Data Collision** | Multiple worker threads modify/delete the exact same user, record, or entity simultaneously. | **Generate unique, dynamic test data** per test using timestamps or UUIDs (e.g. `user_${Date.now()}@example.com` or Faker.js). |
+| **Shared Authentication / Session** | Multiple tests overwrite or invalidate the shared session token / cookies at the same time. | Use isolated `BrowserContext` per test or role-based dedicated `storageState` files (`adminAuth.json`, `userAuth.json`). |
+| **Global / Static Variable Pollution** | Framework variables outside `test()` blocks modified across tests running in the same process. | Keep page objects, state, and test variables strictly scoped inside tests or Playwright fixtures. |
+| **Server / DB Resource Bottlenecks** | Too many parallel requests cause backend timeouts or database locks. | Tune worker concurrency (`workers: 4` or `workers: '50%'` in config), increase assertion timeouts, or optimize backend environment. |
+| **Order Dependency** | Test B relies on Test A having created a record or navigated first. | Ensure **zero interdependency**. Each test must be completely autonomous (seed its own data via API in `beforeEach`). If strictly dependent, use `test.describe.configure({ mode: 'serial' })`. |
+
+#### How to Debug:
+1. Re-run locally with multiple workers: `npx playwright test --workers=4`.
+2. Inspect the **Trace Viewer** of the failed test run (`npx playwright show-trace test-results/.../trace.zip`) to check DOM state and network responses at the exact moment of failure.
+
+---
+
+### 5. Locators Preferences in Playwright
+
+**Answer:**
+
+Playwright recommends an **accessibility-first, user-centric locator hierarchy**. We prioritize locators that reflect how actual users and assistive technologies perceive the webpage, making tests resilient to HTML refactoring.
+
+#### Locator Priority Order:
+
+```
+1. getByRole()        (Primary choice — matches accessibility tree)
+       ↓
+2. getByLabel()       (Form controls associated with <label>)
+       ↓
+3. getByPlaceholder() (Input fields with placeholder text)
+       ↓
+4. getByText()        (Non-interactive text content)
+       ↓
+5. getByTestId()      (Dedicated QA test attribute: data-testid)
+       ↓
+6. locator(css)       (Stable CSS / structural selectors)
+       ↓
+7. XPath / Dynamic ID (Avoid / Last resort)
+```
+
+#### Examples & Rationale:
+
+```javascript
+// 1. BEST: User-facing role + name
+await page.getByRole('button', { name: 'Submit Order' }).click();
+await page.getByRole('heading', { level: 1, name: 'User Profile' });
+
+// 2. BEST for form inputs: Label association
+await page.getByLabel('Email Address').fill('sriram@accenture.com');
+
+// 3. GOOD: Placeholder
+await page.getByPlaceholder('Search products...').fill('Laptop');
+
+// 4. GOOD: Dedicated test ID (stable against UX redesigns)
+await page.getByTestId('cart-total-amount');
+
+// 5. CSS with Filtering (for complex lists/tables):
+await page.locator('.product-row').filter({ hasText: 'MacBook' }).getByRole('button', { name: 'Delete' }).click();
+
+// ❌ AVOID: Brittle, implementation-dependent XPaths / Dynamic IDs
+// await page.locator('//div[3]/div[2]/table/tbody/tr[1]/td[4]/button');
+// await page.locator('#button_9421_submit');
+```
+
+---
+
+### 6. `beforeAll()` vs `beforeEach()` — When do you use each?
+
+**Answer:**
+
+Both are lifecycle hooks provided by Playwright, but they differ in execution frequency, isolation scope, and fixture access.
+
+| Feature | `beforeAll()` | `beforeEach()` |
+|---------|---------------|----------------|
+| **Execution Frequency** | Runs **once** before all tests in a file/group | Runs **before every single test** in a file/group |
+| **Scope** | Worker-level / Suite-level | Individual test-level |
+| **`page` Fixture Access** | ❌ **No** (Cannot access `page` fixture directly because `page` is scoped to individual tests) | ✅ **Yes** (Has direct access to `page`, `context`, and custom test fixtures) |
+| **Test Isolation** | Shared across tests in that worker | Clean, isolated slate per test |
+| **Primary Use Cases** | - Setting up database connections<br>- Fetching global auth tokens / API tokens<br>- Starting/stopping mock servers<br>- Loading heavy static test fixtures | - Navigating to the base URL (`await page.goto('/')`)<br>- Resetting application state<br>- Instantiating Page Objects<br>- Creating unique test-specific data via API |
+
+#### Code Example:
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test.describe('Order Management Module', () => {
+  let authToken;
+
+  // beforeAll: Heavy one-time setup (Runs ONCE)
+  test.beforeAll(async ({ request }) => {
+    const authRes = await request.post('https://api.myapp.com/auth/token', {
+      data: { client_id: 'accenture_qa', secret: 'secret123' },
+    });
+    const data = await authRes.json();
+    authToken = data.token; // Cached for entire suite
+  });
+
+  // beforeEach: Test-specific setup (Runs BEFORE EACH TEST)
+  test.beforeEach(async ({ page }) => {
+    // Set token in localStorage and navigate to dashboard
+    await page.addInitScript((token) => {
+      window.localStorage.setItem('auth_token', token);
+    }, authToken);
+    await page.goto('/dashboard');
+  });
+
+  test('Test 1: View profile', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible();
+  });
+
+  test('Test 2: View orders', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Orders' })).toBeVisible();
+  });
+});
+```
+
+---
+
+### 7. Write a TS/JS program to find the second largest number in an array
+
+**Answer:**
+
+#### Approach 1: Single Pass $O(n)$ Time & $O(1)$ Space (Optimal Solution)
+Iterate through the array once while maintaining two variables: `largest` and `secondLargest`. Correctly handles negative numbers, duplicate maximum values, and edge cases.
+
+```typescript
+function findSecondLargest(arr: number[]): number | null {
+  if (!arr || arr.length < 2) {
+    console.log("Array must contain at least two elements.");
+    return null;
+  }
+
+  let largest = -Infinity;
+  let secondLargest = -Infinity;
+
+  for (const num of arr) {
+    if (num > largest) {
+      secondLargest = largest;
+      largest = num;
+    } else if (num > secondLargest && num < largest) {
+      // Handles duplicate values of largest (e.g., [20, 20, 10])
+      secondLargest = num;
+    }
+  }
+
+  if (secondLargest === -Infinity) {
+    console.log("No distinct second largest element found (all elements are equal).");
+    return null;
+  }
+
+  return secondLargest;
+}
+
+// Test Cases:
+console.log(findSecondLargest([12, 35, 1, 10, 34, 1])); // 34
+console.log(findSecondLargest([10, 5, 10]));             // 5 (Duplicate max handled)
+console.log(findSecondLargest([-10, -5, -20, -2]));      // -5 (Negative numbers handled)
+console.log(findSecondLargest([10, 10, 10]));            // null (All equal)
+console.log(findSecondLargest([7]));                     // null (< 2 elements)
+```
+
+- **Time Complexity:** $O(n)$ — Single pass through the array.
+- **Space Complexity:** $O(1)$ — Constant extra memory.
+
+---
+
+### 8. What is POM (Page Object Model) and why use it?
+
+**Answer:**
+
+**Page Object Model (POM)** is a structural design pattern in test automation where each web page (or distinct UI component) is represented by a dedicated class.
+
+- The **class** encapsulates the page's UI elements (locators) and user actions (methods).
+- The **test scripts** interact exclusively with page methods and contain assertion logic.
+
+```
+       ┌───────────────────────────────┐
+       │         Test Script           │  <-- Contains test flow and assertions
+       │  (e.g., login.spec.js)        │
+       └──────────────┬────────────────┘
+                      │ calls methods
+                      ▼
+       ┌───────────────────────────────┐
+       │       Page Object Class       │  <-- Encapsulates locators and user actions
+       │   (e.g., LoginPage.js)        │
+       └──────────────┬────────────────┘
+                      │ interacts with
+                      ▼
+       ┌───────────────────────────────┐
+       │        Web Application        │  <-- Real browser DOM
+       └───────────────────────────────┘
+```
+
+#### Why use POM?
+1. **Maintainability:** If a locator changes (e.g. login button ID), you only update it in one place (`LoginPage.js`), without touching hundreds of test files.
+2. **Reusability:** Common workflows (e.g., `login()`, `searchProduct()`, `checkout()`) are written once and reused across multiple test suites.
+3. **Readability:** Tests read like business requirements rather than technical selector manipulation:
+   ```javascript
+   await loginPage.login('admin', 'password');
+   await dashboardPage.navigateToSettings();
+   ```
+4. **Separation of Concerns:** UI interaction logic is decoupled from validation/assertion logic.
+
+---
+
+### 9. Have you done API testing?
+
+**Answer:**
+
+"Yes. In my projects, I perform automated REST API testing using **Playwright's native `APIRequestContext` (`request` fixture)** as well as tools like Postman and RestAssured."
+
+#### How API Testing is utilized in our Playwright Automation:
+
+1. **Standalone API Regression Suites:**
+   - Validating CRUD operations (GET, POST, PUT, DELETE, PATCH).
+   - Verifying HTTP status codes (200, 201, 400, 401, 403, 404, 500).
+   - Validating response schemas, headers, content types, and latency performance SLAs.
+
+2. **Fast Pre-Test Setup & Post-Test Teardown:**
+   - Instead of logging in via UI and clicking 15 times to create a shopping cart, we execute an API call in `beforeEach` (< 200ms) to create the cart and inject its ID into the test.
+   - Cleaning up database records via DELETE APIs in `afterEach`.
+
+3. **Session Authentication Reuse (`storageState`):**
+   - Logging in via API, obtaining JWT tokens/cookies, and injecting them directly into browser storage to bypass UI login screens.
+
+4. **Hybrid End-to-End Validation:**
+   - Action triggered on UI (e.g., place an order) $\to$ Backend validation via API (e.g., verify order status in database/API is `PROCESSED`).
+
+---
+
+### 10. How do you handle a Strict Mode Violation in Playwright?
+
+**Answer:**
+
+#### What is a Strict Mode Violation?
+By default, Playwright enforces **strict mode** on all locator actions (`click()`, `fill()`, `textContent()`, etc.). If a locator resolves to **more than one element** in the DOM, Playwright halts execution immediately and throws:
+
+```
+Error: strict mode violation: locator('button.submit-btn') resolved to 3 elements:
+1) <button class="submit-btn">Save Draft</button>
+2) <button class="submit-btn">Submit Order</button>
+3) <button class="submit-btn">Cancel</button>
+```
+
+#### How to Handle / Resolve It:
+
+##### 1. Refine the Locator (Best Practice — Make it unique):
+Use accessible roles, text, or parent-child filters:
+```javascript
+// Before (matches multiple buttons):
+// await page.locator('button.submit-btn').click();
+
+// After (Precise and unique):
+await page.getByRole('button', { name: 'Submit Order' }).click();
+```
+
+##### 2. Use `filter()`:
+```javascript
+await page.locator('.product-card').filter({ hasText: 'iPhone 15' }).click();
+```
+
+##### 3. Use Explicit Index Selectors (`first()`, `last()`, `nth()`):
+When intentionally selecting an item from a list:
+```javascript
+await page.locator('.dropdown-item').first().click();
+await page.locator('.dropdown-item').nth(2).click(); // 3rd item (0-indexed)
+```
+
+##### 4. For Multi-Element Assertions, use `count()` or `all()`:
+```javascript
+// Assert count
+await expect(page.locator('.todo-item')).toHaveCount(5);
+
+// Iterate through all matched elements
+const items = await page.locator('.product-title').all();
+for (const item of items) {
+  console.log(await item.textContent());
+}
+```
+
+---
+
+### 11. Key features of your automation framework
+
+**Answer:**
+
+"Our Playwright automation framework is designed with an enterprise architecture focused on speed, reliability, maintainability, and CI/CD integration."
+
+#### Core Framework Features:
+
+```
+                  ┌─────────────────────────────────────────────────┐
+                  │          Playwright Automation Framework        │
+                  └───────────────────────┬─────────────────────────┘
+                                          │
+    ┌─────────────────┬───────────────────┼───────────────────┬─────────────────┐
+    ▼                 ▼                   ▼                   ▼                 ▼
+┌──────────────┐ ┌──────────────┐ ┌───────────────┐ ┌────────────────┐ ┌────────────────┐
+│ Page Object  │ │ Session Auth │ │ Built-in API  │ │ Parallelism &  │ │ Multi-Channel  │
+│  & Fixtures  │ │ storageState │ │ Orchestration │ │ CI/CD Sharding │ │ Reporting &    │
+│ Architecture │ │ (Fast Login) │ │ (Hybrid E2E)  │ │ (Cross-Browser)│ │ Trace Debugging│
+└──────────────┘ └──────────────┘ └───────────────┘ └────────────────┘ └────────────────┘
+```
+
+1. **TypeScript / JavaScript Core:** Strict typing, IntelliSense, modern async/await syntax.
+2. **Page Object Model + Custom Fixtures (`test.extend`):** Clean dependency injection where pages are auto-initialized and passed into tests with zero boilerplate.
+3. **Session Authentication Reuse (`storageState`):** Saves cookies and localStorage to JSON, bypassing UI login on every test run.
+4. **Hybrid UI + API Integration:** Fast API calls for data preparation and assertions.
+5. **Cross-Browser & Multi-Device Execution:** Native Chromium, Firefox, WebKit, and mobile viewport emulation.
+6. **Built-in Auto-Waiting & Auto-Retrying Assertions:** Zero arbitrary `sleep()` calls, drastically reducing flakiness.
+7. **Trace Viewer, Screenshots & Video Recording:** Captured on first retry / failure for instant debugging.
+8. **Dynamic Test Data Management:** Environment-specific configs (`qa.env`, `stage.env`) combined with dynamic data generators (Faker.js).
+9. **CI/CD Pipeline with Matrix Sharding:** Distributed runs in GitHub Actions / Jenkins with HTML reports published to GitHub Pages or AWS S3.
+
+---
+
+### 12. What are fixtures, and how do you create a custom one?
+
+**Answer:**
+
+#### What are Fixtures?
+In Playwright, **Fixtures** provide a powerful dependency injection mechanism. They set up the environment, instantiate required resources, provide them to the test, and tear them down automatically after the test finishes.
+
+- **Isolation:** Every test gets a fresh, isolated fixture instance.
+- **Composability:** Fixtures can depend on other fixtures.
+- **Lazy Initialization:** Fixtures only run if a test explicitly declares them as arguments.
+
+#### How to Create a Custom Fixture:
+
+##### Step 1: Define Custom Fixtures (`fixtures/myCustomFixture.ts` / `.js`)
+
+```typescript
+import { test as base, Page } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { DashboardPage } from '../pages/DashboardPage';
+
+// 1. Declare the fixture types
+type MyFixtures = {
+  loginPage: LoginPage;
+  dashboardPage: DashboardPage;
+  loggedInPage: Page;
+};
+
+// 2. Extend the base test object with custom fixtures
+export const test = base.extend<MyFixtures>({
+  // Page Object Fixture: Instantiates LoginPage
+  loginPage: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+    await use(loginPage); // Passes fixture to the test
+  },
+
+  // Page Object Fixture: Instantiates DashboardPage
+  dashboardPage: async ({ page }, use) => {
+    const dashboardPage = new DashboardPage(page);
+    await use(dashboardPage);
+  },
+
+  // Pre-authenticated Page Fixture
+  loggedInPage: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login('testuser@accenture.com', 'Password123');
+    await use(page); // Test receives already-logged-in page
+    // Teardown logic after test completes (optional)
+    await page.context().clearCookies();
+  },
+});
+
+export { expect } from '@playwright/test';
+```
+
+##### Step 2: Use the Fixtures in Test Files (`tests/dashboard.spec.ts`)
+
+```typescript
+import { test, expect } from '../fixtures/myCustomFixture';
+
+// Notice how zero "new LoginPage(page)" instances are created manually!
+test('user can view dashboard statistics', async ({ loggedInPage, dashboardPage }) => {
+  await dashboardPage.openStatisticsTab();
+  await expect(dashboardPage.statsCard).toBeVisible();
+});
+```
+
+---
+
+### 13. How do you handle dynamic locators / dynamic elements?
+
+**Answer:**
+
+Dynamic elements have IDs, classes, or attributes that change every render or deployment (e.g., `<button id="btn_x78k_submit">`).
+
+#### Strategies to Handle Dynamic Elements in Playwright:
+
+##### 1. User-Facing Accessibility Locators (Immune to dynamic DOM changes):
+```javascript
+// Regardless of changing IDs, role and accessible name remain constant
+await page.getByRole('button', { name: 'Confirm Payment' }).click();
+await page.getByLabel('Date of Birth').fill('1995-05-15');
+```
+
+##### 2. Locator Filtering & Chaining:
+Filter parent containers by static text or child elements:
+```javascript
+// Target a specific row in a dynamic table
+const targetRow = page.locator('tr').filter({ hasText: 'Invoice #1042' });
+await targetRow.getByRole('button', { name: 'Download PDF' }).click();
+```
+
+##### 3. Substring Matching in CSS / XPath:
+When attributes have dynamic suffixes or prefixes:
+```javascript
+// Starts with: id starts with "user_submit_"
+await page.locator("button[id^='user_submit_']").click();
+
+// Contains: class contains "item-card"
+await page.locator("div[class*='item-card']").click();
+
+// Ends with: id ends with "_save"
+await page.locator("input[id$='_save']").click();
+```
+
+##### 4. Regex Pattern Matching:
+```javascript
+// Dynamic order confirmation message
+await expect(page.locator('.confirmation-msg')).toHaveText(/Order #\d{6} confirmed/);
+```
+
+##### 5. Polling Assertions with `expect.toPass()`:
+For elements whose contents update via live WebSockets or async background polls:
+```javascript
+await expect(async () => {
+  const badge = await page.locator('.status-badge').textContent();
+  expect(badge?.trim()).toBe('Ready');
+}).toPass({ timeout: 10000, intervals: [500, 1000] });
+```
+
+---
+
+
