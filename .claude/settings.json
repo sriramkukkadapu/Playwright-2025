@@ -98,7 +98,21 @@
       "Bash(sed -i '' \"s#path.resolve\\(import.meta.dirname, '.env'\\)#path.resolve\\(import.meta.dirname, '.env'\\)#\" playwright.config.js)",
       "Bash(sed -i '' 's/GOOGLE_API_KEY=/GOOGLE_API_KEY=test-key-123/; s/GOOGLE_OAUTH_TOKEN=/GOOGLE_OAUTH_TOKEN=Bearer test-token-456/' .env)",
       "Bash(npm view *)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "Bash(gh run *)",
+      "Read(//Users/sriramkukkadapu/.local/gh-cli/**)",
+      "Bash(find / -maxdepth 4 -iname \"gh\" -type f)",
+      "Bash(curl -sL \"https://api.github.com/repos/sriramkukkadapu/Playwright-2025/actions/jobs/100608677865/logs\" -o /tmp/job_log.txt)",
+      "Bash(git credential *)",
+      "Bash(grep -n \"✘\\\\|failed\\\\|Error:\\\\|Error Context\\\\|passed\\\\b\" /tmp/job_log.txt | head -80)",
+      "Bash(sed -n '2320,2401p' /tmp/job_log.txt)",
+      "Bash(grep -n \"rahulshettyacademy.com/loginpagePractise\\\\|rahulshettyacademy.com/client\" /tmp/job_log.txt | grep \"T10:1[0-6]\" | head -30)",
+      "Bash(grep -E \"^\\\\d+:\\\\s*20[0-9]{2}|failed$|passed \\\\\\(|flaky\")",
+      "Read(//Users/sriramkukkadapu/projects/Playwright-2025/tests/training/**)",
+      "Read(//Users/sriramkukkadapu/projects/playwright-2025/tests/training/**)",
+      "Bash(xargs -I{} sh -c 'echo \"=== {} ===\"; cat {}')",
+      "Read(//Users/sriramkukkadapu/projects/Playwright-2025/.github/workflows/**)",
+      "Read(//Users/sriramkukkadapu/projects/playwright-2025/.github/workflows/**)"
     ],
     "additionalDirectories": [
       "/Users/sriramkukkadapu/projects/Playwright-2025/Learning",
@@ -114,7 +128,9 @@
       "/Users/sriramkukkadapu/projects/Playwright-2025/tests",
       "/Users/sriramkukkadapu/projects/playwright-2025/tests",
       "/Users/sriramkukkadapu/projects/Playwright-2025/tests/GoogleWorkspace",
-      "/Users/sriramkukkadapu/projects/playwright-2025/tests/GoogleWorkspace"
+      "/Users/sriramkukkadapu/projects/playwright-2025/tests/GoogleWorkspace",
+      "/Users/sriramkukkadapu/projects/Playwright-2025/.github/workflows",
+      "/Users/sriramkukkadapu/projects/playwright-2025/.github/workflows"
     ]
   }
 }
