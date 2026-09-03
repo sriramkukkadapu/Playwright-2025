@@ -30,6 +30,9 @@ A comprehensive guide covering Selenium WebDriver with Java — from fundamental
 11. [EPAM Gurugram — Interview Questions (Medium + Hard, 50% Hike)](#11-epam-gurugram--interview-questions-medium--hard-50-hike)
     - [Round 1 (Virtual): 1 Hour 30 Minutes](#round-1-virtual-1-hour-30-minutes)
     - [Round 2: 1 Hour 30 Minutes](#round-2-1-hour-30-minutes-1)
+12. [GSPANN — Interview Questions (Java + API Automation, SDET)](#12-gspann--interview-questions-java--api-automation-sdet)
+    - [Round 1 (Level 1): Java, API & Scenario-Based](#round-1-level-1-java-api--scenario-based)
+    - [Round 2 (Level 2): Java + API Automation Framework](#round-2-level-2-java--api-automation-framework)
 
 ---
 
@@ -9505,3 +9508,662 @@ public class BrokenLinkChecker {
 **Key points:** links are collected once via `driver.findElements(By.tagName("a"))` and their `href` attributes, but the actual status checks happen **outside** Selenium/the browser via plain `HttpURLConnection` (or REST Assured/Apache HttpClient) since there's no need to render the target page — this is what makes parallelizing safe and fast, since you're not juggling multiple browser instances, just concurrent HTTP calls. Use `HEAD` first for speed; some servers don't support `HEAD` properly and return a false 405/501, so fall back to `GET` for those before marking a link broken.
 
 ---
+
+## 12. GSPANN — Interview Questions (Java + API Automation, SDET)
+
+*Two rounds of interviews for an SDET / API Automation role at GSPANN — Round 1 (Level 1) mixes Java coding basics, a REST Assured validation task, and scenario-based/HR-style questions; Round 2 (Level 2) goes deeper into Core Java & Collections, POJO-based API automation, Cucumber, framework design, and CI/CD.*
+
+---
+
+## Round 1 (Level 1): Java, API & Scenario-Based
+
+### 1. Tell me about yourself.
+
+**Sample Answer:**
+
+"Hi, I'm [Your Name], an SDET/QA Automation Engineer with X years of experience in API and UI test automation. I currently work at [Company], where I build and maintain automated test suites for both REST APIs and web applications.
+
+**My day-to-day responsibilities:**
+- Designing and maintaining an API automation framework using REST Assured with a POJO-based request/response model
+- Writing Cucumber feature files and step definitions for business-readable API and UI scenarios
+- Integrating the suite into CI/CD (Jenkins/GitHub Actions) with parameterized environment and tag-based execution
+- Collaborating with developers during defect triage, especially on last-minute pre-release fixes
+
+**Key achievements:**
+- Built an API automation framework from scratch covering 150+ endpoint scenarios
+- Reduced a 5–6 hour regression run to under 2 hours through parallelization and API-based test data setup
+- Introduced POJO-based serialization, cutting brittle JSON-path assertions across the suite
+
+**Tech stack:** Java, REST Assured, Cucumber, TestNG, Selenium, Jenkins, Git, Maven."
+
+**Tips:**
+- Keep it under 90 seconds; structure as Intro → Current role → Key skills → Achievement.
+- Since this role is API-Automation-heavy, weight your answer toward API testing experience, not just UI Selenium work.
+- Quantify wherever possible ("cut execution time by 60%", "covered 150+ endpoints").
+
+---
+
+### 2. Write a code in REST Assured to validate that a response contains an id value greater than 4.
+
+Sample response being validated (a list of objects, each with an `id` field):
+
+```json
+[
+  { "id": 3, "name": "Item A" },
+  { "id": 7, "name": "Item B" },
+  { "id": 5, "name": "Item C" }
+]
+```
+
+**Using REST Assured's Hamcrest-style body assertion (validates every element in one line):**
+
+```java
+given()
+    .baseUri("https://api.example.com")
+.when()
+    .get("/items")
+.then()
+    .statusCode(200)
+    .body("id", everyItem(greaterThan(4)));
+```
+
+**Using `jsonPath()` + a stream, when you need the actual boolean/values rather than an assertion-only check:**
+
+```java
+Response response = given()
+        .baseUri("https://api.example.com")
+    .when()
+        .get("/items")
+    .then()
+        .statusCode(200)
+        .extract().response();
+
+List<Integer> ids = response.jsonPath().getList("id", Integer.class);
+boolean allGreaterThanFour = ids.stream().allMatch(id -> id > 4);
+Assert.assertTrue(allGreaterThanFour, "Found an id <= 4 in: " + ids);
+```
+
+**If the requirement is "at least one id is greater than 4" rather than "every id":**
+
+```java
+boolean anyGreaterThanFour = ids.stream().anyMatch(id -> id > 4);
+Assert.assertTrue(anyGreaterThanFour);
+```
+
+**Key points:**
+- `everyItem(greaterThan(4))` is a Hamcrest matcher applied across a JSON array field — REST Assured extracts the `id` field from every object in the array and checks the matcher against each value.
+- Clarify with the interviewer whether "contains an id greater than 4" means *at least one* (`anyMatch`) or *every* (`allMatch`) — the sample data given (`3, 7, 5`) technically fails an "every id > 4" check because of the `3`, so I'd flag that ambiguity out loud rather than silently assuming.
+- The stream-based version is more useful when you need to report *which* ids failed, not just get a pass/fail.
+
+---
+
+### 3. Take a string and write a Java program to print only consonants from the string.
+
+```java
+public class ConsonantPrinter {
+
+    public static String extractConsonants(String input) {
+        StringBuilder consonants = new StringBuilder();
+        String vowels = "aeiouAEIOU";
+
+        for (char ch : input.toCharArray()) {
+            if (Character.isLetter(ch) && vowels.indexOf(ch) == -1) {
+                consonants.append(ch);
+            }
+        }
+        return consonants.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(extractConsonants("Automation Testing"));
+        // Output: tmtnTstng
+    }
+}
+```
+
+**Key points:**
+- `Character.isLetter(ch)` filters out spaces, digits, and punctuation first — without it, spaces/numbers would pass the "not a vowel" check and get wrongly included.
+- `vowels.indexOf(ch) == -1` checks against both cases (`aeiouAEIOU`) in one string rather than calling `Character.toLowerCase()` on every character — either approach works, this one avoids an extra method call per character.
+- O(n) time, O(1) extra space (aside from the vowel-lookup string, which is constant-size) — no need for a `Set<Character>` here since checking membership in a 10-character string via `indexOf` is already fast enough and arguably more readable.
+
+---
+
+### 4. Write a Java program to find duplicate elements in an array and print the array in sorted order.
+
+`int arr[] = {9,9,1,4,3,7,6,6,5,2,2,0,11,0};`
+
+```java
+import java.util.*;
+
+public class DuplicatesAndSort {
+
+    public static void main(String[] args) {
+        int[] arr = {9, 9, 1, 4, 3, 7, 6, 6, 5, 2, 2, 0, 11, 0};
+
+        // Step 1: find duplicates using a frequency map
+        Map<Integer, Integer> frequency = new LinkedHashMap<>();
+        for (int num : arr) {
+            frequency.merge(num, 1, Integer::sum);
+        }
+
+        List<Integer> duplicates = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : frequency.entrySet()) {
+            if (entry.getValue() > 1) duplicates.add(entry.getKey());
+        }
+        System.out.println("Duplicates: " + duplicates);
+        // Duplicates: [9, 6, 2, 0]
+
+        // Step 2: print the array sorted
+        int[] sortedArr = arr.clone();
+        Arrays.sort(sortedArr);
+        System.out.println("Sorted array: " + Arrays.toString(sortedArr));
+        // Sorted array: [0, 0, 1, 2, 2, 3, 4, 5, 6, 6, 7, 9, 9, 11]
+    }
+}
+```
+
+**Key points:**
+- `arr.clone()` before sorting keeps the original array untouched, in case a later step needs the original order — good practice to mention even if not strictly required by the question.
+- `LinkedHashMap` preserves the order duplicates were first encountered, so the reported duplicate list (`[9, 6, 2, 0]`) matches the order they appear in the original array rather than an arbitrary hash order.
+- `Arrays.sort()` on a primitive `int[]` uses a **dual-pivot Quicksort** (O(n log n) average) — worth knowing that it's a different algorithm (and stability guarantee) than `Arrays.sort()` on an `Object[]`/`List`, which uses a stable **TimSort**.
+- A common follow-up: "can you find duplicates without extra space?" — possible via sorting first, then scanning adjacent equal elements, but that mutates/depends on sort order and is O(n log n) instead of O(n); I'd mention both trade-offs (frequency-map O(n) time/O(n) space vs. sort-then-scan O(n log n) time/O(1) extra space).
+
+---
+
+### 5. Write a Java program to print numbers from 1 to 10 without using a for loop.
+
+```java
+public class PrintWithoutForLoop {
+
+    public static void main(String[] args) {
+
+        // Option 1: while loop
+        int i = 1;
+        while (i <= 10) {
+            System.out.println(i);
+            i++;
+        }
+
+        // Option 2: recursion
+        printRecursive(1);
+
+        // Option 3: IntStream (Java 8 streams)
+        java.util.stream.IntStream.rangeClosed(1, 10).forEach(System.out::println);
+
+        // Option 4: Stream.iterate
+        java.util.stream.Stream.iterate(1, n -> n + 1)
+                .limit(10)
+                .forEach(System.out::println);
+    }
+
+    static void printRecursive(int num) {
+        if (num > 10) return;
+        System.out.println(num);
+        printRecursive(num + 1);
+    }
+}
+```
+
+**Key points:**
+- The interviewer is testing whether you know Java offers multiple looping/iteration constructs beyond `for` — `while`, recursion, and Java 8 Streams (`IntStream.rangeClosed`, `Stream.iterate`) all avoid the literal `for` keyword.
+- `IntStream.rangeClosed(1, 10)` is the cleanest, most idiomatic modern-Java answer — `rangeClosed` includes the upper bound (10), whereas plain `range(1, 10)` would stop at 9.
+- Recursion works but isn't preferred for anything beyond a small fixed range — it consumes stack frames and would `StackOverflowError` for a large enough range, unlike the iterative/stream options.
+
+---
+
+### 6. If you have 1,000 test cases and it takes around 5–6 hours to execute them, how would you reduce the execution time?
+
+- **Parallelize execution** — run across multiple threads/workers (TestNG `thread-count`, Cucumber's parallel JUnit-platform config) and shard across multiple CI machines, rather than one machine running everything serially.
+- **Split the suite by risk/purpose** — separate a fast **smoke suite** (run on every commit/PR) from the **full regression** (run nightly), so not every code change waits on all 1,000 cases.
+- **Move setup/data-creation to the API layer** — if UI tests are doing UI-based login/data-seeding, switching to API-based setup alone often cuts a large chunk of the total time since setup runs before every single test.
+- **Eliminate hard waits and redundant navigation** — audit for `Thread.sleep()` and overly generous fixed timeouts across the suite; these compound across 1,000 tests into hours of pure waiting.
+- **Identify and fix the slowest tests specifically** — most reporting tools show per-test duration; targeting the worst 10% of tests (often due to unnecessary full-page reloads or excessive waits) usually yields a bigger win than evenly optimizing everything.
+- **Remove redundant/overlapping coverage** — 1,000 test cases sometimes include multiple tests validating the same code path from slightly different angles; consolidating overlapping cases reduces count without reducing real coverage.
+- **Reuse session/auth state** — `storageState` (Playwright) or a shared authenticated session (Selenium) instead of re-logging-in through the UI in every single test.
+- **Run in headless mode + fixed viewport** in CI — already faster than headed execution and avoids resolution-dependent flakiness that can trigger retries.
+
+**Interview-ready summary:** "I wouldn't just throw more machines at it — I'd first split the 1,000 cases by purpose (smoke vs. regression), then parallelize/shard what's left, and separately profile for the specific slow tests and hard waits that are inflating the total. Usually a combination of smarter suite segmentation plus parallelism gets a multi-hour run down to a fraction of that, without cutting real coverage."
+
+---
+
+### 7. If a defect comes to you for testing just one day before the release, how would you handle it?
+
+- **Triage severity and scope first** — is this a release blocker (breaks a core flow, security/data issue) or a lower-priority cosmetic issue that could ship with a follow-up ticket? This decision drives everything else.
+- **Scope the test to the actual fix, not the whole app** — review the dev's fix/diff to understand exactly what changed, and write a **focused regression** around that specific area plus its immediate dependencies, rather than attempting a full regression pass in the time available.
+- **Run a targeted smoke test on the critical path** alongside the focused fix verification, to catch any obvious collateral damage the fix might have introduced elsewhere.
+- **Prioritize manual + automated in parallel** if any automation for that specific area already exists — run it immediately for fast, repeatable coverage while doing manual exploratory testing on the new/changed behavior automation might not cover yet.
+- **Communicate a clear go/no-go with residual risk, explicitly** — tell the release owner exactly what was tested, what wasn't (and why, given the time), and let them make an informed release decision rather than silently signing off as if full coverage happened.
+- **Add proper regression coverage after the release**, once the immediate pressure is off — a same-day fire drill isn't the time to also build out full automated coverage for that area; that goes on the backlog immediately following release.
+
+**Interview-ready summary:** "With one day left, the job isn't to test everything — it's to test the *right* things fast and be transparent about what's covered. I'd triage severity, scope testing tightly to the actual code change plus a critical-path smoke check, lean on any existing automation for speed, and give the release owner a clear, honest picture of residual risk rather than a false all-clear."
+
+---
+
+### 8. Why do you want to change your organization?
+
+**Approach:** Keep it forward-looking and specific to growth/opportunity — never frame it as complaining about the current employer, even if that's part of the real reason.
+
+**Sample answer:** "I've learned a lot in my current role, particularly around [specific skill — e.g., building an API automation framework from scratch]. At this point, I'm looking for a role that lets me go deeper into [specific area — e.g., SDET-focused API automation at scale, or working with a more mature CI/CD setup], and this role/company's focus on [specific aspect of the JD] aligns well with where I want to grow next."
+
+**Tips:**
+- Anchor the answer to something concrete about *this* role/company (from the JD or the interview conversation so far), not a generic "looking for growth" answer that could apply anywhere.
+- Avoid negativity about the current employer/manager/team — even a true grievance reads as a red flag about how you'll talk about *this* company later.
+- If compensation is a genuine factor, it's fine to mention it briefly, but lead with the growth/opportunity angle first.
+
+---
+
+## Round 2 (Level 2): Java + API Automation Framework
+
+### 1. Reverse the words in a string
+
+Input: `I like Java programming` → Output: `programming Java like I`
+
+```java
+public class ReverseWords {
+
+    public static String reverseWords(String input) {
+        String[] words = input.trim().split("\\s+");
+        StringBuilder result = new StringBuilder();
+
+        for (int i = words.length - 1; i >= 0; i--) {
+            result.append(words[i]);
+            if (i != 0) result.append(" ");
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseWords("I like Java programming"));
+        // Output: programming Java like I
+    }
+}
+```
+
+**Key points:**
+- `split("\\s+")` handles multiple/irregular spaces between words, not just a single space.
+- Reversing the **order of words**, not the characters within each word — a common trap is confusing this with `StringBuilder.reverse()` on the whole string, which would also flip each word's letters.
+- Alternative one-liner using `Collections.reverse()`:
+```java
+List<String> words = Arrays.asList(input.trim().split("\\s+"));
+Collections.reverse(words);
+String result = String.join(" ", words);
+```
+- `Arrays.asList()` returns a fixed-size list backed by the array, but `Collections.reverse()` only reorders in place — it doesn't add/remove — so this works fine without throwing `UnsupportedOperationException`.
+
+---
+
+### 2. Find the second largest number in an array
+
+```java
+public class SecondLargest {
+
+    public static Integer findSecondLargest(int[] arr) {
+        if (arr == null || arr.length < 2) return null;
+
+        int largest = Integer.MIN_VALUE;
+        int secondLargest = Integer.MIN_VALUE;
+
+        for (int num : arr) {
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            } else if (num > secondLargest && num != largest) {
+                secondLargest = num;
+            }
+        }
+        return secondLargest == Integer.MIN_VALUE ? null : secondLargest;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(findSecondLargest(new int[]{12, 35, 1, 10, 34, 1}));  // 34
+        System.out.println(findSecondLargest(new int[]{5, 5, 5}));               // null (no distinct second value)
+        System.out.println(findSecondLargest(new int[]{7}));                     // null (fewer than 2 elements)
+    }
+}
+```
+
+**Key points:**
+- Single pass, O(n) time, O(1) space — no need to sort the array (`Arrays.sort()` would be O(n log n) and is the answer most interviewers expect you to *avoid*).
+- `num != largest` is the key guard against duplicate values — without it, an array of `[5, 5, 5]` would incorrectly report `5` as the second largest.
+- Edge cases explicitly handled: null/too-short array, and an array with no distinct second-highest value (all elements equal).
+
+---
+
+### 3. Given a JSON response containing employee details, create POJO classes and retrieve the address value
+
+Sample response:
+
+```json
+{
+  "employeeId": "E101",
+  "name": "Sriram",
+  "department": "QA",
+  "address": {
+    "street": "MG Road",
+    "city": "Bengaluru",
+    "pincode": "560001"
+  }
+}
+```
+
+POJO classes (nested object → nested class):
+
+```java
+public class Employee {
+    private String employeeId;
+    private String name;
+    private String department;
+    private Address address;
+
+    // getters and setters
+    public String getEmployeeId() { return employeeId; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
+    public Address getAddress() { return address; }
+    public void setAddress(Address address) { this.address = address; }
+}
+
+public class Address {
+    private String street;
+    private String city;
+    private String pincode;
+
+    // getters and setters
+    public String getStreet() { return street; }
+    public void setStreet(String street) { this.street = street; }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+    public String getPincode() { return pincode; }
+    public void setPincode(String pincode) { this.pincode = pincode; }
+}
+```
+
+Deserializing the response and reading the address:
+
+```java
+Response response = given()
+        .when()
+            .get("/employees/E101")
+        .then()
+            .statusCode(200)
+            .extract().response();
+
+Employee employee = response.as(Employee.class); // REST Assured uses Jackson/Gson under the hood
+String city = employee.getAddress().getCity();
+System.out.println(city); // Bengaluru
+```
+
+**Key points:**
+- Field names in the POJO must match the JSON keys exactly (or be annotated with `@JsonProperty("json_key")` from Jackson when they differ, e.g. snake_case JSON vs camelCase Java).
+- A nested JSON object becomes a **nested POJO** referenced as a field (`Address address` inside `Employee`), not a flattened set of fields — this is the detail interviewers are checking for.
+- If you only need the address without building full POJOs, `response.jsonPath().getString("address.city")` is a quicker one-liner — but POJOs are preferred in a real framework for type safety and reuse across many tests.
+
+---
+
+### 4. Difference between `==` and `.equals()` with follow-up questions
+
+| Aspect | `==` | `.equals()` |
+|---|---|---|
+| Compares | Reference (memory address) for objects; actual value for primitives | Logical/content equality, as defined by the class's `equals()` override |
+| Default behavior (no override) | N/A — always reference comparison for objects | `Object.equals()` defaults to `==` (reference check) unless overridden |
+| String literals | `==` can return `true` for two literals due to the **String pool** | Always compares actual character content |
+| Custom objects | Always reference comparison unless the object is a primitive | Meaningful only if the class overrides `equals()` (e.g., POJOs used in assertions) |
+
+```java
+String s1 = "hello";
+String s2 = "hello";
+String s3 = new String("hello");
+
+System.out.println(s1 == s2);        // true  — both point to the same pooled literal
+System.out.println(s1 == s3);        // false — s3 is a new object on the heap, different reference
+System.out.println(s1.equals(s3));   // true  — content is equal
+```
+
+**Common follow-ups I was asked:**
+
+- *"Why does `s1 == s2` return true for strings but not for `new String(...)`?"* — Java maintains a **String constant pool**; literals are interned automatically and reused, but `new String()` explicitly forces a new heap object outside the pool.
+- *"What about `Integer a = 100, b = 100; a == b`?"* — `true`, because of **Integer caching** (`Integer.valueOf` caches values from -128 to 127). But `Integer a = 200, b = 200; a == b` is `false` — outside the cached range, two separate `Integer` objects are created.
+```java
+Integer a = 100, b = 100;
+System.out.println(a == b); // true (cached)
+Integer x = 200, y = 200;
+System.out.println(x == y); // false (not cached — new objects)
+```
+- *"If you override `equals()`, what else must you override?"* — `hashCode()`, to honor the contract that equal objects must produce equal hash codes (otherwise the object breaks silently inside a `HashMap`/`HashSet`).
+
+**Interview-ready summary:** "`==` always checks *identity* — same object in memory (or same primitive value); `.equals()` checks *logical equality*, which is only meaningful if the class defines what 'equal' means by overriding it, and any such override must be paired with a matching `hashCode()` override."
+
+---
+
+### 5. How can you produce a NullPointerException?
+
+Several common, deliberately reproducible ways:
+
+```java
+// 1. Calling a method on a null reference
+String str = null;
+str.length(); // NPE
+
+// 2. Accessing a field on a null object
+Employee emp = null;
+System.out.println(emp.getName()); // NPE
+
+// 3. Unboxing a null wrapper into a primitive
+Integer count = null;
+int value = count; // NPE — auto-unboxing tries to call count.intValue() on null
+
+// 4. Array element that was never initialized
+String[] names = new String[3];
+System.out.println(names[0].length()); // NPE — names[0] is null by default
+
+// 5. Chained calls where an intermediate result is null
+Map<String, String> map = new HashMap<>();
+String result = map.get("missingKey").toUpperCase(); // NPE — get() returns null for a missing key
+
+// 6. A method that legitimately returns null, used without a null-check
+List<String> data = getDataFromApi(); // suppose this returns null on failure
+data.size(); // NPE if getDataFromApi() returned null
+```
+
+**Key points:** the two most common real-world sources in an automation framework are (a) `Map.get()` returning `null` for a missing key and then chaining a call on the result, and (b) unboxing a `null` `Integer`/`Boolean` from a JSON response field that wasn't present. Defensive coding uses `Optional`, explicit null checks, or `Objects.requireNonNull()` with a clear message at the boundary where the null could originate — rather than letting it surface as an unexplained NPE three calls later.
+
+---
+
+### 6. What happens if you try to access index 0 from an empty List?
+
+```java
+List<String> emptyList = new ArrayList<>();
+System.out.println(emptyList.get(0)); // throws IndexOutOfBoundsException
+```
+
+It throws `IndexOutOfBoundsException` (specifically the message is usually `"Index 0 out of bounds for length 0"`) — **not** `NullPointerException`. The list object itself is not null; it's a valid, empty collection, so calling `.get(0)` on it correctly reports that index `0` doesn't exist within a collection of size `0`.
+
+**Interview-ready summary:** "An empty list is still a valid object — it's just size zero — so `.get(0)` fails with `IndexOutOfBoundsException`, the same exception you'd get indexing past the end of a non-empty list. A `NullPointerException` would only happen if the *list reference itself* were null, which is a different bug entirely."
+
+---
+
+### 7. Reverse a `HashMap<String, String>` mapping (city → country becomes country → list of cities)
+
+Given:
+```java
+Map<String, String> cityToCountry = new HashMap<>();
+cityToCountry.put("Mumbai", "India");
+cityToCountry.put("Delhi", "India");
+cityToCountry.put("Berlin", "Germany");
+```
+
+Desired output: `India → [Mumbai, Delhi]`, `Germany → [Berlin]`.
+
+**Using Java Streams (`groupingBy`):**
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class ReverseMap {
+    public static void main(String[] args) {
+        Map<String, String> cityToCountry = new HashMap<>();
+        cityToCountry.put("Mumbai", "India");
+        cityToCountry.put("Delhi", "India");
+        cityToCountry.put("Berlin", "Germany");
+
+        Map<String, List<String>> countryToCities = cityToCountry.entrySet()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        Map.Entry::getValue,                       // group by country (the value)
+                        Collectors.mapping(Map.Entry::getKey, Collectors.toList()) // collect cities (the keys)
+                ));
+
+        System.out.println(countryToCities);
+        // {India=[Mumbai, Delhi], Germany=[Berlin]}
+    }
+}
+```
+
+**Without streams, for comparison (plain loop):**
+
+```java
+Map<String, List<String>> countryToCities = new HashMap<>();
+for (Map.Entry<String, String> entry : cityToCountry.entrySet()) {
+    countryToCities
+        .computeIfAbsent(entry.getValue(), k -> new ArrayList<>())
+        .add(entry.getKey());
+}
+```
+
+**Key points:**
+- This is a **many-to-one → one-to-many** inversion, so the reversed map's value type has to change from `String` to `List<String>` — a plain `Map<String, String>` can't represent it, since `India` would need to map to two cities.
+- `Collectors.groupingBy(valueAsKey, Collectors.mapping(originalKey, toList()))` is the idiomatic stream way to build this in one pass.
+- `computeIfAbsent()` is the equivalent imperative idiom — it avoids a manual "does the key exist, if not create an empty list first" check.
+- If duplicate original *values* map to the exact same key in some other dataset (unlikely here since keys are unique by definition), no data is lost either way — every original key always survives in the correct bucket.
+
+---
+
+### 8. Explain your API Automation Framework
+
+- **Layered structure**: Test/step-definition layer → API client/service layer (`EmployeeApiClient`, `OrderApiClient` wrapping REST Assured calls) → POJO/model layer (request & response objects) → Config layer (base URIs, auth tokens per environment).
+- **RequestSpecification / ResponseSpecification** — reusable, pre-configured request building blocks (base URI, headers, auth, content-type) shared across all API calls instead of repeating `given().baseUri(...).header(...)` in every test.
+```java
+public class ApiSpecs {
+    public static RequestSpecification getRequestSpec() {
+        return new RequestSpecBuilder()
+                .setBaseUri(ConfigReader.get("api.base.url"))
+                .setContentType(ContentType.JSON)
+                .addHeader("Authorization", "Bearer " + TokenManager.getToken())
+                .build();
+    }
+}
+```
+- **POJO-based serialization/deserialization** — every request body and response is mapped to/from a Java class (as in Q3 above) rather than raw JSON strings, so tests get compile-time safety and IDE autocomplete instead of typo-prone string keys.
+- **Response validation layer** — a mix of REST Assured's fluent `.then().statusCode().body(...)` assertions for quick checks, and POJO-based field-by-field assertions for complex payloads.
+- **Test data & environment config** — externalized to properties/JSON per environment (`qa`, `staging`), resolved via `-Denv=qa`, so the same suite runs against multiple environments without code changes.
+- **Reporting** — Allure/ExtentReports attaching the actual request/response payload on failure (via REST Assured's logging filters), since with API tests the raw request/response *is* the most useful debugging artifact.
+- **CI/CD integration** — Maven/Gradle-triggered via Jenkins/GitHub Actions, secrets (API keys/tokens) injected as environment variables, never committed to the repo.
+- **BDD layer on top (Cucumber)** — Gherkin feature files describe business-readable API scenarios, and step definitions call into the API client layer underneath, keeping Gherkin steps thin and delegating actual HTTP logic to reusable client classes.
+
+---
+
+### 9. Questions around Cucumber Step Definition files and RequestSpecification
+
+**Step Definition file organization for API automation:**
+- One step-definition class per API domain/feature (`EmployeeApiSteps`, `OrderApiSteps`), mirroring the `.feature` file it supports — avoids one giant catch-all step-def class that becomes unmaintainable.
+- Step definitions stay thin — they call a shared API client/service class, they don't build raw `given()...when()...then()` chains inline in every step. This keeps the actual REST Assured logic reusable outside of Cucumber too (e.g., in a plain TestNG suite).
+```java
+public class EmployeeApiSteps {
+    private Response response;
+    private final EmployeeApiClient apiClient = new EmployeeApiClient();
+
+    @When("I fetch employee details for id {string}")
+    public void fetchEmployee(String employeeId) {
+        response = apiClient.getEmployeeById(employeeId);
+    }
+
+    @Then("the response status code should be {int}")
+    public void verifyStatusCode(int expectedStatus) {
+        Assert.assertEquals(response.getStatusCode(), expectedStatus);
+    }
+
+    @Then("the employee city should be {string}")
+    public void verifyCity(String expectedCity) {
+        Employee employee = response.as(Employee.class);
+        Assert.assertEquals(employee.getAddress().getCity(), expectedCity);
+    }
+}
+```
+- Shared state between steps (like the `response` field above) stays scoped to **one Cucumber scenario instance** — Cucumber creates a new step-definition object per scenario by default, so there's no need for manual reset/teardown of that field between scenarios; this is different from TestNG, where you'd need to be careful about instance reuse across test methods.
+
+**RequestSpecification — what it actually is:**
+- A **reusable builder object** in REST Assured (`RequestSpecBuilder().build()`) that pre-packages common request configuration — base URI, headers, auth scheme, content type, query params — so every test doesn't repeat that boilerplate.
+```java
+RequestSpecification spec = new RequestSpecBuilder()
+        .setBaseUri("https://api.example.com")
+        .addHeader("Authorization", "Bearer " + token)
+        .setContentType(ContentType.JSON)
+        .build();
+
+Response response = given()
+        .spec(spec)
+        .pathParam("id", "E101")
+    .when()
+        .get("/employees/{id}");
+```
+- **Follow-up I was asked:** "Is `RequestSpecification` thread-safe for parallel execution?" — the builder itself just produces an immutable configuration snapshot at `.build()` time, so the resulting `RequestSpecification` object can safely be reused/shared across parallel threads as long as you don't mutate shared mutable state (like a shared token variable) concurrently without synchronization; per-thread values (like a per-user auth token) are better resolved fresh inside each test/thread rather than baked once into a single static spec.
+
+---
+
+### 10. Have you faced challenges with parallel execution or API chaining? How did you handle them?
+
+**Parallel execution challenges:**
+- **Shared mutable state** — a static `RequestSpecification`, token, or REST Assured global config (`RestAssured.baseURI = ...`) set once and read by multiple threads causes race conditions where one thread's environment/token leaks into another's request. Fix: avoid RestAssured's static/global configuration in parallel suites; build a fresh spec (or a `ThreadLocal`-scoped one) per test/thread instead.
+```java
+private static final ThreadLocal<RequestSpecification> specHolder =
+        ThreadLocal.withInitial(ApiSpecs::getRequestSpec);
+```
+- **Test data collisions** — two parallel tests creating/updating the same resource (e.g., both hitting `PUT /employees/E101`) step on each other. Fix: generate unique test data per thread (UUID/timestamp-suffixed IDs) so parallel tests never touch the same record.
+- **Rate limiting from the API itself** — running many parallel calls against a shared test environment can trip the API's own rate limiter, producing intermittent 429s that look like flaky tests. Fix: either throttle the parallel thread count for that specific suite, or get a whitelisted/higher rate limit for the QA environment's service account.
+
+**API chaining challenges:**
+- The core problem: a later call depends on data returned by an earlier call (e.g., create an employee → capture the generated `employeeId` from the response → use it in the next `GET`/`PUT` call).
+```java
+// Step 1: create and capture the generated ID
+Response createResponse = apiClient.createEmployee(newEmployeePayload);
+String employeeId = createResponse.jsonPath().getString("employeeId");
+
+// Step 2: chain — use that ID in the next call
+Response getResponse = apiClient.getEmployeeById(employeeId);
+Assert.assertEquals(getResponse.getStatusCode(), 200);
+```
+- **In Cucumber specifically**, this chained value needs to be stored on the step-definition instance field (or a shared `TestContext`/`ScenarioContext` object injected via PicoContainer/Guice for cross-step-def-class sharing) rather than a static variable, so parallel scenarios running on different threads don't overwrite each other's chained IDs.
+- **Cleanup/teardown ordering** — if a chained-created resource isn't deleted in reverse order (or at all) on test failure, orphaned test data accumulates in the environment over time; I address this with an `@After` hook that deletes anything the scenario created, tracked in that scenario's context object.
+
+---
+
+### 11. What parameters do you pass during CI/CD execution?
+
+Typical parameters passed into the pipeline job (via Jenkins parameters, GitHub Actions inputs, or Maven `-D` system properties):
+
+```bash
+mvn clean test \
+  -Denv=qa \
+  -Dsuite=api-regression.xml \
+  -Dthread.count=5 \
+  -Dtags="@regression and not @wip" \
+  -Dbrowser=chrome \
+  -DapiBaseUrl=https://qa-api.example.com
+```
+
+- **`env`** — which environment to run against (qa/staging/prod-smoke), resolved by the framework's `ConfigReader`.
+- **`suite`** — which TestNG/Cucumber suite/tag set to execute (smoke vs full regression).
+- **`thread.count` / `parallel`** — how many parallel threads/workers for this specific run, often tuned differently for a fast PR-gate run vs. a thorough nightly run.
+- **`tags`** — Cucumber/TestNG tag expression to filter which scenarios actually execute.
+- **Secrets** (API tokens, DB credentials, service account keys) — injected as **environment variables from the CI credentials store** (Jenkins Credentials, GitHub Actions Secrets), never passed as plain `-D` values that would show up in build logs.
+- **Report/notification settings** — e.g., a Slack webhook URL or recipient email list for failure notifications, often environment-specific too.
+
+**Interview-ready summary:** "Anything that changes between environments or run types — target environment, suite/tag selection, parallelism, and credentials — gets externalized as a CI parameter or environment variable rather than hardcoded, so the exact same pipeline definition can run a fast smoke test on a PR and a full nightly regression against a different environment just by changing the parameters, not the code."
+
+---
+
+> **What stood out about this interview:** the interviewer wasn't grading whether the code compiled and ran — he was checking whether I understood the *logic* behind the syntax and could reason my way to the right approach, offering guidance along the way rather than expecting a silent, unaided solution. That's a good reminder that in a Level 2/technical interview, thinking out loud and explaining *why* a particular data structure or approach fits the problem often matters more than typing fast, correct syntax on the first try.

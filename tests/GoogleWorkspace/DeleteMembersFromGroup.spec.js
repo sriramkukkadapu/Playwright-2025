@@ -11,16 +11,21 @@
 // from the Network tab as cURL to obtain a fresh bearer token)
 // ============================================================
 
+
+// npx playwright test tests/GoogleWorkspace/DeleteMembersFromGroup.spec.js
+
 const { test } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 
 const BASE_URL = 'https://content-admin.googleapis.com/admin/directory';
 
-// NOTE: these were copied verbatim from the Java test — the OAuth
-// bearer token expires quickly and will need to be refreshed.
-const API_KEY = 'AIzaSyBeo4NGA__U6Xxy-aBE6yFm19pgq8TY-TM';
-const TOKEN = '';
+// The API key and bearer token are read from the environment so they
+// never end up committed to source (the bearer token also expires
+// quickly and needs to be refreshed via the Network tab, see above).
+// export GOOGLE_API_KEY=... and GOOGLE_OAUTH_TOKEN="Bearer ya29...." before running this test.
+const API_KEY = process.env.GOOGLE_API_KEY;
+const TOKEN = process.env.GOOGLE_OAUTH_TOKEN;
 
 async function deleteEmailIdFromGroup(request, groupEmailId, emailId) {
     return request.delete(`${BASE_URL}/v1/groups/${groupEmailId}/members/${emailId}`, {

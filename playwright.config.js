@@ -1,7 +1,5 @@
 // @ts-check
-import { chromium, defineConfig, devices } from '@playwright/test';
-import { trace } from 'console';
-import { permission } from 'process';
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Read environment variables from file.
@@ -14,15 +12,15 @@ import { permission } from 'process';
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
-const config = ({
+const config = defineConfig({
   workers: 10, // Use a specific number of workers(threads)
   testDir: './tests',
   // testMatch: './tests/*.spec.js',
 
   fullyParallel: true, // each test in spec file is run independently
-  timeout: 60*1000, //test timeout across entire project
-  expect: { 
-    timeout: 30*1000 //this time out applicable only expect - assertions
+  timeout: 60 * 1000, //test timeout across entire project
+  expect: {
+    timeout: 30 * 1000 //this time out applicable only expect - assertions
   },
   reporter: 'html',
   retries: 2, // 0-no retries - dont put this under use because this will be applicable globally.
@@ -31,7 +29,7 @@ const config = ({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     browserName: 'chromium',
     ignoreHttpsErrors: true,
-    Permissions: ['geolocation'],
+    permissions: ['geolocation'],
     // browserName: 'firefox',
     // browserName: 'webkit',
     headless: true,
@@ -46,14 +44,22 @@ const config = ({
       ],
     }
   }
-  // ,projects: [
-  //   {
-  //     name: 'chromium',
-  //     use: { ...devices['Desktop Chrome'], 
-  //        viewport: {width:1728, height:864}
-  //     },
-  //   }]
+  , projects: [
+    {
+      name: 'setup',
+      testDir: './tests',
+      testMatch: '0SetupTest.spec.js',
+    },
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1728, height: 864 },
+        storageState: '.auth/user.json',
+      },
+      dependencies: ['setup'],
+    }]
 });
 
-module.exports = config; //exporting config variable to be available across entire project
+export default config;
 

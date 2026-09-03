@@ -5,5 +5,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.auth/
 /downloads/
 .playwright-mcp
+.env
