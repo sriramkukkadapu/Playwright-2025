@@ -94,7 +94,11 @@
       "Read(//Users/sriramkukkadapu/.claude/projects/-Users-sriramkukkadapu-projects-playwright-2025/memory/**)",
       "Read(//Users/sriramkukkadapu/projects/Playwright-2025/tests/GoogleWorkspace/**)",
       "Read(//Users/sriramkukkadapu/projects/playwright-2025/tests/GoogleWorkspace/**)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(sed -i '' \"s#path.resolve\\(import.meta.dirname, '.env'\\)#path.resolve\\(import.meta.dirname, '.env'\\)#\" playwright.config.js)",
+      "Bash(sed -i '' 's/GOOGLE_API_KEY=/GOOGLE_API_KEY=test-key-123/; s/GOOGLE_OAUTH_TOKEN=/GOOGLE_OAUTH_TOKEN=Bearer test-token-456/' .env)",
+      "Bash(npm view *)",
+      "Bash(git check-ignore *)"
     ],
     "additionalDirectories": [
       "/Users/sriramkukkadapu/projects/Playwright-2025/Learning",
