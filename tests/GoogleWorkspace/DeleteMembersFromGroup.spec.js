@@ -23,7 +23,10 @@ const BASE_URL = 'https://content-admin.googleapis.com/admin/directory';
 // The API key and bearer token are read from the environment so they
 // never end up committed to source (the bearer token also expires
 // quickly and needs to be refreshed via the Network tab, see above).
-// export GOOGLE_API_KEY=... and GOOGLE_OAUTH_TOKEN="Bearer ya29...." before running this test.
+//
+// Add a .env file in the project root (it's git-ignored) with:
+//   GOOGLE_API_KEY=AIzaSyBeo4NGA__U6Xxy-aBE6yFm19pgq8TY-TM
+//   GOOGLE_OAUTH_TOKEN=Bearer ya29....
 const API_KEY = process.env.GOOGLE_API_KEY;
 const TOKEN = process.env.GOOGLE_OAUTH_TOKEN;
 
