@@ -25,6 +25,7 @@ test('End to end journey with Special locators', async ({page}) =>
 
         const cartBtn = page.locator("button[routerLink='/dashboard/cart']");
         await cartBtn.click();
+        await page.waitForURL(/cart/, { timeout: 15000 });
         await page.locator("div li").first().waitFor();
         expect (await page.locator("'ZARA COAT 3'").isVisible()).toBeTruthy();
 

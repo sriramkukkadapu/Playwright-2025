@@ -112,7 +112,13 @@
       "Read(//Users/sriramkukkadapu/projects/playwright-2025/tests/training/**)",
       "Bash(xargs -I{} sh -c 'echo \"=== {} ===\"; cat {}')",
       "Read(//Users/sriramkukkadapu/projects/Playwright-2025/.github/workflows/**)",
-      "Read(//Users/sriramkukkadapu/projects/playwright-2025/.github/workflows/**)"
+      "Read(//Users/sriramkukkadapu/projects/playwright-2025/.github/workflows/**)",
+      "Bash(grep -n \"passed\\\\|failed\\\\|error\\\\|Error\\\\|##\\\\[error\\\\]\" /tmp/job_log2.txt | tail -60)",
+      "Bash(sed -n '2250,2265p' /tmp/job_log2.txt)",
+      "Bash(grep -n \"13POMTestUsingPOManager\\\\|2UIElements.*Select and Checkbox\\\\|W6_Forms_Tables_Waits\" /tmp/job_log2.txt)",
+      "Bash(sed -n '2027,2060p' /tmp/job_log2.txt)",
+      "Bash(sed -n '2059,2100p' /tmp/job_log2.txt)",
+      "Bash(sed -n '2181,2245p' /tmp/job_log2.txt)"
     ],
     "additionalDirectories": [
       "/Users/sriramkukkadapu/projects/Playwright-2025/Learning",

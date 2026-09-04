@@ -43,18 +43,30 @@ test('2 - Select and Checkbox Examples', async ({page}) =>
         const signInBtn =  page.locator("#signInBtn");
         const userCheckbox =  page.locator("//input[@id='usertype' and @value='user']");
         const okBtnAlertBox =  page.locator("#okayBtn");
+        const modal = page.locator("#myModal");
         const terms =  page.locator("#terms");
         const documentsLink = page.locator("a[href*='documents']"); // //a[contains(@href,'documents')]");
 
-        await page.goto("https://rahulshettyacademy.com/loginpagePractise/", { waitUntil: 'domcontentloaded' });  
+        await page.goto("https://rahulshettyacademy.com/loginpagePractise/", { waitUntil: 'domcontentloaded' });
 
         await userName.fill("sriramkukkadapu@gmail.com");
         await password.fill("sriramk1");
         await dropdown.selectOption("Consultant");
-        
+
         await userCheckbox.click();
         await expect(userCheckbox).toBeChecked();
         await okBtnAlertBox.click();
+        // The alert box is a Bootstrap fade modal — clicking #okayBtn while it's
+        // still fading in can get swallowed, leaving it open and blocking the
+        // Sign In button underneath. Wait for it to actually close, retrying the
+        // click once if it doesn't, instead of relying on the low-level click's
+        // own retry loop (which can spin for the whole test timeout).
+        try {
+            await modal.waitFor({ state: 'hidden', timeout: 5000 });
+        } catch {
+            await okBtnAlertBox.click();
+            await modal.waitFor({ state: 'hidden' });
+        }
         // await page.pause();
         // await terms.check();
         console.log("is terms checked: "+await terms.isChecked());

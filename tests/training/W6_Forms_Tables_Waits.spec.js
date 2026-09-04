@@ -130,7 +130,14 @@ test('W6: Auto-waits and Explicit Waits', async ({ page }) => {
 
     // waitForLoadState
     await page.goto(AUTO_URL);
-    await page.waitForLoadState('networkidle'); // all network quiet
+    // 'networkidle' waits for 500ms of no network activity — this page keeps
+    // background ad/analytics requests going, so it can genuinely never go
+    // idle. Bound it with its own timeout instead of letting it eat the
+    // whole test timeout; it's still useful to demonstrate the API and to
+    // catch the common case where the page does settle quickly.
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {
+        console.log('networkidle did not settle within 10s — page likely has ongoing background requests, continuing anyway');
+    });
     await page.waitForLoadState('domcontentloaded'); // DOM ready
     await page.waitForLoadState('load'); // page fully loaded
 
