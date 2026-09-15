@@ -16,6 +16,9 @@ const config = defineConfig({
   workers: 10, // Use a specific number of workers(threads)
   testDir: './tests',
   // testMatch: './tests/*.spec.js',
+  // GoogleWorkspace tests hit a live Google API with real credentials and
+  // mutate a real group's membership — never run them automatically in CI.
+  testIgnore: process.env.CI ? '**/GoogleWorkspace/**' : undefined,
 
   fullyParallel: true, // each test in spec file is run independently
   timeout: 60 * 1000, //test timeout across entire project

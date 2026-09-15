@@ -40,6 +40,10 @@ A comprehensive guide covering Playwright interview topics — from fundamentals
 32. [Accenture Interview Questions — Playwright focused](#32-accenture-interview-questions--playwright-focused)
 33. [10 Playwright Interview Questions You Should Be Ready to Answer](#33-10-playwright-interview-questions-you-should-be-ready-to-answer)
 34. [Playwright Interview Q&A — Real-World Answers (4+ Years Experience)](#34-playwright-interview-qa--real-world-answers-4-years-experience)
+35. [Infosys — Automation Testing Interview (8+ Years Experience): Java String Programs](#35-infosys--automation-testing-interview-8-years-experience-java-string-programs)
+36. [Playwright + TypeScript Interview Questions — Most Asked in MNCs (4–5 Years Experience)](#36-playwright--typescript-interview-questions--most-asked-in-mncs-4-5-years-experience)
+    - [Round 1: Core Technical Questions](#round-1-core-technical-questions)
+    - [Round 2: Advanced / Framework / Scenario-Based](#round-2-advanced--framework--scenario-based)
 
 ---
 
@@ -287,35 +291,35 @@ Locator filters narrow down matched elements based on content, child elements, o
 
 #### `filter({ hasText })` — Filter by text content
 
-```typescript
+```javascript
 await page.locator('li').filter({ hasText: 'Playwright' }).click();
 await page.locator('.card').filter({ hasText: /\$[0-9]+/ }).click(); // Regex support
 ```
 
 #### `filter({ hasNotText })` — Exclude by text content
 
-```typescript
+```javascript
 const availableProducts = page.locator('.product-card').filter({ hasNotText: 'Out of stock' });
 await expect(availableProducts).toHaveCount(5);
 ```
 
 #### `filter({ has })` — Filter by child element
 
-```typescript
+```javascript
 await page.locator('tr').filter({ has: page.getByRole('button', { name: 'Edit' }) }).click();
 await page.locator('.card').filter({ has: page.locator('img') }).click();
 ```
 
 #### `filter({ hasNot })` — Exclude by child element
 
-```typescript
+```javascript
 const protectedRows = page.locator('tr').filter({ hasNot: page.locator('button.delete') });
 await expect(protectedRows).toHaveCount(2);
 ```
 
 #### Combining Filters (Chaining)
 
-```typescript
+```javascript
 await page.locator('.product-card')
   .filter({ hasText: 'iPhone' })
   .filter({ has: page.getByRole('button', { name: 'Add to Cart' }) })
@@ -324,7 +328,7 @@ await page.locator('.product-card')
 
 #### Real-World Example
 
-```typescript
+```javascript
 const johnRow = page.locator('tr').filter({ hasText: 'John' });
 await johnRow.getByRole('button', { name: 'Edit' }).click();
 ```
@@ -344,7 +348,7 @@ await johnRow.getByRole('button', { name: 'Edit' }).click();
 
 ### How do you select a value from a dropdown?
 
-```typescript
+```javascript
 // By label (preferred — most stable)
 await page.locator('select#country').selectOption({ label: 'India' });
 
@@ -363,7 +367,7 @@ await page.selectOption('#colors', ['red', 'blue', 'green']);
 
 **For custom dropdowns (non-`<select>`):**
 
-```typescript
+```javascript
 await page.locator('.dropdown-trigger').click();
 await page.locator('.dropdown-option').filter({ hasText: 'India' }).click();
 
@@ -374,7 +378,7 @@ await page.getByRole('option', { name: 'India' }).click();
 
 ### How do you handle dialogs/alerts?
 
-```typescript
+```javascript
 // Register handler BEFORE the action that triggers the dialog
 page.on('dialog', async (dialog) => {
   console.log('Dialog type: ' + dialog.type());
@@ -391,7 +395,7 @@ Dialogs are **synchronous and blocking** — when `window.alert()` fires, the br
 
 **Confirm dialog:**
 
-```typescript
+```javascript
 page.on('dialog', async (d) => {
   expect(d.type()).toContain('confirm');
   expect(d.message()).toEqual('Are you sure?');
@@ -402,7 +406,7 @@ await page.click('#delete-button');
 
 **Prompt dialog:**
 
-```typescript
+```javascript
 page.on('dialog', async (d) => {
   await d.accept('My Answer'); // Pass input text
 });
@@ -411,7 +415,7 @@ await page.click('#prompt-btn');
 
 ### How do you handle Frames/iFrames?
 
-```typescript
+```javascript
 // Using frameLocator (recommended)
 const frame = page.frameLocator('#payment-iframe');
 await frame.locator('#card-number').fill('4242424242424242');
@@ -437,7 +441,7 @@ await expect(frame.locator('.success')).toBeVisible();
 
 ### How do you take screenshots in Playwright?
 
-```typescript
+```javascript
 // Full page screenshot (captures entire scrollable page)
 await page.screenshot({ path: 'screenshots/fullpage.png', fullPage: true });
 
@@ -478,7 +482,7 @@ module.exports = config;
 
 **Access video in test:**
 
-```typescript
+```javascript
 test('record video', async ({ page }, testInfo) => {
   await page.goto('https://example.com');
   const video = page.video();
@@ -501,7 +505,7 @@ test('record video', async ({ page }, testInfo) => {
 
 ### How do you capture network requests & responses?
 
-```typescript
+```javascript
 test('capture network traffic', async ({ page }) => {
   page.on('request', (request) => {
     console.log(`${request.method()} ${request.url()}`);
@@ -517,7 +521,7 @@ test('capture network traffic', async ({ page }) => {
 
 **Wait for a specific API response:**
 
-```typescript
+```javascript
 const responsePromise = page.waitForResponse(
   (response) => response.url().includes('/api/users') && response.status() === 200
 );
@@ -529,7 +533,7 @@ expect(data.users).toHaveLength(10);
 
 ### How can you mock API responses?
 
-```typescript
+```javascript
 // Return custom mock data
 await page.route('**/api/users', async (route) => {
   await route.fulfill({
@@ -542,7 +546,7 @@ await page.route('**/api/users', async (route) => {
 
 **Mock error responses:**
 
-```typescript
+```javascript
 await page.route('**/api/data', async (route) => {
   await route.fulfill({ status: 500, body: JSON.stringify({ error: 'Server Error' }) });
 });
@@ -550,7 +554,7 @@ await page.route('**/api/data', async (route) => {
 
 **Modify real responses (partial mock):**
 
-```typescript
+```javascript
 await page.route('**/api/products', async (route) => {
   const response = await route.fetch();
   const json = await response.json();
@@ -561,14 +565,14 @@ await page.route('**/api/products', async (route) => {
 
 **Block requests:**
 
-```typescript
+```javascript
 await page.route('**/*google-analytics*/**', (route) => route.abort());
 await page.route('**/*.{png,jpg,jpeg}', (route) => route.abort());
 ```
 
 **Using HAR files:**
 
-```typescript
+```javascript
 await page.routeFromHAR('tests/mocks/api.har', { url: '**/api/**' });
 ```
 
@@ -623,7 +627,7 @@ module.exports = config;
 
 #### Basic Auth (HTTP credentials):
 
-```typescript
+```javascript
 const context = await browser.newContext({
   httpCredentials: { username: 'admin', password: 'password123' },
 });
@@ -631,7 +635,7 @@ const context = await browser.newContext({
 
 #### Token-based Auth (inject via API):
 
-```typescript
+```javascript
 test('token auth', async ({ page }) => {
   const response = await page.request.post('/api/auth/login', {
     data: { username: 'user', password: 'pass' },
@@ -644,7 +648,7 @@ test('token auth', async ({ page }) => {
 
 #### Multi-role testing:
 
-```typescript
+```javascript
 test.describe('Admin tests', () => {
   test.use({ storageState: './auth/admin.json' });
   test('admin can delete', async ({ page }) => { /* ... */ });
@@ -672,7 +676,7 @@ Playwright uses **auto-waiting** built into every action. Selenium requires manu
 
 **Playwright — auto-waits on every action:**
 
-```typescript
+```javascript
 await page.click('#submit');
 // Automatically waits for:
 // ✓ Attached to DOM
@@ -704,7 +708,7 @@ button.click();
 
 **When you DO need explicit waits in Playwright (rare):**
 
-```typescript
+```javascript
 await page.waitForURL('**/dashboard');
 await page.waitForResponse('**/api/data');
 await page.waitForLoadState('networkidle');
@@ -712,7 +716,7 @@ await page.waitForLoadState('networkidle');
 
 **Anti-patterns to AVOID:**
 
-```typescript
+```javascript
 // ❌ NEVER
 await page.waitForTimeout(3000);
 
@@ -732,7 +736,7 @@ await page.click('#btn');
 
 **Use text/role locators instead of dynamic IDs:**
 
-```typescript
+```javascript
 // Bad: dynamic ID that changes every render
 await page.locator('#btn-abc123xyz');
 
@@ -743,14 +747,14 @@ await page.getByTestId('submit-button');
 
 **Wait for dynamic content:**
 
-```typescript
+```javascript
 await expect(page.locator('.results')).toHaveCount(10);
 await expect(page.locator('.price')).not.toHaveText('Loading...');
 ```
 
 **Polling for dynamic values:**
 
-```typescript
+```javascript
 await expect(async () => {
   const count = await page.locator('.notification-count').textContent();
   expect(Number(count)).toBeGreaterThan(0);
@@ -787,7 +791,7 @@ Browser (one instance, shared)
 
 **Answer: No.** Both pages share the same cookies/localStorage.
 
-```typescript
+```javascript
 const context = await browser.newContext();
 const page1 = await context.newPage(); // Login here
 const page2 = await context.newPage(); // Already logged in — same session
@@ -797,7 +801,7 @@ const page2 = await context.newPage(); // Already logged in — same session
 
 **Answer: Yes.** Different contexts are completely isolated.
 
-```typescript
+```javascript
 const context1 = await browser.newContext();
 const context2 = await browser.newContext(); // Fresh session!
 const page1 = await context1.newPage(); // Logged in
@@ -860,7 +864,7 @@ Fixtures are Playwright's **dependency injection system** — they provide pre-c
 
 **Built-in fixtures:**
 
-```typescript
+```javascript
 test('example', async ({ page, context, browser, request }) => {
   // page — fresh tab (per test)
   // context — BrowserContext owning the page
@@ -919,8 +923,8 @@ test('use URL fixture', async ({ page, appUrl }) => {
 
 **POM with Fixture (recommended):**
 
-```typescript
-// pageObjects/POFixture.ts
+```javascript
+// pageObjects/POFixture.js
 import { test as base } from "@playwright/test";
 import { LoginPage } from "./LoginPage";
 import { DashboardPage } from "./DashboardPage";
@@ -938,17 +942,10 @@ export { expect } from "@playwright/test";
 
 **Page class:**
 
-```typescript
-// pages/LoginPage.ts
-import { Page, Locator } from '@playwright/test';
-
+```javascript
+// pages/LoginPage.js
 export class LoginPage {
-  readonly page: Page;
-  readonly usernameInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginButton: Locator;
-
-  constructor(page: Page) {
+  constructor(page) {
     this.page = page;
     this.usernameInput = page.getByPlaceholder('email@example.com');
     this.passwordInput = page.getByPlaceholder('enter your passsword');
@@ -957,7 +954,7 @@ export class LoginPage {
 
   async goto() { await this.page.goto('/login'); }
 
-  async login(username: string, password: string) {
+  async login(username, password) {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
@@ -967,7 +964,7 @@ export class LoginPage {
 
 **Using in tests:**
 
-```typescript
+```javascript
 import { test } from "./pageObjects/POFixture";
 
 test('End to end journey', async ({ poManager }) => {
@@ -992,7 +989,7 @@ test('End to end journey', async ({ poManager }) => {
 
 **JSON fixture files:**
 
-```typescript
+```javascript
 import testData from '../testData/loginTestData.json';
 await page.fill('#email', testData.email);
 await page.fill('#password', testData.password);
@@ -1000,7 +997,7 @@ await page.fill('#password', testData.password);
 
 **Data-driven tests (multiple users):**
 
-```typescript
+```javascript
 import users from '../testData/users.json';
 
 for (const user of users) {
@@ -1014,7 +1011,7 @@ for (const user of users) {
 
 **Test data as fixture:**
 
-```typescript
+```javascript
 export const test = base.extend({
   testDataForLogin: async ({}, use) => {
     await use({ email: "user@example.com", password: "Test1234!" });
@@ -1024,7 +1021,7 @@ export const test = base.extend({
 
 **API-generated data (setup/teardown):**
 
-```typescript
+```javascript
 test.beforeAll(async ({ request }) => {
   const response = await request.post('/api/orders', { data: { product: 'Widget' } });
   orderId = (await response.json()).id;
@@ -1094,13 +1091,13 @@ module.exports = config;
 
 **Per-test retry:**
 
-```typescript
+```javascript
 test.describe.configure({ retries: 3 });
 ```
 
 **Detecting retries in code:**
 
-```typescript
+```javascript
 test('retry-aware', async ({ page }, testInfo) => {
   if (testInfo.retry > 0) {
     console.log(`Retry attempt: ${testInfo.retry}`);
@@ -1156,7 +1153,7 @@ npx playwright test --headed --debug
 
 **5. Verbose logging:**
 
-```typescript
+```javascript
 page.on('console', (msg) => console.log('BROWSER:', msg.text()));
 page.on('pageerror', (err) => console.error('PAGE ERROR:', err.message));
 page.on('requestfailed', (req) => console.log('FAILED:', req.url()));
@@ -1326,7 +1323,7 @@ await newPage.waitForLoadState();
 
 **Two users collaborating:**
 
-```typescript
+```javascript
 test('two users edit same document', async ({ browser }) => {
   const user1Context = await browser.newContext({ storageState: './auth/user1.json' });
   const user2Context = await browser.newContext({ storageState: './auth/user2.json' });
@@ -1351,7 +1348,7 @@ test('two users edit same document', async ({ browser }) => {
 1. **Parallel execution** — `workers: 10`, `fullyParallel: true`
 2. **Reuse auth state** — `storageState` (saves 2-5s per test)
 3. **Block unnecessary resources:**
-   ```typescript
+   ```javascript
    await page.route('**/*.{png,jpg,svg}', (route) => route.abort());
    await page.route('**/analytics/**', (route) => route.abort());
    ```
@@ -1374,7 +1371,7 @@ test('two users edit same document', async ({ browser }) => {
 | Recommended | Yes — modern API | No — legacy, may be deprecated |
 | Assertions | Works with `expect(locator)` | Manual checks |
 
-```typescript
+```javascript
 // locator — never goes stale
 const counter = page.locator('.count');
 await expect(counter).toHaveText('0');
@@ -1394,7 +1391,7 @@ const button = await page.$('#submit');
 
 ### Write an XPath for an element
 
-```typescript
+```javascript
 // XPath by text
 await page.locator("//a[text()='Docs']").click();
 
@@ -1407,7 +1404,7 @@ await page.locator("//a[contains(@href,'/docs')]").click();
 
 **But prefer role-based locators over XPath:**
 
-```typescript
+```javascript
 // Better — more readable and resilient
 await page.getByRole('link', { name: 'Docs' }).click();
 ```
@@ -1445,8 +1442,8 @@ public class VowelConsonantCounter {
 
 **TypeScript:**
 
-```typescript
-function countVowelsAndConsonants(name: string): void {
+```javascript
+function countVowelsAndConsonants(name) {
   let vowels = 0, consonants = 0;
   for (const char of name.toLowerCase()) {
     if (char >= 'a' && char <= 'z') {
@@ -1512,14 +1509,14 @@ public static int lengthOfLongestSubstring(String s) {
 
 **TypeScript:**
 
-```typescript
-function longestSubstring(s: string): number {
-  const lastIndex = new Map<string, number>();
+```javascript
+function longestSubstring(s) {
+  const lastIndex = new Map();
   let maxLen = 0, start = 0;
 
   for (let end = 0; end < s.length; end++) {
-    if (lastIndex.has(s[end]) && lastIndex.get(s[end])! >= start) {
-      start = lastIndex.get(s[end])! + 1;
+    if (lastIndex.has(s[end]) && lastIndex.get(s[end]) >= start) {
+      start = lastIndex.get(s[end]) + 1;
     }
     lastIndex.set(s[end], end);
     maxLen = Math.max(maxLen, end - start + 1);
@@ -1595,7 +1592,7 @@ Then I apply these solutions:
 - **Isolated test data** — each test creates its own data, no shared state
 - **Proper synchronization** — `waitForResponse()`, `waitForURL()` where needed
 
-```typescript
+```javascript
 // Bad — hard wait, flaky
 await page.waitForTimeout(3000);
 await page.click('#btn');
@@ -1613,7 +1610,7 @@ await page.click('#btn');
 
 For large test suites, I prefer using **authentication state** instead of logging in before every test.
 
-```typescript
+```javascript
 // Save auth state after login (run once in global setup)
 await page.context().storageState({
   path: 'playwright/.auth/user.json'
@@ -1646,7 +1643,7 @@ module.exports = config;
 
 I use Playwright's built-in API capabilities alongside browser automation. This gives a single framework for both UI and API testing.
 
-```typescript
+```javascript
 import { test, expect } from '@playwright/test';
 
 test('API + UI combined', async ({ page, request }) => {
@@ -1821,14 +1818,14 @@ Avoid creating the same test data repeatedly. Use:
 
 Avoid hard waits like:
 
-```typescript
+```javascript
 // ❌ Never do this
 await page.waitForTimeout(5000);
 ```
 
 Prefer Playwright's auto-waiting and condition-based waits:
 
-```typescript
+```javascript
 // ✅ Auto-retries until condition met
 await expect(page.locator('.result')).toBeVisible();
 ```
@@ -4098,8 +4095,8 @@ test.describe('Order Management Module', () => {
 #### Approach 1: Single Pass $O(n)$ Time & $O(1)$ Space (Optimal Solution)
 Iterate through the array once while maintaining two variables: `largest` and `secondLargest`. Correctly handles negative numbers, duplicate maximum values, and edge cases.
 
-```typescript
-function findSecondLargest(arr: number[]): number | null {
+```javascript
+function findSecondLargest(arr) {
   if (!arr || arr.length < 2) {
     console.log("Array must contain at least two elements.");
     return null;
@@ -4304,20 +4301,13 @@ In Playwright, **Fixtures** provide a powerful dependency injection mechanism. T
 
 ##### Step 1: Define Custom Fixtures (`fixtures/myCustomFixture.ts` / `.js`)
 
-```typescript
-import { test as base, Page } from '@playwright/test';
+```javascript
+import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 
-// 1. Declare the fixture types
-type MyFixtures = {
-  loginPage: LoginPage;
-  dashboardPage: DashboardPage;
-  loggedInPage: Page;
-};
-
 // 2. Extend the base test object with custom fixtures
-export const test = base.extend<MyFixtures>({
+export const test = base.extend({
   // Page Object Fixture: Instantiates LoginPage
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
@@ -4346,7 +4336,7 @@ export { expect } from '@playwright/test';
 
 ##### Step 2: Use the Fixtures in Test Files (`tests/dashboard.spec.ts`)
 
-```typescript
+```javascript
 import { test, expect } from '../fixtures/myCustomFixture';
 
 // Notice how zero "new LoginPage(page)" instances are created manually!
@@ -4480,7 +4470,7 @@ Every Playwright **action** (`click`, `fill`, `check`, etc.) automatically waits
 5. Receives Events — not obscured by another element on top of it
 ```
 
-```typescript
+```javascript
 // This single line internally waits for all 5 checks before clicking
 await page.click('#submit');
 
@@ -4491,7 +4481,7 @@ await expect(page.locator('.cart-count')).toHaveText('3');
 
 **When explicit waits are still needed** — auto-waiting only covers element actionability, not *application-level* async events that don't map to a specific element becoming actionable:
 
-```typescript
+```javascript
 // Waiting for a navigation to complete
 await page.waitForURL('**/dashboard');
 
@@ -4510,7 +4500,7 @@ const [download] = await Promise.all([
 
 **What NOT to do:**
 
-```typescript
+```javascript
 // ❌ Anti-pattern — arbitrary fixed delay, either too short (flaky) or too long (slow)
 await page.waitForTimeout(3000);
 ```
@@ -4599,7 +4589,7 @@ export default {
 
 **For multiple roles** (admin, viewer, editor), generate one `storageState` file per role and assign per `describe` block:
 
-```typescript
+```javascript
 test.describe('Admin flows', () => {
   test.use({ storageState: './auth/admin.json' });
   test('admin can delete a record', async ({ page }) => { /* ... */ });
@@ -4613,7 +4603,7 @@ test.describe('Viewer flows', () => {
 
 **Even faster — skip the UI entirely and authenticate via API:**
 
-```typescript
+```javascript
 setup('authenticate via API', async ({ request }) => {
   const response = await request.post('/api/auth/login', {
     data: { username: 'testuser', password: 'password123' },
@@ -4696,7 +4686,7 @@ Browser (Chromium/Firefox/WebKit instance — one per worker, shared across many
 | **BrowserContext** | An isolated session inside the browser (own cookies, localStorage, cache, permissions) | Full isolation between contexts |
 | **Page** | A single tab within a context | Shares session state with sibling pages in the *same* context |
 
-```typescript
+```javascript
 const browser = await chromium.launch();          // one heavy launch
 
 const contextA = await browser.newContext();       // cheap, near-instant
@@ -4728,7 +4718,7 @@ The core principle: **don't let your test's pass/fail hinge on infrastructure yo
 
 **1. Mock the third-party response — deterministic, fast, no external dependency:**
 
-```typescript
+```javascript
 await page.route('**/api/payment-gateway/**', async (route) => {
   await route.fulfill({
     status: 200,
@@ -4744,7 +4734,7 @@ await expect(page.locator('.payment-success')).toBeVisible();
 
 **2. Simulate the third party's failure modes deliberately — this is often MORE valuable than the happy path:**
 
-```typescript
+```javascript
 // Simulate the payment gateway timing out
 await page.route('**/api/payment-gateway/**', route => route.abort('timedout'));
 await page.click('#pay-now');
@@ -4759,7 +4749,7 @@ await expect(page.locator('.shipping-fallback-message')).toBeVisible();
 
 **3. Partial mocking — let the real call happen, but tweak the response (useful for edge cases the real service can't easily reproduce on demand):**
 
-```typescript
+```javascript
 await page.route('**/api/inventory/**', async (route) => {
   const response = await route.fetch();
   const json = await response.json();
@@ -4770,7 +4760,7 @@ await page.route('**/api/inventory/**', async (route) => {
 
 **4. Record real traffic once, replay it deterministically (HAR files) — useful when the mock needs to match a real, complex response shape exactly:**
 
-```typescript
+```javascript
 await page.routeFromHAR('tests/mocks/shipping-api.har', { url: '**/api/shipping/**' });
 ```
 
@@ -4788,7 +4778,7 @@ Playwright ships a built-in `request` fixture (`APIRequestContext`) that makes H
 
 **1. Use API calls for fast test-data setup, then verify via the UI (most common pattern):**
 
-```typescript
+```javascript
 test('newly created order appears correctly in the UI', async ({ page, request }) => {
   // API: create the order in ~50ms instead of clicking through a multi-step UI form
   const response = await request.post('/api/orders', {
@@ -4805,7 +4795,7 @@ test('newly created order appears correctly in the UI', async ({ page, request }
 
 **2. Pure API test suite, colocated with UI tests, sharing the same config/reporting:**
 
-```typescript
+```javascript
 test.describe('Orders API', () => {
   test('GET /api/orders/:id returns correct schema', async ({ request }) => {
     const response = await request.get('/api/orders/123');
@@ -4818,7 +4808,7 @@ test.describe('Orders API', () => {
 
 **3. Cleanup via API after a UI test** — keeps the environment clean without slow UI-driven teardown:
 
-```typescript
+```javascript
 test.afterEach(async ({ request }, testInfo) => {
   if (testInfo.annotations.find(a => a.type === 'orderId')) {
     await request.delete(`/api/orders/${orderId}`);
@@ -4849,7 +4839,7 @@ The goal is to make locators depend on things that **rarely change** — user-fa
 
 **Locator priority, most to least resilient:**
 
-```typescript
+```javascript
 // 1. Role + accessible name — tied to what the USER sees/hears, survives most CSS/DOM refactors
 await page.getByRole('button', { name: 'Submit Order' }).click();
 
@@ -4871,7 +4861,7 @@ await page.locator('.btn.btn-primary.mt-3').click();  // breaks on any style ref
 
 1. **Push for `data-testid` as a team contract.** Get developers to add `data-testid` to key interactive elements as part of the Definition of Done — this decouples locators from styling/DOM changes entirely, and is the single highest-leverage fix for locator churn.
 2. **Centralize locators in Page Objects, never inline in test files.** When the UI changes, you fix the locator in exactly one place (`LoginPage.js`), not in every test file that touches that page.
-   ```typescript
+   ```javascript
    export class CheckoutPage {
      constructor(page) {
        this.page = page;
@@ -4880,12 +4870,12 @@ await page.locator('.btn.btn-primary.mt-3').click();  // breaks on any style ref
    }
    ```
 3. **Filter/chain instead of writing brittle deep-nested selectors** — target a stable ancestor, then filter by content:
-   ```typescript
+   ```javascript
    await page.locator('tr').filter({ hasText: 'Invoice #1042' })
      .getByRole('button', { name: 'Download' }).click();
    ```
 4. **Use regex for dynamic-but-patterned text** rather than hardcoding a value that will go stale:
-   ```typescript
+   ```javascript
    await expect(page.locator('.order-status')).toHaveText(/Order #\d+ confirmed/);
    ```
 5. **Avoid absolute XPath and index-based locators** (`div > div > span:nth-child(3)`) — they break the moment a sibling element is added/removed, which happens constantly during active UI development.
@@ -4910,7 +4900,7 @@ With multiple teams sharing one framework, the CI/CD strategy has to balance **f
 | **Nightly (scheduled)** | Full cross-team regression suite, all browsers | Catches cross-module integration regressions that PR-scoped runs miss |
 | **Pre-release** | Full regression + cross-browser + visual regression | Final gate before a release cut |
 
-```typescript
+```javascript
 // Tag tests so CI can selectively run subsets
 test('checkout completes successfully', { tag: ['@smoke', '@checkout'] }, async ({ page }) => { ... });
 ```
@@ -5010,23 +5000,16 @@ Key principles:
 
 Each page gets a class containing locators and page-specific actions:
 
-```typescript
-import { Page, Locator } from '@playwright/test';
-
+```javascript
 export class LoginPage {
-  readonly page: Page;
-  readonly username: Locator;
-  readonly password: Locator;
-  readonly loginButton: Locator;
-
-  constructor(page: Page) {
+  constructor(page) {
     this.page = page;
     this.username = page.getByLabel('Username');
     this.password = page.getByLabel('Password');
     this.loginButton = page.getByRole('button', { name: 'Login' });
   }
 
-  async login(username: string, password: string) {
+  async login(username, password) {
     await this.username.fill(username);
     await this.password.fill(password);
     await this.loginButton.click();
@@ -5034,7 +5017,7 @@ export class LoginPage {
 }
 ```
 
-```typescript
+```javascript
 test('valid login', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.login('admin', 'password');
@@ -5054,7 +5037,7 @@ Different mechanisms depending on the type of data:
 - **Database** — when application architecture allows controlled DB access
 - **Fixtures** — reusable generated data
 
-```typescript
+```javascript
 import users from '../data/users.json';
 
 test('login', async ({ page }) => {
@@ -5073,7 +5056,7 @@ test('login', async ({ page }) => {
 ENV=qa npx playwright test
 ```
 
-```typescript
+```javascript
 const environments = {
   dev:  { baseURL: 'https://dev.example.com' },
   qa:   { baseURL: 'https://qa.example.com' },
@@ -5093,7 +5076,7 @@ export default defineConfig({
 
 Keep environment-specific values in a configuration object or external files:
 
-```typescript
+```javascript
 const config = {
   dev:  { baseURL: 'https://dev.example.com',  apiURL: 'https://dev-api.example.com' },
   qa:   { baseURL: 'https://qa.example.com',   apiURL: 'https://qa-api.example.com' },
@@ -5141,8 +5124,8 @@ npx playwright test --grep @regression
 
 Create utilities only for genuinely reusable functionality:
 
-```typescript
-export async function waitForApiResponse(page: Page, url: string) {
+```javascript
+export async function waitForApiResponse(page, url) {
   return page.waitForResponse(response =>
     response.url().includes(url) && response.ok()
   );
@@ -5159,7 +5142,7 @@ export async function waitForApiResponse(page: Page, url: string) {
 
 Playwright provides `request`:
 
-```typescript
+```javascript
 test('GET customer', async ({ request }) => {
   const response = await request.get('/api/customers/123');
   expect(response.ok()).toBeTruthy();
@@ -5172,7 +5155,7 @@ test('GET customer', async ({ request }) => {
 
 POST:
 
-```typescript
+```javascript
 const response = await request.post('/api/customers', {
   data: { name: 'John', email: 'john@test.com' }
 });
@@ -5183,7 +5166,7 @@ expect(response.status()).toBe(201);
 
 Create data via API, then validate through the UI — much faster than creating an order entirely through the UI:
 
-```typescript
+```javascript
 const response = await request.post('/api/orders', {
   data: { productId: 100, quantity: 2 }
 });
@@ -5195,7 +5178,7 @@ await expect(page.getByText(order.orderNumber)).toBeVisible();
 
 **3. How do you handle authentication using API?**
 
-```typescript
+```javascript
 const response = await request.post('/api/login', {
   data: { username: process.env.USERNAME, password: process.env.PASSWORD }
 });
@@ -5210,7 +5193,7 @@ await request.get('/api/orders', {
 
 **4. How do you mock API responses using `route.fulfill()`?**
 
-```typescript
+```javascript
 await page.route('**/api/products', async route => {
   await route.fulfill({
     status: 200,
@@ -5242,14 +5225,14 @@ Useful for testing: error responses, empty states, slow APIs, rare backend condi
 
 `locator()` is the preferred modern approach:
 
-```typescript
+```javascript
 const button = page.getByRole('button', { name: 'Submit' });
 await button.click();
 ```
 
 `page.$()` returns an `ElementHandle`:
 
-```typescript
+```javascript
 const button = await page.$('#submit');
 ```
 
@@ -5261,7 +5244,7 @@ Locator provides: auto-waiting, retryability, better handling of dynamic DOM, be
 
 Playwright automatically waits for elements to become actionable before performing actions:
 
-```typescript
+```javascript
 await page.getByRole('button', { name: 'Submit' }).click();
 ```
 
@@ -5271,7 +5254,7 @@ It checks: element exists, is visible, is enabled, is stable, and can receive th
 
 Avoid brittle selectors like `div:nth-child(7)`. Use semantic locators instead:
 
-```typescript
+```javascript
 page.getByRole('button', { name: 'Submit' });
 page.getByLabel('Email');
 page.getByPlaceholder('Enter email');
@@ -5289,7 +5272,7 @@ await expect(rows).toHaveCount(5);
 
 Playwright locators generally work through **open** Shadow DOM automatically:
 
-```typescript
+```javascript
 await page.locator('my-component').getByRole('button').click();
 
 // Chaining locators
@@ -5307,17 +5290,17 @@ Prefer built-in semantic locators first. If the app consistently provides a cust
 <button data-testid="checkout-button">
 ```
 
-```typescript
+```javascript
 page.getByTestId('checkout-button');
 ```
 
 If the app uses a different attribute, configure a custom test ID:
 
-```typescript
+```javascript
 use: { testIdAttribute: 'data-qa' }
 ```
 
-```typescript
+```javascript
 page.getByTestId('checkout-button');
 ```
 
@@ -5333,7 +5316,7 @@ page.getByTestId('checkout-button');
 | `waitForLoadState()` | Waits for a page loading state |
 | `waitForTimeout()` | Fixed delay — avoid in normal automation |
 
-```typescript
+```javascript
 // waitForSelector-equivalent
 await page.locator('#result').waitFor({ state: 'visible' });
 
@@ -5343,20 +5326,20 @@ await page.waitForLoadState('networkidle');
 
 > Don't use `networkidle` blindly — modern apps may continuously make network requests.
 
-```typescript
+```javascript
 // waitForTimeout — avoid; creates unnecessary delay and can still be flaky
 await page.waitForTimeout(3000);
 ```
 
 **2. Why is hard wait discouraged?**
 
-```typescript
+```javascript
 await page.waitForTimeout(5000);
 ```
 
 If the app is ready after 500ms, you waste 4.5 seconds. If it needs 6 seconds, the test still fails. Instead, wait for a meaningful condition:
 
-```typescript
+```javascript
 await expect(page.getByText('Order created')).toBeVisible();
 // or
 await page.waitForResponse('**/api/orders');
@@ -5366,7 +5349,7 @@ await page.waitForResponse('**/api/orders');
 
 Playwright auto-waits for actions and assertions:
 
-```typescript
+```javascript
 await page.getByRole('button', { name: 'Save' }).click(); // waits until actionable
 
 await expect(page.getByText('Success')).toBeVisible(); // retries until timeout expires
@@ -5393,7 +5376,7 @@ Each worker gets its own isolated test environment per Playwright's test isolati
 | **Workers** | Control parallel execution capacity (`--workers=4`) |
 | **Projects** | Represent different configurations (browser, device, environment, config variation) |
 
-```typescript
+```javascript
 projects: [
   { name: 'chromium', use: { browserName: 'chromium' } },
   { name: 'firefox',  use: { browserName: 'firefox' } }
@@ -5406,7 +5389,7 @@ projects: [
 npx playwright test --workers=4
 ```
 
-```typescript
+```javascript
 workers: process.env.CI ? 2 : 4
 ```
 
@@ -5439,7 +5422,7 @@ Then run four CI jobs in parallel: `--shard=1/4`, `--shard=2/4`, `--shard=3/4`, 
 
 **1. How do you intercept network requests?**
 
-```typescript
+```javascript
 await page.route('**/api/users', async route => {
   console.log(route.request().method());
   await route.continue();
@@ -5448,7 +5431,7 @@ await page.route('**/api/users', async route => {
 
 Modify requests:
 
-```typescript
+```javascript
 await page.route('**/api/users', async route => {
   const headers = { ...route.request().headers(), 'x-test': 'true' };
   await route.continue({ headers });
@@ -5457,7 +5440,7 @@ await page.route('**/api/users', async route => {
 
 **2. How do you validate an API response in UI tests?**
 
-```typescript
+```javascript
 const responsePromise = page.waitForResponse(
   response => response.url().includes('/api/orders') && response.request().method() === 'POST'
 );
@@ -5475,7 +5458,7 @@ expect(body.status).toBe('created');
 
 Failure:
 
-```typescript
+```javascript
 await page.route('**/api/products', async route => {
   await route.abort();
 });
@@ -5483,7 +5466,7 @@ await page.route('**/api/products', async route => {
 
 Slow response:
 
-```typescript
+```javascript
 await page.route('**/api/products', async route => {
   await new Promise(resolve => setTimeout(resolve, 5000));
   await route.continue();
@@ -5494,7 +5477,7 @@ Then verify the UI displays the correct loading/error state.
 
 **4. How do you block specific requests?**
 
-```typescript
+```javascript
 // Block images
 await page.route('**/*', async route => {
   if (route.request().resourceType() === 'image') {
@@ -5515,7 +5498,7 @@ await page.route('**/*', async route => {
 
 Use `storageState`. A setup test logs in once:
 
-```typescript
+```javascript
 await page.goto('/login');
 await page.getByLabel('Username').fill('admin');
 await page.getByLabel('Password').fill('password');
@@ -5526,7 +5509,7 @@ await page.context().storageState({ path: 'playwright/.auth/admin.json' });
 
 Then configure:
 
-```typescript
+```javascript
 use: { storageState: 'playwright/.auth/admin.json' }
 ```
 
@@ -5536,7 +5519,7 @@ use: { storageState: 'playwright/.auth/admin.json' }
 
 Stores browser authentication state — cookies and local storage — letting a new browser context start already authenticated:
 
-```typescript
+```javascript
 storageState: 'playwright/.auth/user.json'
 ```
 
@@ -5564,13 +5547,13 @@ Create separate authentication states:
 └── manager.json
 ```
 
-```typescript
+```javascript
 test.use({ storageState: 'playwright/.auth/admin.json' });
 ```
 
 For two users interacting simultaneously, create two separate browser contexts:
 
-```typescript
+```javascript
 const adminContext = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
 const userContext  = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
 ```
@@ -5596,7 +5579,7 @@ npx playwright test
 
 **2. How do you generate reports in CI?**
 
-```typescript
+```javascript
 reporter: [
   ['html'],
   ['junit', { outputFile: 'results.xml' }]
@@ -5607,7 +5590,7 @@ HTML is useful for human investigation; JUnit is useful for CI systems that cons
 
 **3. How do you store artifacts?**
 
-```typescript
+```javascript
 use: {
   screenshot: 'only-on-failure',
   video: 'retain-on-failure',
@@ -5664,7 +5647,7 @@ npx playwright show-trace trace.zip
 
 **3. How do you capture screenshots/videos on failure?**
 
-```typescript
+```javascript
 use: {
   screenshot: 'only-on-failure',
   video: 'retain-on-failure',
@@ -5689,7 +5672,7 @@ Launches tests in a debugging-friendly mode allowing inspection of actions and l
 
 **1. How do you run tests on Chromium, Firefox and WebKit?**
 
-```typescript
+```javascript
 projects: [
   { name: 'chromium', use: { browserName: 'chromium' } },
   { name: 'firefox',  use: { browserName: 'firefox' } },
@@ -5704,7 +5687,7 @@ npx playwright test --project=chromium   # only chromium
 
 **2. How do you emulate mobile devices?**
 
-```typescript
+```javascript
 import { devices } from '@playwright/test';
 
 projects: [
@@ -5724,7 +5707,7 @@ Simulates device characteristics: screen size, user agent, device scale factor, 
 
 **1. How do you handle file upload?**
 
-```typescript
+```javascript
 await page.getByLabel('Upload file').setInputFiles('test-data/sample.pdf');
 
 // Via file chooser
@@ -5736,7 +5719,7 @@ await fileChooser.setFiles('test-data/sample.pdf');
 
 **2. How do you handle file download and validate content?**
 
-```typescript
+```javascript
 const downloadPromise = page.waitForEvent('download');
 await page.getByText('Download').click();
 const download = await downloadPromise;
@@ -5747,7 +5730,7 @@ await download.saveAs('test-results/report.pdf');
 
 For CSV/text files, read and validate contents:
 
-```typescript
+```javascript
 import fs from 'fs';
 
 const content = fs.readFileSync('test-results/report.csv', 'utf-8');
@@ -5760,7 +5743,7 @@ expect(content).toContain('Order ID');
 
 **1. How do you handle iframes?**
 
-```typescript
+```javascript
 const frame = page.frameLocator('#payment-frame');
 await frame.getByLabel('Card Number').fill('4111111111111111');
 
@@ -5772,7 +5755,7 @@ const frame2 = page.frame({ name: 'payment-frame' });
 
 **2. How do you handle multiple tabs/windows?**
 
-```typescript
+```javascript
 const newPagePromise = page.context().waitForEvent('page');
 await page.getByText('Open Report').click();
 const newPage = await newPagePromise;
@@ -5790,7 +5773,7 @@ const popup = await popupPromise;
 
 Playwright auto-handles dialogs only when there's no dialog listener; generally handle expected dialogs explicitly:
 
-```typescript
+```javascript
 page.on('dialog', async dialog => {
   console.log(dialog.message());
   await dialog.accept();
@@ -5804,7 +5787,7 @@ page.once('dialog', async dialog => {
 
 **4. How do you test drag and drop?**
 
-```typescript
+```javascript
 // If supported by the application
 await page.locator('#source').dragTo(page.locator('#target'));
 
@@ -5817,7 +5800,7 @@ await page.mouse.up();
 
 **5. How do you handle infinite scrolling?**
 
-```typescript
+```javascript
 while (!(await page.getByText('Target Item').isVisible())) {
   await page.mouse.wheel(0, 1000);
   await page.waitForTimeout(500);
@@ -5828,7 +5811,7 @@ while (!(await page.getByText('Target Item').isVisible())) {
 
 **6. How do you validate table data dynamically?**
 
-```typescript
+```javascript
 const rows = page.locator('table tbody tr');
 const count = await rows.count();
 
@@ -5903,7 +5886,7 @@ Common causes: race conditions, weak locators, backend delays, shared test data,
 
 Replace timing assumptions with condition-based synchronization:
 
-```typescript
+```javascript
 // Instead of:
 await page.waitForTimeout(3000);
 await button.click();
@@ -5915,7 +5898,7 @@ await button.click();
 
 **6. How do you implement retry mechanism?**
 
-```typescript
+```javascript
 export default defineConfig({
   retries: process.env.CI ? 2 : 0
 });
@@ -5929,14 +5912,14 @@ export default defineConfig({
 
 **1. Write code to login and validate dashboard**
 
-```typescript
+```javascript
 import { test, expect } from '@playwright/test';
 
 test('login and validate dashboard', async ({ page }) => {
   await page.goto('/login');
 
-  await page.getByLabel('Username').fill(process.env.USERNAME!);
-  await page.getByLabel('Password').fill(process.env.PASSWORD!);
+  await page.getByLabel('Username').fill(process.env.USERNAME);
+  await page.getByLabel('Password').fill(process.env.PASSWORD);
   await page.getByRole('button', { name: 'Login' }).click();
 
   await expect(page).toHaveURL(/dashboard/);
@@ -5946,7 +5929,7 @@ test('login and validate dashboard', async ({ page }) => {
 
 **2. Wait for API response**
 
-```typescript
+```javascript
 const responsePromise = page.waitForResponse(
   response =>
     response.url().includes('/api/orders') &&
@@ -5965,14 +5948,14 @@ expect(body.orders).toBeDefined();
 
 **3. Upload file**
 
-```typescript
+```javascript
 await page.getByLabel('Choose file').setInputFiles('test-data/sample.pdf');
 await expect(page.getByText('sample.pdf')).toBeVisible();
 ```
 
 **4. Handle dropdown**
 
-```typescript
+```javascript
 // Native <select>
 await page.getByLabel('Country').selectOption('IN');
 
@@ -5987,8 +5970,8 @@ await page.getByRole('option', { name: 'India' }).click();
 
 A good reusable function represents a meaningful operation:
 
-```typescript
-async function login(page: Page, username: string, password: string) {
+```javascript
+async function login(page, username, password) {
   await page.goto('/login');
   await page.getByLabel('Username').fill(username);
   await page.getByLabel('Password').fill(password);
@@ -5998,9 +5981,9 @@ async function login(page: Page, username: string, password: string) {
 }
 ```
 
-```typescript
+```javascript
 test('admin login', async ({ page }) => {
-  await login(page, process.env.ADMIN_USER!, process.env.ADMIN_PASSWORD!);
+  await login(page, process.env.ADMIN_USER, process.env.ADMIN_PASSWORD);
 });
 ```
 
@@ -6066,4 +6049,1370 @@ Example, for `storageState`:
 
 > That style demonstrates hands-on framework experience, rather than simply knowing Playwright syntax.
 
+---
 
+## 35. Infosys — Automation Testing Interview (8+ Years Experience): Java String Programs
+
+*Recently shared Java String-manipulation programs asked in an Infosys automation testing interview for an 8+ years experience profile.*
+
+---
+
+### 1. Reverse a Particular Word from a String
+
+**Input:** `welcome to java` → **Output:** `welcome ot java`
+
+Only the second word (`to`) gets reversed — the rest of the sentence stays untouched.
+
+```java
+public class ReverseSpecificWord {
+
+    public static void main(String[] args) {
+        String input = "welcome to java";
+        System.out.println(reverseWordAt(input, 1)); // reverse the word at index 1 ("to")
+    }
+
+    public static String reverseWordAt(String sentence, int wordIndex) {
+        String[] words = sentence.split(" ");
+
+        if (wordIndex < 0 || wordIndex >= words.length) {
+            throw new IllegalArgumentException("wordIndex out of bounds for: " + sentence);
+        }
+
+        words[wordIndex] = new StringBuilder(words[wordIndex]).reverse().toString();
+
+        return String.join(" ", words);
+    }
+}
+// Output: welcome ot java
+```
+
+**Explanation:**
+- The input string is split into words using `split(" ")`.
+- The second word (`"to"`, index `1`) is selected.
+- `StringBuilder.reverse()` reverses only that word — no manual loop needed, though a manual char-swap loop works identically if the interviewer wants you to avoid `StringBuilder`.
+- `String.join(" ", words)` recombines the original first and third words with the reversed second word.
+
+**Key points:**
+- Parameterizing which word to reverse (`wordIndex`) rather than hardcoding "the second word" shows you generalized the solution instead of just hardcoding for the one sample input — a good habit to point out in an 8+ years interview.
+- Edge cases worth mentioning: multiple consecutive spaces would produce empty-string entries in the `words` array with a plain `split(" ")` — use `split("\\s+")` if the input isn't guaranteed to have single spaces.
+- Manual loop alternative (if asked to avoid `StringBuilder`):
+```java
+String word = words[wordIndex];
+char[] chars = word.toCharArray();
+for (int left = 0, right = chars.length - 1; left < right; left++, right--) {
+    char temp = chars[left];
+    chars[left] = chars[right];
+    chars[right] = temp;
+}
+words[wordIndex] = new String(chars);
+```
+
+---
+
+### 2. Reverse Each Word While Keeping `*` at the Same Position
+
+**Input:** `Welcome*To*Java` → **Output:** `emocleW*oT*avaJ`
+
+Every word is reversed individually, but the `*` delimiters stay exactly where they were.
+
+```java
+public class ReverseWordsKeepDelimiterPosition {
+
+    public static void main(String[] args) {
+        String input = "Welcome*To*Java";
+        System.out.println(reverseWordsKeepingDelimiter(input));
+    }
+
+    public static String reverseWordsKeepingDelimiter(String input) {
+        String[] words = input.split("\\*");
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            result.append(new StringBuilder(words[i]).reverse());
+            if (i != words.length - 1) {
+                result.append("*");
+            }
+        }
+        return result.toString();
+    }
+}
+// Output: emocleW*oT*avaJ
+```
+
+**Explanation:**
+- The string is split using `split("\\*")` — `*` is a regex metacharacter, so it must be escaped (`\\*`) to split on the literal character.
+- Each resulting word (`Welcome`, `To`, `Java`) is reversed individually with `StringBuilder.reverse()`.
+- The `*` is appended back between reversed words (but not after the last one), so the delimiter positions in the output match the original string exactly.
+- The special character itself is never reversed or moved — only the alphabetic segments between delimiters are reversed.
+
+**Key points:**
+- This is a more general version of "reverse words but keep special characters in place" — the same pattern (`split` on the delimiter, reverse each token, rejoin with the delimiter) works for any single-character delimiter (`-`, `_`, `/`, etc.), just by changing the regex passed to `split()`.
+- A common follow-up: "what if the delimiter itself could appear as part of a word, or there are multiple different delimiters mixed in?" — that needs a proper single-pass parser distinguishing letters from delimiters, rather than a plain `split()`, since `split()` assumes one fixed delimiter pattern.
+- Trailing/leading `*` in the input (e.g., `*Java`) would produce an empty string as the first element from `split("\\*")` — worth calling out proactively, since `new StringBuilder("").reverse()` just returns `""` safely, but it's good to show you've considered it.
+
+
+
+---
+
+## 36. Playwright + TypeScript Interview Questions — Most Asked in MNCs (4–5 Years Experience)
+
+*A compiled list of the most frequently asked Playwright + TypeScript interview questions across two rounds at product and service-based MNCs, for a 4–5 years experience profile — Round 1 covers core technical fundamentals, Round 2 covers advanced framework design and scenario-based debugging.*
+
+---
+
+## Round 1: Core Technical Questions
+
+### 1. Difference between Playwright and Selenium
+
+| Aspect | Playwright | Selenium |
+|---|---|---|
+| Architecture | Talks to browser directly over CDP / WebSocket (browser-level protocol) | Talks via WebDriver protocol (HTTP, JSON wire) through a driver binary |
+| Auto-waiting | Built-in — waits for actionability before every action | None — you write explicit/implicit waits yourself |
+| Speed | Faster, fewer network hops | Slower due to HTTP round trips |
+| Multi-tab/frame handling | First-class, native APIs | Clunky, manual window handle switching |
+| Language + TS support | First-class TypeScript support out of the box | TS support exists but bolted on via bindings |
+| Parallelization | Built-in workers, sharding, browser contexts | Needs Grid/TestNG/JUnit for parallelism |
+| Browser coverage | Chromium, Firefox, WebKit | Chromium, Firefox, Safari (via driver), IE (legacy) |
+| Network interception | Native `page.route()` | Needs BrowserMob Proxy or similar |
+| Trace/debugging | Trace Viewer, Codegen, Inspector built-in | No built-in trace/debug tooling |
+| Assertions | Built-in web-first assertions with auto-retry | Needs external assertion libraries |
+
+```javascript
+// Playwright: no explicit wait needed, auto-waits for visibility + actionability
+await page.getByRole('button', { name: 'Submit' }).click();
+```
+
+**Interview-ready summary:** "Playwright is a browser-automation-protocol-first tool with native auto-waiting, multi-context/multi-tab support, and built-in parallelism, whereas Selenium is WebDriver-protocol-based and needs a lot of scaffolding (explicit waits, Grid, third-party proxies) to match what Playwright gives you out of the box."
+
+---
+
+### 2. Explain Playwright architecture
+
+At a high level, Playwright doesn't drive browsers through a slow HTTP-based wire protocol like Selenium's WebDriver — it talks to the browser almost natively:
+
+```
+Test Script (TypeScript)
+      ↓
+Playwright Library (Node.js process)
+      ↓  (single persistent WebSocket connection)
+Browser Server process
+      ↓
+CDP (Chromium) / custom patched protocols for Firefox & WebKit
+      ↓
+Browser instance (Chromium / Firefox / WebKit)
+```
+
+Key architectural points I'd bring up in an interview:
+
+- **Out-of-process browsers**: Playwright launches the browser as a separate process and controls it entirely through a protocol channel (CDP for Chromium, patched equivalents for Firefox/WebKit), not through an in-page injected driver.
+- **One WebSocket, many commands**: All commands (click, navigate, evaluate) go over one persistent connection — this is why Playwright is faster than polling-based WebDriver.
+- **Browser Contexts**: Each `BrowserContext` is like an isolated incognito profile — separate cookies, storage, cache — created cheaply within a single browser process, which is why Playwright can spin up "fresh browsers" instantly for test isolation instead of launching a whole new browser binary each time.
+- **Multi-process/multi-page model**: Each `Page` maps to a browser tab; Playwright can track frames, workers, popups because it listens for browser-level events, not because it polls the DOM.
+- **Same engine drives everything**: Codegen, Trace Viewer, Inspector, and the actual test runner all consume the same underlying protocol events — that's why traces can rebuild an exact DOM snapshot after the fact.
+
+```javascript
+import { chromium } from '@playwright/test';
+
+const browser = await chromium.launch();              // browser server process
+const context = await browser.newContext(); // isolated profile
+const page = await context.newPage();            // one tab
+await page.goto('https://example.com');
+```
+
+**Interview-ready summary:** "Playwright uses a single WebSocket connection to drive the browser through its native automation protocol (CDP for Chromium), with browser contexts giving cheap, isolated sessions inside one browser process — that's the core reason it's fast, reliable, and good at multi-tab/multi-context scenarios."
+
+---
+
+### 3. What are Locators and why are they better than traditional selectors?
+
+A `Locator` in Playwright is a **lazy, re-queryable reference** to an element — it doesn't resolve to a DOM node immediately; it re-finds the element every time an action is performed on it.
+
+```javascript
+const submitBtn = page.getByRole('button', { name: 'Submit' });
+await submitBtn.click(); // resolved fresh at the moment of the action
+```
+
+Compare that to old-style Selenium `WebElement` / Playwright's own deprecated `page.$()` (ElementHandle), which grabs a reference to a **specific DOM node at that instant** — if the DOM re-renders (React/Angular re-mount), that handle becomes stale and throws.
+
+| | Locator | ElementHandle / raw selector |
+|---|---|---|
+| Resolution | Lazy, re-evaluated on each action | Eager, snapshot at query time |
+| Stale element risk | None — auto re-locates | High — throws `StaleElementReferenceException`-style errors |
+| Auto-waiting | Yes, waits for actionability | No, must query + wait manually |
+| Chaining | Composable (`locator.filter()`, `locator.locator()`) | Not composable |
+| Retry-ability | Built into assertions (`expect(locator)...`) | Manual retry needed |
+
+```javascript
+// Composable and resilient to re-renders
+const row = page.getByRole('row', { name: /John Doe/ });
+await row.getByRole('button', { name: 'Delete' }).click();
+```
+
+**Interview-ready summary:** "Locators are lazy and self-healing against DOM re-renders because they re-query the DOM at the moment of action, which is why Playwright recommends them over `ElementHandle`s or cached selectors that can go stale."
+
+---
+
+### 4. How does auto-waiting work in Playwright?
+
+Before performing any action (click, fill, check, etc.), Playwright runs a chain of **actionability checks** on the target element and retries until they all pass or a timeout is hit — no manual `sleep()` or `waitForSelector()` required for the common case.
+
+The actionability checks, in order, roughly are:
+
+1. **Attached** — element exists in the DOM
+2. **Visible** — has non-empty bounding box, not `visibility:hidden`
+3. **Stable** — not animating (two consecutive frames give the same bounding box)
+4. **Receives events** — not obscured by another element (e.g. a modal overlay)
+5. **Enabled** — not `disabled`
+6. Additionally for `fill()`: **editable** (not `readonly`)
+
+```javascript
+// Playwright internally retries all actionability checks until timeout (default 30s)
+await page.getByRole('button', { name: 'Pay Now' }).click();
+```
+
+If any check keeps failing, Playwright throws a timeout error with a **detailed log** of which check failed (this log is visible directly in the error message and in Trace Viewer) — that's a big DX win over Selenium, where you get a bare `ElementNotInteractableException`.
+
+Auto-waiting is combined with **web-first assertions**, which also poll and retry:
+
+```javascript
+// Retries internally, no explicit wait needed
+await expect(page.getByText('Order confirmed')).toBeVisible();
+```
+
+**Interview-ready summary:** "Playwright auto-waits by running a sequence of actionability checks — attached, visible, stable, receives-events, enabled — before every action, retrying until timeout, and web-first assertions apply the same polling model, which is why we rarely need explicit `waitForTimeout()` calls."
+
+---
+
+### 5. Difference between page, context, and browser
+
+```
+Browser (one process, e.g. Chromium)
+  └── BrowserContext (isolated profile: cookies, storage, cache, permissions)
+        └── Page (a single tab)
+              └── Frame(s) (main frame + iframes)
+```
+
+| Level | What it represents | Isolation |
+|---|---|---|
+| `Browser` | An actual launched browser instance/process | Shared engine, but contexts inside it don't leak state |
+| `BrowserContext` | An "incognito"-like session — cookies, localStorage, permissions, geolocation, auth state | Fully isolated from other contexts |
+| `Page` | A single browser tab within a context | Shares context storage/cookies with sibling pages |
+
+```javascript
+import { chromium } from '@playwright/test';
+
+const browser = await chromium.launch();
+
+const userA = await browser.newContext({ storageState: 'authA.json' });
+const userB = await browser.newContext({ storageState: 'authB.json' });
+
+const pageA = await userA.newPage();
+const pageB = await userB.newPage();
+
+// pageA and pageB are two logged-in users in the SAME browser, fully isolated
+```
+
+Why this matters practically:
+
+- Use **one context per independent test** (Playwright Test does this automatically per test) to avoid cross-test cookie/localStorage leakage — much cheaper than launching a new browser per test.
+- Use **multiple contexts in one test** to simulate multi-user scenarios (e.g. chat between two users, admin + regular user).
+- Use **multiple pages in one context** to simulate multi-tab flows for the *same* logged-in user (e.g. clicking a link that opens a new tab).
+
+**Interview-ready summary:** "Browser is the actual process, context is an isolated session (cookies/storage/permissions) inside that browser, and page is a tab inside a context — tests get a fresh context each run for isolation, and I reach for multiple contexts when I need multiple independent users, and multiple pages when I need multiple tabs for the same user."
+
+---
+
+### 6. How do you handle multiple tabs, windows, and frames?
+
+**Multiple tabs/windows** — listen for the `page` event on the context (new tab) or `popup` event on the page (window.open / target="_blank"):
+
+```javascript
+const [newPage] = await Promise.all([
+  context.waitForEvent('page'),       // wait for the new tab to be created
+  page.getByRole('link', { name: 'Open in new tab' }).click(),
+]);
+await newPage.waitForLoadState();
+await expect(newPage.getByRole('heading')).toHaveText('Details');
+```
+
+Or, more idiomatically for a click that directly triggers a popup:
+
+```javascript
+const [popup] = await Promise.all([
+  page.waitForEvent('popup'),
+  page.getByRole('button', { name: 'Terms & Conditions' }).click(),
+]);
+await popup.close();
+```
+
+**Frames / iframes** — use `page.frameLocator()`, which scopes all subsequent locators to inside the iframe and still gets full auto-waiting:
+
+```javascript
+const frame = page.frameLocator('iframe#payment-frame');
+await frame.getByLabel('Card number').fill('4111111111111111');
+await frame.getByRole('button', { name: 'Pay' }).click();
+```
+
+For nested iframes, you can chain `frameLocator` calls:
+
+```javascript
+await page
+  .frameLocator('#outer-frame')
+  .frameLocator('#inner-frame')
+  .getByRole('button', { name: 'Confirm' })
+  .click();
+```
+
+Key practices:
+- Always track the returned `Page` object for a new tab/window — don't assume `page` still refers to the active tab.
+- Use `context.pages()` to enumerate all currently open tabs if needed.
+- Prefer `frameLocator()` over the older `page.frame({ name })` + manual frame handle, since `frameLocator` supports auto-waiting and re-querying.
+
+**Interview-ready summary:** "For new tabs/popups I wait on the `page`/`popup` context event alongside the triggering action and keep a reference to the new `Page`; for iframes I scope locators with `frameLocator()` so auto-waiting still works inside the frame."
+
+---
+
+### 7. Explain Page Object Model implementation using TypeScript
+
+I implement POM as **classes with typed locators initialized in the constructor**, plus action/assertion methods — never store raw strings scattered across tests.
+
+```javascript
+// pages/LoginPage.js
+import { expect } from '@playwright/test';
+
+export class LoginPage {
+  constructor(page) {
+    this.page = page;
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: 'Log in' });
+    this.errorBanner = page.getByRole('alert');
+  }
+
+  async goto() {
+    await this.page.goto('/login');
+  }
+
+  async login(email, password) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async expectError(message) {
+    await expect(this.errorBanner).toHaveText(message);
+  }
+}
+```
+
+```javascript
+// tests/login.spec.js
+import { test } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+
+test('shows error for invalid credentials', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('bad@user.com', 'wrongpass');
+  await loginPage.expectError('Invalid email or password');
+});
+```
+
+Practices I follow at this level of experience:
+
+- **No assertions embedded inside "action" methods** unless it's a page-level assertion helper (`expectError` above is fine because it's a UI-state check, not a business assertion).
+- Base class for common page behaviors (`waitForPageLoad`, `getToast`) that all page objects extend.
+- Combine POM with **fixtures** so tests receive `loginPage` directly instead of `new LoginPage(page)` in every test (see fixtures question below).
+- Keep POM classes free of test data — pass data in via method params, keep data in separate `testdata/*.ts` or JSON files.
+- Export locators as `readonly` so nothing reassigns them mid-test.
+
+**Interview-ready summary:** "I model each page/component as a TypeScript class with typed `Locator` properties in the constructor and behavior methods, wire it up through a custom fixture so tests just consume `{ loginPage }`, and keep test data and assertions out of the page object itself to keep it reusable."
+
+---
+
+### 8. How do you perform API testing with Playwright?
+
+Playwright ships `request` — an `APIRequestContext` — that lets you make HTTP calls directly, either standalone or sharing cookies/auth with a browser context (useful for hybrid UI+API tests).
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test.describe('Users API', () => {
+  let apiContext;
+
+  test.beforeAll(async ({ playwright }) => {
+    apiContext = await playwright.request.newContext({
+      baseURL: 'https://api.example.com',
+      extraHTTPHeaders: {
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    });
+  });
+
+  test('creates a user', async () => {
+    const response = await apiContext.post('/users', {
+      data: { name: 'John Doe', email: 'john@example.com' },
+    });
+    expect(response.status()).toBe(201);
+    const body = await response.json();
+    expect(body.name).toBe('John Doe');
+  });
+
+  test.afterAll(async () => {
+    await apiContext.dispose();
+  });
+});
+```
+
+Patterns I actually use on real projects:
+
+- **Setup via API, verify via UI** — create test data (users, orders) through API calls in `beforeEach`/global setup instead of clicking through the UI, then assert via the browser. Much faster and less flaky.
+- **Hybrid context** — `context.request` (from a browser context) shares cookies with the page, so you can log in via UI once, then hit protected APIs directly using the same session.
+- **Typed response interfaces** for stronger assertions:
+
+```javascript
+const res = await apiContext.get('/users/1');
+const user = await res.json();
+expect(user.email).toContain('@');
+```
+
+- **Global setup for auth token/storageState generation** so both API and UI tests reuse the same authenticated state.
+
+**Interview-ready summary:** "I use Playwright's built-in `request` fixture/`APIRequestContext` for pure API tests and for fast test-data setup ahead of UI tests — typing responses with interfaces and reusing auth/session state between API and UI layers where possible."
+
+---
+
+### 9. What are Fixtures? Have you created custom fixtures?
+
+Fixtures are Playwright Test's **dependency-injection mechanism** — reusable setup/teardown units that tests declare as parameters, instead of duplicating setup code in every test or relying on `beforeEach` blocks scattered around.
+
+```javascript
+// fixtures/base.js
+import { test as base } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { DashboardPage } from '../pages/DashboardPage';
+
+export const test = base.extend({
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
+  },
+
+  dashboardPage: async ({ page }, use) => {
+    await use(new DashboardPage(page));
+  },
+
+  authenticatedPage: [async ({ page }, use) => {
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(process.env.TEST_USER);
+    await page.getByLabel('Password').fill(process.env.TEST_PASS);
+    await page.getByRole('button', { name: 'Log in' }).click();
+    await use();
+  }, { auto: true }], // runs automatically for every test in files that import this
+});
+
+export { expect } from '@playwright/test';
+```
+
+```javascript
+// tests/dashboard.spec.js
+import { test, expect } from '../fixtures/base';
+
+test('shows welcome banner after login', async ({ dashboardPage }) => {
+  await expect(dashboardPage.welcomeBanner).toBeVisible();
+});
+```
+
+Why I reach for custom fixtures instead of `beforeEach`:
+
+- **Composable and scoped** — fixtures can depend on other fixtures, and you control scope (`test` vs `worker`) — e.g. a `worker`-scoped fixture to start a test server once per worker instead of once per test.
+- **Automatic teardown** — code after `await use()` runs as cleanup, guaranteed even on failure.
+- **Opt-in per file** — only files that import the custom `test` get the fixture; no global pollution.
+- **Real example I've built**: a `worker`-scoped `dbConnection` fixture (one DB pool per worker, not per test) and an `apiHelper` fixture that wraps common REST calls for seeding data.
+
+**Interview-ready summary:** "Fixtures are Playwright's DI system for setup/teardown — I extend `base.test` to inject page objects and auth state directly into tests, use `auto: true` for setup every test needs, and `worker` scope for expensive resources like DB connections that shouldn't be recreated per test."
+
+---
+
+### 10. How do you run tests in parallel and control workers?
+
+Playwright parallelizes **at the file level by default** — each test *file* runs in its own worker process; tests within one file run serially unless you explicitly opt into `describe.parallel`.
+
+```javascript
+// playwright.config.js
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  fullyParallel: true,   // also parallelize tests WITHIN a file
+  workers: process.env.CI ? 4 : undefined, // undefined = 50% of CPU cores locally
+  retries: process.env.CI ? 2 : 0,
+});
+```
+
+```bash
+# Override at the CLI
+npx playwright test --workers=8
+```
+
+Controlling parallelism at a finer grain:
+
+```javascript
+import { test } from '@playwright/test';
+
+test.describe.parallel('independent checks', () => {
+  test('check A', async ({ page }) => { /* ... */ });
+  test('check B', async ({ page }) => { /* ... */ });
+});
+
+test.describe.serial('dependent flow', () => {
+  test('step 1: create order', async ({ page }) => { /* ... */ });
+  test('step 2: pay for order', async ({ page }) => { /* ... */ }); // depends on step 1
+});
+```
+
+Practical considerations I bring up:
+
+- **Workers scale with CPU cores locally**, but in CI I set an explicit number based on runner size/plan (e.g. 4 on a 2-vCPU GitHub Actions runner is too aggressive — I tune it).
+- **Sharding across machines** for very large suites: `npx playwright test --shard=1/4`, `--shard=2/4`, etc., run on separate CI jobs, then merge blob reports.
+- Each worker gets **its own process**, so no shared in-memory state between tests in different files — test data must be independent or namespaced (e.g. unique emails per test) to avoid collisions when run in parallel.
+- Serial dependency between steps is a **smell** for parallel-safe design — I prefer independent tests with API-based setup over chained UI steps.
+
+**Interview-ready summary:** "Playwright parallelizes per file across worker processes by default; I turn on `fullyParallel` for true test-level parallelism, tune `workers` per CI runner size, and use sharding across machines for large suites — keeping tests independent (via API-seeded data) is what actually makes parallelism safe."
+
+---
+
+### 11. Difference between getByRole, getByText, and getByTestId
+
+| Locator | Matches on | When I use it |
+|---|---|---|
+| `getByRole` | ARIA role + accessible name (button, link, heading, textbox...) | Default choice — mirrors how a real user/assistive tech perceives the page, resilient to styling/markup changes |
+| `getByText` | Visible text content | Static, user-facing text (e.g. "Order confirmed", paragraph copy) where role isn't meaningful |
+| `getByTestId` | `data-testid` attribute | Elements with no meaningful role/text, or highly dynamic components where devs have added explicit test hooks |
+
+```javascript
+// Preferred — resilient, accessibility-aligned
+await page.getByRole('button', { name: 'Add to cart' }).click();
+
+// Good for plain copy/messages
+await expect(page.getByText('Your cart is empty')).toBeVisible();
+
+// Fallback when there's no role/text to hook into (e.g. a decorative icon-only div)
+await page.getByTestId('cart-icon').click();
+```
+
+Priority order I follow in practice (matches Playwright's own recommended locator priority):
+1. `getByRole` (best — accessibility + semantics)
+2. `getByLabel` / `getByPlaceholder` (forms)
+3. `getByText`
+4. `getByTestId` (explicit escape hatch)
+5. CSS/XPath (last resort, most brittle)
+
+**Interview-ready summary:** "`getByRole` is my default because it mirrors what a real user/screen reader sees and survives markup churn; `getByText` is for static visible copy; `getByTestId` is the escape hatch for elements with no semantic role, reserved for when devs have added explicit hooks."
+
+---
+
+### 12. How do you intercept network requests?
+
+`page.route()` intercepts requests matching a URL pattern and lets you mock, modify, block, or just observe them before they hit the network.
+
+```javascript
+// Mock an API response entirely
+await page.route('**/api/orders', async (route) => {
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify([{ id: 1, item: 'Laptop', qty: 1 }]),
+  });
+});
+
+await page.goto('/orders');
+```
+
+```javascript
+// Modify a real request/response (e.g. inject a header, then continue)
+await page.route('**/api/**', async (route) => {
+  const headers = route.request().headers();
+  await route.continue({ headers: { ...headers, 'x-test-run': 'true' } });
+});
+```
+
+```javascript
+// Block noisy third-party calls (analytics, ads) to speed up + stabilize tests
+await page.route(/google-analytics|doubleclick/, (route) => route.abort());
+```
+
+```javascript
+// Passive observation without altering traffic
+page.on('response', (response) => {
+  if (response.url().includes('/api/login') && response.status() >= 400) {
+    console.log('Login failed with', response.status());
+  }
+});
+```
+
+Real use cases at 4-5 years experience level:
+
+- **Simulating error states** (500s, timeouts) that are hard to trigger from the real backend, to test UI error handling.
+- **Stubbing slow/unstable third-party dependencies** (payment gateways, external APIs) for deterministic tests.
+- **Asserting on request payloads** — capture `route.request().postDataJSON()` to verify the frontend sent the right data.
+- **Speeding up suites** by aborting images/fonts/analytics on pages where visuals don't matter.
+
+**Interview-ready summary:** "`page.route()` gives full control over the request/response lifecycle — I use it to mock backend responses for deterministic tests, simulate error conditions that are hard to reproduce live, and block third-party noise to make the suite faster and less flaky."
+
+---
+
+### 13. Explain Trace Viewer and its importance
+
+Trace Viewer is Playwright's **post-mortem debugging tool** — it records a structured trace (DOM snapshots, network calls, console logs, screenshots per action, source code) during a test run, that you can replay later like a video with a timeline scrubber.
+
+```javascript
+// playwright.config.js
+export default defineConfig({
+  use: {
+    trace: 'on-first-retry', // record trace only when a test fails and retries
+  },
+});
+```
+
+```bash
+npx playwright show-trace trace.zip
+```
+
+What's inside a trace, and why each part matters:
+
+- **DOM snapshots per action** — lets you inspect the *actual* rendered DOM at each step, not just a screenshot, including computed styles (like DevTools frozen at that instant).
+- **Action timeline** — every `click`, `fill`, `navigation` with exact timing, so you can see where time was spent.
+- **Network tab** — every request/response with headers/body, so you can tell if a failure was UI or backend.
+- **Console logs** — JS errors that happened during the run.
+- **Before/after screenshots** for every action, plus a full video if enabled.
+- **Source panel** — highlights the exact line of test code executing at that point in the timeline.
+
+Why it matters in real projects:
+
+- It's the single biggest reason CI failures stop being "reproduce it locally and pray" — you download the trace artifact from the CI run and get the *exact* browser state at failure, no re-run needed.
+- I set `trace: 'on-first-retry'` in CI (not `'on'` for every test) to keep artifact size/storage sane while still catching every real failure.
+- I always attach `trace.zip` as a CI artifact in the pipeline config specifically for this reason.
+
+**Interview-ready summary:** "Trace Viewer captures DOM snapshots, network, console, and screenshots for every action during a run, so I can replay a CI failure exactly as it happened without reproducing it locally — I enable it as `on-first-retry` to balance debuggability with artifact size."
+
+---
+
+### 14. How do you handle authentication / storage state across tests?
+
+I authenticate **once** (usually in global setup or a dedicated setup project) and persist the session (`cookies` + `localStorage`) to a JSON file via `storageState`, then reuse it across all tests instead of logging in through the UI in every single test.
+
+```javascript
+// auth.setup.js
+import { test as setup } from '@playwright/test';
+
+const authFile = 'playwright/.auth/user.json';
+
+setup('authenticate', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByLabel('Email').fill(process.env.TEST_USER);
+  await page.getByLabel('Password').fill(process.env.TEST_PASS);
+  await page.getByRole('button', { name: 'Log in' }).click();
+  await page.waitForURL('/dashboard');
+
+  await page.context().storageState({ path: authFile });
+});
+```
+
+```javascript
+// playwright.config.js
+export default defineConfig({
+  projects: [
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    {
+      name: 'chromium',
+      use: { storageState: 'playwright/.auth/user.json' },
+      dependencies: ['setup'], // ensures auth runs first
+    },
+  ],
+});
+```
+
+For multiple roles (admin vs regular user), I keep separate storage-state files and separate projects/fixtures:
+
+```javascript
+// fixtures/roles.js
+export const test = base.extend({
+  adminState: ['playwright/.auth/admin.json', { option: true, scope: 'worker' }],
+});
+```
+
+Extra practices:
+
+- **Never commit** `.auth/*.json` — add to `.gitignore`; regenerate per CI run against a test account.
+- For **token expiry**, I add a check in setup to re-auth if the token in the storage state is stale (compare timestamp / decode JWT `exp`).
+- For **API + UI hybrid tests**, the same storage state cookie works for `context.request` calls, so authenticated API calls don't need a separate login.
+
+**Interview-ready summary:** "I authenticate once via a setup project, persist `storageState` (cookies + localStorage) to disk, and every subsequent test/project reuses that file instead of logging in through the UI repeatedly — with separate state files per role when multiple user types are needed."
+
+---
+
+## Round 2: Advanced / Framework / Scenario-Based
+
+### 1. How would you design a scalable Playwright + TypeScript framework?
+
+I structure it in clear layers so it scales as the team and suite grow:
+
+```
+project-root/
+├── tests/                  # spec files only, thin, readable
+├── pages/                  # Page Object classes
+├── fixtures/               # custom test/expect extensions
+├── utils/                  # helpers (data gen, date utils, api wrappers)
+├── config/                 # env-specific config (qa.json, staging.json, prod.json)
+├── testdata/               # typed fixtures/factories for test data
+├── playwright.config.ts
+└── global-setup.ts / auth.setup.ts
+```
+
+```javascript
+// utils/apiClient.ts — typed wrapper reused by tests and setup
+export class ApiClient {
+  constructor(request, baseURL) {
+    this.request = request;
+    this.baseURL = baseURL;
+  }
+
+  async createOrder(payload) {
+    const res = await this.request.post(`${this.baseURL}/orders`, { data: payload });
+    return res.json();
+  }
+}
+```
+
+Principles I insist on:
+
+- **Layered separation**: tests never talk to `page` directly for anything beyond top-level flow — everything goes through page objects/fixtures.
+- **Fixtures over inheritance** — compose behavior (`loginPage`, `apiClient`, `testUser`) via `test.extend`, avoid deep class inheritance chains that get brittle.
+- **Strict typing everywhere** — `tsconfig.json` with `strict: true`, typed config objects, typed API responses/interfaces — catches wiring mistakes at compile time, not runtime.
+- **Config-driven environments** (see next question) instead of hardcoded URLs.
+- **Data isolation** — every test creates/owns its own data (via API) rather than relying on shared seed data, so parallel runs don't collide.
+- **Tagging** (`@smoke`, `@regression`) via `test.describe` titles/grep tags for selective execution in CI.
+- **Consistent reporting + CI wiring** from day one, not bolted on later.
+- **Linting/formatting** (ESLint + Prettier) enforced in CI so the framework doesn't rot as more people contribute.
+
+**Interview-ready summary:** "I design around clear layers — page objects, fixtures, typed API/data utilities, config-driven environments — with fixtures for composition instead of inheritance, strict TypeScript, and self-contained test data, so the framework stays maintainable as the team and suite scale."
+
+---
+
+### 2. How do you manage multiple environments (QA / Staging / Prod)?
+
+I keep environment config **out of test code entirely**, driven by env variables and a typed config loader.
+
+```javascript
+// config/env.js
+const environments = {
+  qa: {
+    baseURL: 'https://qa.myapp.com',
+    apiURL: 'https://qa-api.myapp.com',
+    testUser: { email: process.env.QA_USER, password: process.env.QA_PASS },
+  },
+  staging: {
+    baseURL: 'https://staging.myapp.com',
+    apiURL: 'https://staging-api.myapp.com',
+    testUser: { email: process.env.STAGING_USER, password: process.env.STAGING_PASS },
+  },
+};
+
+const env = process.env.TEST_ENV ?? 'qa';
+export const config = environments[env];
+```
+
+```javascript
+// playwright.config.js
+import { config } from './config/env';
+
+export default defineConfig({
+  use: {
+    baseURL: config.baseURL,
+  },
+});
+```
+
+```bash
+TEST_ENV=staging npx playwright test
+```
+
+Additional practices:
+
+- **Secrets** (passwords, API tokens) always come from environment variables / CI secret store — never hardcoded, never committed even in the config files above.
+- **`.env` files per environment** (`.env.qa`, `.env.staging`) loaded via `dotenv`, gitignored, with a `.env.example` committed for documentation.
+- **Prod is usually read-only/smoke-only** — I gate destructive tests (create/delete) to run only against QA/staging via a tag or a config flag.
+- CI pipeline passes `TEST_ENV` as a parameter/matrix so the same test suite runs against different environments without code changes.
+
+**Interview-ready summary:** "Environment differences live in a typed config module keyed by a `TEST_ENV` variable, secrets come from the CI secret store/`.env` files that are gitignored, and I restrict destructive test paths from running against prod — the test code itself never hardcodes a URL."
+
+---
+
+### 3. How do you implement data-driven testing?
+
+I drive tests off typed arrays/objects (or external JSON/CSV) and loop with `for...of`, rather than duplicating near-identical `test()` blocks.
+
+```javascript
+const invalidLoginCases = [
+  { description: 'empty password', email: 'user@test.com', password: '', expectedError: 'Password is required' },
+  { description: 'wrong password', email: 'user@test.com', password: 'wrong123', expectedError: 'Invalid credentials' },
+  { description: 'malformed email', email: 'not-an-email', password: 'pass123', expectedError: 'Enter a valid email' },
+];
+
+for (const { description, email, password, expectedError } of invalidLoginCases) {
+  test(`login fails: ${description}`, async ({ loginPage }) => {
+    await loginPage.goto();
+    await loginPage.login(email, password);
+    await loginPage.expectError(expectedError);
+  });
+}
+```
+
+For larger datasets, I pull from an external file so QA/business can maintain data without touching code:
+
+```javascript
+import cases from '../testdata/loginCases.json';
+
+for (const c of cases) {
+  test(`login fails: ${c.description}`, async ({ loginPage }) => { /* ... */ });
+}
+```
+
+Extra considerations:
+
+- Each generated test gets its **own title** (from the data), so failures are individually reportable in the HTML report, not buried inside one test's loop.
+- For combinatorial data, I sometimes generate fixtures with a factory library (or a simple typed builder function) rather than hand-writing every permutation.
+- Data-driven **API tests** for validation-heavy endpoints (e.g. field-length, required-field checks) are usually a better ROI than data-driving full UI flows, since they're faster and less flaky.
+
+**Interview-ready summary:** "I model test data as typed arrays/interfaces (or external JSON) and generate one `test()` per data row in a loop, so each case reports independently in the results — reserving heavy data-driven matrices for API-level validation where it's fast and stable."
+
+---
+
+### 4. Explain Visual Testing / Visual Regression in Playwright
+
+Visual regression compares a **current screenshot** against a previously approved **baseline image**, pixel-by-pixel (with a configurable diff threshold), and fails the test if the difference exceeds tolerance — catching unintended CSS/layout changes that functional assertions would miss entirely.
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test('dashboard visual regression', async ({ page }) => {
+  await page.goto('/dashboard');
+  await expect(page).toHaveScreenshot('dashboard.png', {
+    maxDiffPixelRatio: 0.02,       // allow up to 2% pixel difference
+    mask: [page.locator('.timestamp')], // hide dynamic content
+  });
+});
+```
+
+How it works internally:
+
+1. First run (or `--update-snapshots`) saves the screenshot as the **baseline**, per OS + browser (baselines are OS-specific by default because font rendering differs).
+2. Subsequent runs take a new screenshot and diff it against the baseline using a perceptual pixel-comparison algorithm.
+3. If the diff ratio/pixel count exceeds the configured threshold, the test fails and Playwright writes out `expected.png`, `actual.png`, and `diff.png` for review — visible directly in the HTML report.
+
+Practical concerns I always account for:
+
+- **Dynamic content** (timestamps, ads, animations, carousels) must be masked or frozen (`mask`, disabling animations via CSS override, or waiting for network idle) or the test becomes permanently flaky.
+- **Cross-OS baselines** — CI usually runs Linux, so baselines must be generated on the same OS/browser combination CI uses, not on a dev's Mac.
+- **Full-page vs element-level snapshots** — I prefer scoping to a specific component/locator over full-page where possible, since full-page screenshots are more prone to unrelated diffs.
+
+**Interview-ready summary:** "Visual testing does a pixel-level diff of a screenshot against an approved baseline with a tolerance threshold, masking dynamic regions — it catches layout/CSS regressions that functional locators/assertions can't see, but needs OS-consistent baselines and disciplined masking to avoid flakiness."
+
+---
+
+### 5. How do you handle flaky tests?
+
+My actual troubleshooting flow, roughly in order:
+
+1. **Look at the trace first** (`trace: 'on-first-retry'`) — most "flaky" tests are actually timing/race issues visible immediately in the trace's network/DOM timeline, not true randomness.
+2. **Check for missing auto-waits vs hard waits** — search for `waitForTimeout()` in the failing spec; replace with a proper `waitFor`/web-first assertion on the actual condition (network idle, specific element state).
+3. **Check test isolation** — is the test depending on state left behind by another test/parallel run (shared data, same email/order ID)? I fix this at the data layer (unique test data per run, e.g. `faker`-generated emails), not by adding retries.
+4. **Check for animation/transition timing** — CSS transitions completing after the "stable" check but before the visual assertion; I disable animations globally for tests (`prefers-reduced-motion` or `* { transition: none !important }` injected via `addStyleTag`).
+5. **Network dependency on third parties** — flaky external calls (ads, analytics, payment sandboxes) get mocked via `page.route()` instead of hitting the real thing.
+6. **Only then, use retries** — as a safety net, not a fix:
+
+```javascript
+// playwright.config.js
+export default defineConfig({
+  retries: process.env.CI ? 2 : 0,
+});
+```
+
+```javascript
+// Track genuinely flaky tests so they don't hide as "green"
+test('known flaky - payment webhook timing', async ({ page }) => {
+  test.info().annotations.push({ type: 'flaky', description: 'JIRA-1234' });
+  // ...
+});
+```
+
+- I track flake rate over time (via CI dashboards/report history) — a test that needs retries every run gets flagged and fixed, not silently tolerated.
+- `test.slow()` for legitimately slow (not flaky) tests, to extend timeout rather than mask a real issue with retries.
+
+**Interview-ready summary:** "I treat retries as a safety net, never a fix — the actual fix comes from the trace: replacing hard waits with proper conditions, isolating test data, disabling animations, and mocking unreliable third-party calls; I track flake rate so masked issues don't go unaddressed."
+
+---
+
+### 6. How do you integrate Playwright with CI/CD pipelines?
+
+Example GitHub Actions setup reflecting what I'd actually configure:
+
+```yaml
+# .github/workflows/playwright.yml
+name: Playwright Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx playwright install --with-deps
+
+      - name: Run tests (shard ${{ matrix.shard }}/4)
+        run: npx playwright test --shard=${{ matrix.shard }}/4
+        env:
+          TEST_ENV: qa
+          BASE_URL: ${{ secrets.QA_BASE_URL }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report
+          retention-days: 7
+
+  merge-reports:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: blob-report-*, path: all-blob-reports, merge-multiple: true }
+      - run: npx playwright merge-reports --reporter=html ./all-blob-reports
+      - uses: actions/upload-artifact@v4
+        with: { name: html-report, path: playwright-report }
+```
+
+Practices I apply for a real pipeline:
+
+- **Sharding** across matrix jobs for suite-runtime, then **merge blob reports** into one HTML report.
+- **Cache** `node_modules` and Playwright's browser binaries between runs to cut install time.
+- **Fail-fast off** (`fail-fast: false` in matrix) so one shard failing doesn't cancel the others — you want the full picture.
+- **Trace/video/screenshot artifacts uploaded only `if: always()` / on failure**, not every run, to control storage.
+- **Separate pipelines/jobs** for smoke (on every PR, tagged `@smoke`, fast) vs full regression (nightly/on merge to main).
+- Notify (Slack/Teams webhook) on failure with a link to the merged HTML report artifact.
+
+**Interview-ready summary:** "I shard the suite across parallel CI jobs, merge blob reports into a single HTML report, cache dependencies/browsers, upload traces only on failure, and split fast tagged smoke runs on every PR from a fuller regression run on a schedule or merge to main."
+
+---
+
+### 7. Difference between toHaveScreenshot() and toMatchSnapshot()
+
+| | `toHaveScreenshot()` | `toMatchSnapshot()` |
+|---|---|---|
+| Purpose | Image/screenshot comparison specifically | Generic snapshot comparison — images, strings, buffers, JSON, anything serializable |
+| API level | Assertion on a `Page`/`Locator` directly | Assertion on any value you pass it |
+| Built-in screenshot options | Yes — `mask`, `maxDiffPixelRatio`, `animations: 'disabled'`, `fullPage` | No built-in screenshot capture — you must supply the buffer yourself |
+| Naming convention | Auto-manages baseline filenames per test/OS/browser | You control the snapshot name/path manually |
+| Typical use | UI visual regression | Comparing arbitrary serialized output (e.g. a PDF buffer, an API response shape, a rendered SVG string) |
+
+```javascript
+// Screenshot-specific, built for visual regression
+await expect(page).toHaveScreenshot('home.png', { fullPage: true, mask: [page.locator('.ad-banner')] });
+
+// Generic — I've used this for comparing a generated PDF/CSV export byte-for-byte
+const buffer = await downloadedFile.createReadStream();
+expect(await streamToBuffer(buffer)).toMatchSnapshot('export.pdf');
+```
+
+**Interview-ready summary:** "`toHaveScreenshot()` is the purpose-built API for visual regression with screenshot-specific options like masking and animation handling; `toMatchSnapshot()` is the general-purpose snapshot assertion I reach for when comparing non-screenshot artifacts like generated files or serialized data."
+
+---
+
+### 8. How do you mask dynamic elements in visual tests?
+
+I pass a `mask` array of locators to `toHaveScreenshot()` — Playwright overlays a solid box (pink by default) over those regions before diffing, so their content never affects the comparison.
+
+```javascript
+await expect(page).toHaveScreenshot('order-summary.png', {
+  mask: [
+    page.locator('[data-testid="order-timestamp"]'),
+    page.locator('.live-chat-widget'),
+    page.locator('.rotating-banner'),
+  ],
+  maskColor: '#FF00FF',
+});
+```
+
+Other techniques I combine with masking depending on the case:
+
+- **Freeze animations** globally so in-flight CSS transitions/animations don't cause a random diff:
+
+```javascript
+await expect(page).toHaveScreenshot('home.png', { animations: 'disabled' });
+```
+
+- **Stub the data source** via `page.route()` so dynamic values (dates, counters, random IDs) never render in the first place — often cleaner than masking, since you get to actually verify layout with real-looking-but-fixed data.
+- **Wait for network idle / a stable marker element** before capturing, so async-loaded widgets (ads, recommendation carousels) have settled.
+- **Fix the system clock** using `page.clock.install()` (Playwright's clock API) when a component renders "time ago" style dynamic text, so it's deterministic without masking.
+
+**Interview-ready summary:** "I use the `mask` option to blank out inherently dynamic regions like timestamps or live widgets before the pixel diff, combine it with `animations: 'disabled'`, and where possible I prefer stubbing the underlying data (via `page.route()` or the clock API) over masking, since that keeps the screenshot meaningful rather than blacking out real UI."
+
+---
+
+### 9. How do you generate and maintain baseline images properly?
+
+Generation:
+
+```bash
+# First-time generation / intentional UI change acceptance
+npx playwright test --update-snapshots
+
+# Generate only for a specific project/browser to match CI's OS
+npx playwright test --update-snapshots --project=chromium
+```
+
+Rules I follow to keep baselines trustworthy rather than a source of noise:
+
+- **Generate baselines on the same OS/browser CI uses** — never on a local Mac/Windows dev machine, since font rendering and subpixel anti-aliasing differ enough to cause false diffs. I generate them inside the same Docker image CI uses, or via a CI job specifically for `--update-snapshots`.
+- **Commit baselines to version control** (`*-snapshots/` folders) so they're reviewable in PRs like code — a baseline update should go through the same PR review as a code change, since it's effectively "approving" a visual change.
+- **One baseline set per browser/OS/viewport combination** — Playwright namespaces these automatically by test file + project + platform, but I keep the test matrix intentionally small (usually just Chromium desktop) for visual tests specifically, to avoid maintaining 3x the baselines.
+- **Review diffs in PR, not blindly re-run `--update-snapshots`** — a failing visual test should prompt "is this an intended UI change?" before regenerating; blindly updating baselines defeats the entire purpose.
+- **Periodic cleanup** — delete baselines for removed/renamed tests; stale unused baseline images silently bloat the repo.
+- **Threshold tuning per component** — a marketing homepage with real content vs a component library storybook page may need different `maxDiffPixelRatio` values; I don't apply one global threshold blindly everywhere.
+
+**Interview-ready summary:** "Baselines are generated on the exact OS/browser combination CI runs, committed to git so changes go through PR review like code, and I treat a failing visual test as a prompt to review the diff — not a cue to blindly re-run `--update-snapshots`."
+
+---
+
+### 10. Scenario: Tests pass locally but fail in CI – how will you debug?
+
+What I'd actually do, in order:
+
+1. **Pull the CI trace/video/screenshot artifacts first** — don't try to "guess and re-run locally" blind. The trace tells you exactly what the DOM/network looked like at failure.
+2. **Check environment parity**:
+   - Different `baseURL`/environment (CI hitting a different backend with different seed data than my local DB)?
+   - Different **viewport/OS** — CI runners are usually headless Linux; local dev is often macOS with a different viewport default — this alone breaks visual tests and sometimes layout-dependent interactions.
+   - **Timezone/locale** differences between CI runner and local machine affecting date-formatted assertions.
+3. **Resource constraints** — CI runners have fewer CPU cores/less memory than a dev laptop; actions that "just work" locally can time out under CPU throttling. I check if increasing `actionTimeout`/`navigationTimeout` specifically for CI, or reducing `workers`, resolves it (a strong signal it's resource contention, not a real bug).
+4. **Parallelism-induced data collisions** — locally I might run one test at a time; CI runs full parallel workers. Check whether two tests are stepping on shared data/state (same test user, same DB row) that only collides under concurrency.
+5. **Headless vs headed differences** — some UI (certain CSS animations, focus-visible styles, file pickers) behaves subtly differently between `headless: true` and headed mode; I reproduce locally with `--headed=false` explicitly rather than assuming parity.
+6. **Missing environment secrets/config** — CI env vars not set/misnamed vs `.env.local` working fine locally; add a config-validation step that fails fast with a clear error instead of a mysterious downstream failure.
+7. **Network/CDN differences** — third-party scripts (ads, chat widgets) may be blocked/slower from the CI network, causing timeouts that never happen on a home/office network.
+
+Concrete fix pattern once identified — I usually end up making the run **deterministic and CI-representative locally**, e.g.:
+
+```bash
+# Reproduce CI conditions locally instead of guessing
+CI=true npx playwright test --workers=4 --project=chromium
+```
+
+**Interview-ready summary:** "I start from the CI trace/artifacts rather than guessing, then systematically rule out environment parity (OS, viewport, timezone), resource contention under CI's constrained runners, parallel-data collisions that don't happen in a single local run, and headless-specific rendering differences — reproducing CI's exact flags locally rather than assuming my machine is representative."
+
+---
+
+### 11. Scenario: How do you test multi-tab or multi-window workflows?
+
+Example: a "share document" flow where clicking a link opens a new tab that must reflect state from the first tab.
+
+```javascript
+test('document shared link opens correctly in new tab', async ({ context, page }) => {
+  await page.goto('/documents/123');
+
+  const [newTab] = await Promise.all([
+    context.waitForEvent('page'),
+    page.getByRole('link', { name: 'Open in new tab' }).click(),
+  ]);
+
+  await newTab.waitForLoadState('domcontentloaded');
+  await expect(newTab.getByRole('heading')).toHaveText('Document 123');
+
+  // Verify state sync: editing in tab 1 reflects in tab 2 after refresh
+  await page.getByRole('button', { name: 'Rename' }).click();
+  await page.getByLabel('Document name').fill('Renamed Doc');
+  await page.getByRole('button', { name: 'Save' }).click();
+
+  await newTab.reload();
+  await expect(newTab.getByRole('heading')).toHaveText('Renamed Doc');
+
+  await newTab.close();
+});
+```
+
+For genuinely separate **windows/popups** (e.g. OAuth login redirect in a popup):
+
+```javascript
+const [popup] = await Promise.all([
+  page.waitForEvent('popup'),
+  page.getByRole('button', { name: 'Sign in with Google' }).click(),
+]);
+await popup.getByLabel('Email').fill('user@example.com');
+await popup.getByRole('button', { name: 'Next' }).click();
+await popup.waitForEvent('close'); // popup closes itself after OAuth redirect back
+await expect(page.getByText('Signed in as')).toBeVisible();
+```
+
+Key practices:
+
+- Always capture the new `Page` via the `page`/`popup` event **paired with** the triggering click inside `Promise.all` — otherwise there's a race where the event fires before you start waiting for it.
+- Use `context.pages()` when you need to enumerate/find a tab you didn't directly trigger.
+- Explicitly `close()` extra pages/tabs you open mid-test to avoid resource buildup across a long test file.
+- For **two independent users** interacting (not just tabs of the same session), use two separate `BrowserContext`s instead of two pages in one context.
+
+**Interview-ready summary:** "I pair the triggering click with `context.waitForEvent('page')` or `page.waitForEvent('popup')` inside `Promise.all` to avoid race conditions, keep explicit references to every new `Page`, and reach for separate `BrowserContext`s rather than tabs when I actually need two independent user sessions."
+
+---
+
+### 12. How do you handle Shadow DOM, dynamic dropdowns, and calendars?
+
+**Shadow DOM** — Playwright **pierces open shadow roots automatically** with normal locators; no special API needed for open shadow DOM (most component libraries use open shadow roots):
+
+```javascript
+// Works transparently even if <custom-dropdown> uses shadow DOM internally
+await page.locator('custom-dropdown').getByRole('option', { name: 'India' }).click();
+```
+
+For closed shadow roots (rare, deliberately inaccessible), I go through the app's exposed API/attributes rather than fighting the DOM, or ask devs to switch to open mode since closed shadow DOM is largely a testability anti-pattern.
+
+**Dynamic dropdowns / autocomplete/typeahead** — the trick is waiting for the *option list* to actually populate, not just for the input to accept text:
+
+```javascript
+async function selectFromAutocomplete(page, inputLabel, optionText) {
+  await page.getByLabel(inputLabel).fill(optionText.slice(0, 3)); // trigger search
+  const option = page.getByRole('option', { name: optionText });
+  await option.waitFor({ state: 'visible' }); // wait for async list to render
+  await option.click();
+}
+```
+
+For custom (non-native `<select>`) dropdowns built as `div`s, I always locate via role (`listbox`/`option` if ARIA is implemented correctly) rather than CSS classes, since class names are the first thing to change.
+
+**Calendars/date pickers** — I never simulate individual month-navigation clicks when avoidable; if the input accepts direct typing, that's always more stable:
+
+```javascript
+// Prefer direct typed input if the calendar widget supports it
+await page.getByLabel('Check-in date').fill('2026-09-20');
+```
+
+```javascript
+// When only click-navigation is supported, navigate to the target month first, then click the day
+async function pickDate(page, targetMonthLabel, day) {
+  const monthHeader = page.getByRole('heading', { level: 2 }); // e.g. "September 2026"
+  while (!(await monthHeader.textContent())?.includes(targetMonthLabel)) {
+    await page.getByRole('button', { name: 'Next month' }).click();
+  }
+  await page.getByRole('gridcell', { name: day, exact: true }).click();
+}
+```
+
+**Interview-ready summary:** "Open shadow DOM needs no special handling since Playwright locators pierce it automatically; for dynamic dropdowns I wait on the actual option locator rather than a fixed timeout; and for calendars I prefer direct date input when the widget allows it, falling back to a month-navigation loop driven by ARIA roles only when it doesn't."
+
+---
+
+### 13. How do you improve execution speed of a large test suite?
+
+Concrete levers, roughly in order of impact:
+
+1. **Parallelize aggressively** — `fullyParallel: true`, tune `workers` to the CI runner's actual core count, and **shard across multiple CI machines** for very large suites (biggest lever by far).
+2. **Replace UI setup with API setup** — logging in, creating orders/users/records through the UI in every test is the single biggest avoidable time sink; do it via `request` fixture / global setup instead.
+3. **Reuse `storageState`** instead of logging in per test (covered earlier) — cuts redundant navigation + form-fill time across the whole suite.
+4. **Block unnecessary network** — abort analytics/ads/font requests on pages where they're irrelevant to the test via `page.route(...).abort()`.
+5. **Right-size timeouts** — don't let a hanging element wait the full 30s default when 5s is enough signal that something's wrong; tune `expect.timeout`/`actionTimeout` per suite type.
+6. **Avoid unnecessary `waitForTimeout()`** — these are pure dead time; replace with condition-based waits.
+7. **Trim the browser matrix** — run full Chromium+Firefox+WebKit matrix only nightly; run Chromium-only on every PR for fast feedback, expand on merge/nightly.
+8. **Split smoke vs regression** — tag critical-path tests `@smoke` for fast PR gating; run the full regression suite on a schedule, not on every commit.
+9. **Cache dependencies and browser binaries** in CI (`npx playwright install` is a real time cost if re-downloaded every run).
+10. **Headless mode** in CI always (headed rendering has overhead with zero value in CI).
+
+```javascript
+// playwright.config.js
+export default defineConfig({
+  fullyParallel: true,
+  workers: process.env.CI ? Number(process.env.CI_WORKERS) || 4 : undefined,
+  timeout: 20_000,
+  expect: { timeout: 5_000 },
+  projects: [
+    { name: 'chromium-smoke', testMatch: /.*\.smoke\.spec\.ts/, use: { browserName: 'chromium' } },
+    { name: 'full-regression', testMatch: /.*\.spec\.ts/ }, // nightly only, via separate CI job
+  ],
+});
+```
+
+**Interview-ready summary:** "The biggest wins are parallelism/sharding and moving setup out of the UI into API calls with reused `storageState` — after that it's disciplined timeout tuning, blocking irrelevant network calls, and splitting a fast tagged smoke run on every PR from a full cross-browser regression run on a schedule."
+
+---
+
+### 14. Important configurations in playwright.config.ts
+
+```javascript
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  timeout: 30_000,
+  expect: { timeout: 5_000 },
+
+  fullyParallel: true,
+  workers: process.env.CI ? 4 : undefined,
+  retries: process.env.CI ? 2 : 0,
+  forbidOnly: !!process.env.CI, // fail build if a test.only slips into CI
+
+  reporter: [
+    ['html', { open: 'never' }],
+    ['junit', { outputFile: 'results/junit.xml' }],
+    process.env.CI ? ['blob'] : ['list'],
+  ],
+
+  use: {
+    baseURL: process.env.BASE_URL ?? 'https://qa.myapp.com',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    actionTimeout: 10_000,
+    navigationTimeout: 15_000,
+  },
+
+  projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
+      dependencies: ['setup'],
+    },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    { name: 'mobile-chrome', use: { ...devices['Pixel 7'] } },
+  ],
+});
+```
+
+Fields I always call out as "the important ones" in an interview:
+
+- **`retries`, `forbidOnly`, `workers`** — CI-specific hardening (`forbidOnly` in particular has saved me from a stray `test.only` merging to main and silently skipping the rest of the suite).
+- **`trace` / `screenshot` / `video`** set to failure-only modes — debuggability without bloating artifacts.
+- **`projects`** — this is how I model browser matrix, mobile emulation, and the `setup`→`dependencies` auth chain, all from one config file.
+- **`use.baseURL`** — lets every test call relative paths (`page.goto('/login')`) instead of hardcoding domains.
+- **`reporter`** array — multiple reporters simultaneously (HTML for humans, JUnit for CI test-result integration, blob for sharded-report merging).
+- **`expect.timeout` vs `actionTimeout` vs `navigationTimeout`** — three separate knobs that get confused often; I make sure to explain the distinction (assertion polling vs action actionability vs page navigation) rather than setting one blanket `timeout`.
+
+**Interview-ready summary:** "Beyond the obvious `testDir`/`timeout`, the config choices that actually matter in a real project are CI hardening (`forbidOnly`, tuned `retries`/`workers`), failure-only trace/video/screenshot capture, the `projects` array for browser matrix and the auth `setup`→`dependencies` chain, and a multi-reporter setup for both human and CI consumption."
+
+---
+
+### 15. How do you implement custom reporting?
+
+Playwright's `Reporter` interface lets you hook into the test lifecycle (`onBegin`, `onTestEnd`, `onEnd`, etc.) to build anything from a Slack notifier to a custom dashboard feed.
+
+```javascript
+// reporters/slackReporter.js
+class SlackReporter {
+  failures = [];
+
+  onTestEnd(test, result) {
+    if (result.status === 'failed') {
+      this.failures.push({ title: test.title, error: result.error?.message });
+    }
+  }
+
+  async onEnd(result) {
+    if (this.failures.length === 0) return;
+
+    const text = [
+      `*Playwright run finished:* ${result.status}`,
+      ...this.failures.map((f) => `❌ ${f.title} — ${f.error ?? 'see report'}`),
+    ].join('\n');
+
+    await fetch(process.env.SLACK_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+  }
+}
+
+export default SlackReporter;
+```
+
+```javascript
+// playwright.config.js
+export default defineConfig({
+  reporter: [
+    ['html'],
+    ['./reporters/slackReporter.ts'],
+  ],
+});
+```
+
+Real scenarios I've built custom reporters for:
+
+- **Slack/Teams failure summary** posted at the end of a CI run with a link to the HTML report artifact (as above).
+- **Feeding a test-management tool** (e.g. Xray/TestRail/Zephyr) by mapping test titles (tagged with the ticket/test-case ID) to results and pushing via that tool's REST API in `onTestEnd`/`onEnd`.
+- **Custom metrics** — flakiness rate, average duration trend, per-suite pass rate — written to a JSON file or pushed to an internal dashboard/DB for historical tracking beyond what the built-in HTML report retains.
+- Multiple reporters run **simultaneously** (as configured above) — a custom reporter doesn't replace the built-in HTML/JUnit ones, it runs alongside them.
+
+**Interview-ready summary:** "I implement the `Reporter` interface and hook `onTestEnd`/`onEnd` to push results wherever they're needed — Slack notifications, a test-management tool like Xray via its API, or a custom metrics store — and always run it alongside the built-in HTML/JUnit reporters rather than replacing them."
+
+---
+
+### 16. How do you handle file upload and download?
+
+**Upload** — `setInputFiles()` works directly on the `<input type="file">` locator, no OS-level file dialog automation needed:
+
+```javascript
+await page.getByLabel('Upload resume').setInputFiles('testdata/files/resume.pdf');
+
+// Multiple files
+await page.getByLabel('Attachments').setInputFiles([
+  'testdata/files/invoice1.pdf',
+  'testdata/files/invoice2.pdf',
+]);
+
+// Clear a selection
+await page.getByLabel('Attachments').setInputFiles([]);
+```
+
+For upload flows that open a **native file chooser via a button click** rather than a raw visible `<input>`, I listen for the `filechooser` event:
+
+```javascript
+const [fileChooser] = await Promise.all([
+  page.waitForEvent('filechooser'),
+  page.getByRole('button', { name: 'Choose file' }).click(),
+]);
+await fileChooser.setFiles('testdata/files/resume.pdf');
+```
+
+**Download** — capture the `download` event alongside the triggering click, then save/inspect the file:
+
+```javascript
+const [download] = await Promise.all([
+  page.waitForEvent('download'),
+  page.getByRole('button', { name: 'Export CSV' }).click(),
+]);
+
+const path = await download.path(); // temp path Playwright saved it to
+await download.saveAs(`downloads/${download.suggestedFilename()}`);
+
+// Verify content, e.g. a CSV export
+const fs = await import('fs/promises');
+const content = await fs.readFile(path, 'utf-8');
+expect(content).toContain('Order ID,Status');
+```
+
+Practices worth mentioning:
+
+- Set `acceptDownloads: true` in config/context if downloads aren't captured by default in an older setup (recent Playwright defaults this to `true`).
+- For **large files or many upload tests**, keep sample fixture files small and checked into `testdata/files/` rather than generating them at runtime, unless size/content needs to be dynamic.
+- Assert not just that the download **happened**, but on its **actual content** (parse the CSV/PDF/JSON) when the test is meant to verify data correctness, not just "a file appeared."
+
+**Interview-ready summary:** "Uploads go through `setInputFiles()` directly on the file input, or via the `filechooser` event for button-triggered native dialogs; downloads are captured via the `download` event paired with the triggering action, then I verify actual file content rather than just confirming a file was produced."

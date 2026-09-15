@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 async function loadYahooAndFill(page, value) {
-  await page.goto("https://www.yahoo.com");
+  // Yahoo is ad/tracker-heavy — the default waitUntil:'load' blocks until every
+  // sub-resource finishes, which can hang. 'domcontentloaded' + the explicit
+  // searchBox.waitFor below is all we actually need.
+  await page.goto("https://www.yahoo.com", { waitUntil: 'domcontentloaded' });
   // Dismiss consent/cookie modal if present (each variant as separate locator)
   const consent = page.locator('button:has-text("Accept all")')
     .or(page.locator('button:has-text("I agree")'))

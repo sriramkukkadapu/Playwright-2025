@@ -64,7 +64,25 @@ test('E2E: Login → Add to cart → Checkout → Verify order', async ({ page }
     });
 
     await test.step('5. Checkout', async () => {
-        await page.locator("button:has-text('Checkout'), a:has-text('Checkout')").first().click();
+        const checkoutBtn = page.locator("button:has-text('Checkout'), a:has-text('Checkout')").first();
+        // This app's cart is tied to one shared account used by many tests in this
+        // suite, some of which run concurrently — another test can empty or check
+        // out the same cart between steps 3 and 5. Self-heal once by re-adding the
+        // item, instead of waiting the full test timeout for a control that may
+        // never appear because the cart is genuinely empty.
+        try {
+            await checkoutBtn.waitFor({ state: 'visible', timeout: 10000 });
+        } catch {
+            console.log('⚠️ Checkout control missing — cart likely modified by a concurrent test, re-adding item');
+            await page.goto('https://rahulshettyacademy.com/client');
+            await page.locator('.card-body b').last().waitFor({ state: 'visible' });
+            const zaraCard = page.locator('.card-body').filter({ hasText: testData.products.zaraCoat });
+            await zaraCard.locator("button:has-text('Add To Cart')").click();
+            await page.locator("button[routerLink='/dashboard/cart']").click();
+            await page.waitForURL(/cart/, { timeout: 15000 });
+            await checkoutBtn.waitFor({ state: 'visible', timeout: 15000 });
+        }
+        await checkoutBtn.click();
         await page.locator('[placeholder="Select Country"]').waitFor({ state: 'visible' });
         console.log('✅ Step 5: Checkout clicked');
     });

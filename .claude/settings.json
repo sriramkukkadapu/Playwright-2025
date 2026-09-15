@@ -118,7 +118,34 @@
       "Bash(grep -n \"13POMTestUsingPOManager\\\\|2UIElements.*Select and Checkbox\\\\|W6_Forms_Tables_Waits\" /tmp/job_log2.txt)",
       "Bash(sed -n '2027,2060p' /tmp/job_log2.txt)",
       "Bash(sed -n '2059,2100p' /tmp/job_log2.txt)",
-      "Bash(sed -n '2181,2245p' /tmp/job_log2.txt)"
+      "Bash(sed -n '2181,2245p' /tmp/job_log2.txt)",
+      "Bash(awk '/^## Round 1: Core Technical/,/^## Round 2: Advanced/' PlaywrightInterviewQnA.md)",
+      "Bash(awk '/^## Round 2: Advanced/,0' PlaywrightInterviewQnA.md)",
+      "Bash(grep -c '```typescript' PlaywrightQuesSeries.md)",
+      "Bash(grep -c '```javascript' PlaywrightQuesSeries.md)",
+      "Bash(grep -c '```ts' PlaywrightQuesSeries.md)",
+      "Bash(grep -c '```js' PlaywrightQuesSeries.md)",
+      "Bash(grep -n '^```' PlaywrightQuesSeries.md)",
+      "Bash(grep -c '^```typescript' PlaywrightInterviewQnA.md)",
+      "Bash(grep -c '^```javascript' PlaywrightInterviewQnA.md)",
+      "Bash(grep -c '^```ts$' PlaywrightInterviewQnA.md)",
+      "Bash(grep -c '^```js$' PlaywrightInterviewQnA.md)",
+      "Bash(grep -c '^```java$' PlaywrightInterviewQnA.md)",
+      "Bash(grep -n '^```java$' PlaywrightInterviewQnA.md)",
+      "Bash(grep -n '^```typescript' PlaywrightInterviewQnA.md)",
+      "Bash(awk -F: '{print $1}')",
+      "Bash(grep -n '^```typescript' Learning/PlaywrightInterviewQnA.md)",
+      "Bash(grep -n '^```java$' Learning/PlaywrightInterviewQnA.md)",
+      "Bash(python3 /private/tmp/claude-501/-Users-sriramkukkadapu-projects-playwright-2025/688145f9-7ab5-4eeb-92e9-3afd8807d9ff/scratchpad/extract.py)",
+      "Bash(python3)",
+      "Bash(grep -c '^```typescript' Learning/PlaywrightInterviewQnA.md)",
+      "Bash(grep -c '^```javascript' Learning/PlaywrightInterviewQnA.md)",
+      "Bash(grep -n \"^// .*\\\\.ts$\" Learning/PlaywrightInterviewQnA.md)",
+      "Bash(grep -n '^   ```' Learning/PlaywrightInterviewQnA.md)",
+      "Bash(grep -n 'extend<\\\\|implements \\\\|: void\\\\b\\\\|\\): Promise<\\\\|Record<\\\\|!;$\\\\|!\\\\.' Learning/PlaywrightInterviewQnA.md)",
+      "Read(//Users/sriramkukkadapu/.claude/projects/-Users-sriramkukkadapu-projects-Playwright-2025/688145f9-7ab5-4eeb-92e9-3afd8807d9ff/tool-results/**)",
+      "Bash(grep -v \"^--$\")",
+      "Bash(grep -c '^\\\\*\\\\*\\\\[Day [0-9]:.*\\\\*\\\\*<br>$' PlaywrightQuesSeries.md)"
     ],
     "additionalDirectories": [
       "/Users/sriramkukkadapu/projects/Playwright-2025/Learning",
@@ -136,7 +163,9 @@
       "/Users/sriramkukkadapu/projects/Playwright-2025/tests/GoogleWorkspace",
       "/Users/sriramkukkadapu/projects/playwright-2025/tests/GoogleWorkspace",
       "/Users/sriramkukkadapu/projects/Playwright-2025/.github/workflows",
-      "/Users/sriramkukkadapu/projects/playwright-2025/.github/workflows"
+      "/Users/sriramkukkadapu/projects/playwright-2025/.github/workflows",
+      "/Users/sriramkukkadapu/projects/Playwright-2025/tests/training",
+      "/Users/sriramkukkadapu/projects/playwright-2025/tests/training"
     ]
   }
 }
