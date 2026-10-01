@@ -44,6 +44,9 @@ A comprehensive guide covering Playwright interview topics — from fundamentals
 36. [Playwright + TypeScript Interview Questions — Most Asked in MNCs (4–5 Years Experience)](#36-playwright--typescript-interview-questions--most-asked-in-mncs-4-5-years-experience)
     - [Round 1: Core Technical Questions](#round-1-core-technical-questions)
     - [Round 2: Advanced / Framework / Scenario-Based](#round-2-advanced--framework--scenario-based)
+37. [Virtusa — QA Automation Interview (5+ Years Experience, Playwright + TypeScript)](#37-virtusa--qa-automation-interview-5-years-experience-playwright--typescript)
+    - [Round 1: Technical](#round-1-technical-2)
+    - [Round 2: Technical / Client](#round-2-technical--client)
 
 ---
 
@@ -7416,3 +7419,614 @@ Practices worth mentioning:
 - Assert not just that the download **happened**, but on its **actual content** (parse the CSV/PDF/JSON) when the test is meant to verify data correctness, not just "a file appeared."
 
 **Interview-ready summary:** "Uploads go through `setInputFiles()` directly on the file input, or via the `filechooser` event for button-triggered native dialogs; downloads are captured via the `download` event paired with the triggering action, then I verify actual file content rather than just confirming a file was produced."
+
+---
+
+## 37. Virtusa — QA Automation Interview (5+ Years Experience, Playwright + TypeScript)
+
+*Two technical rounds for a QA Automation role at Virtusa for a 5+ years experience profile — Round 1 covers core Playwright fundamentals, Round 2 goes into framework design, execution strategy, and a Selenium-to-Playwright migration scenario, including a client-facing round.*
+
+---
+
+## Round 1: Technical
+
+### 1. What is Playwright and why would you choose it over Selenium?
+
+Playwright is an open-source browser automation and end-to-end testing framework built by Microsoft, supporting Chromium, Firefox, and WebKit through a single API, in JavaScript, TypeScript, Python, Java, and .NET.
+
+Why I'd choose it over Selenium on a real project:
+
+| Reason | Playwright | Selenium |
+|---|---|---|
+| Communication | Single persistent connection direct to the browser | HTTP request/response per command through a driver binary |
+| Waiting | Built-in auto-waiting for actionability | Manual explicit/implicit waits |
+| Isolation | Cheap `BrowserContext` per test | Usually a full new browser/driver session |
+| Network control | Native `page.route()` | Needs an external proxy |
+| Debugging | Trace Viewer, Codegen, Inspector built-in | No built-in equivalent |
+| Driver management | No separate driver binaries to version-match | Requires chromedriver/geckodriver kept in sync with the browser |
+
+```javascript
+// No explicit wait needed — Playwright auto-waits for the button to be actionable
+await page.getByRole('button', { name: 'Submit' }).click();
+```
+
+**Interview-ready summary:** "Playwright removes the biggest sources of flakiness and setup overhead I dealt with in Selenium — no driver binaries to manage, built-in auto-waiting instead of manual waits, and native network interception and tracing, all while staying multi-browser and multi-language."
+
+---
+
+### 2. Explain the Playwright architecture and how it works.
+
+Playwright doesn't drive the browser through an HTTP-based wire protocol like Selenium's WebDriver — it talks to the browser almost directly over a single, persistent connection.
+
+```
+Test Script
+      ↓
+Playwright Library
+      ↓  (single persistent connection)
+Browser Server process
+      ↓
+CDP (Chromium) / patched protocols for Firefox & WebKit
+      ↓
+Browser instance (Chromium / Firefox / WebKit)
+```
+
+Key points I'd bring up:
+
+- Playwright launches the browser as a **separate process** and controls it entirely through a protocol channel — CDP for Chromium, patched equivalents for Firefox and WebKit — not through an in-page injected driver.
+- All commands and events flow over **one connection**, which is why Playwright can push events (console logs, network activity, dialogs) back to the test in real time — that's what powers auto-waiting, `waitForResponse()`, and tracing.
+- A **`BrowserContext`** is a lightweight, isolated session inside one browser process, so spinning up a "fresh browser" per test is cheap — no need to launch a whole new browser binary each time.
+- The same underlying protocol events power Codegen, Trace Viewer, and the Inspector — that's why a trace can rebuild an exact DOM snapshot after the run finishes.
+
+**Interview-ready summary:** "Playwright drives the browser through its native automation protocol over one persistent connection, with browser contexts giving cheap, isolated sessions inside a single browser process — that combination is why it's fast, supports real-time events, and handles multi-tab/multi-context scenarios so well."
+
+---
+
+### 3. What is the difference between `browser`, `context`, and `page`?
+
+```
+Browser (one process, e.g. Chromium)
+  └── BrowserContext (isolated profile: cookies, storage, permissions)
+        └── Page (a single tab)
+```
+
+| Level | What it is | Isolation |
+|---|---|---|
+| `Browser` | The actual launched browser instance | Shared engine process; contexts inside it don't leak state to each other |
+| `BrowserContext` | An "incognito"-like session — its own cookies, storage, permissions | Fully isolated from other contexts |
+| `Page` | A single tab inside a context | Shares the context's cookies/storage with any sibling pages |
+
+```javascript
+const { chromium } = require('playwright');
+
+const browser = await chromium.launch();
+const context = await browser.newContext(); // isolated session
+const page = await context.newPage();       // one tab
+
+await page.goto('https://example.com');
+```
+
+Why it matters practically: Playwright Test gives every test a fresh context automatically (cheap isolation), I use **multiple contexts** in one test to simulate independent users (e.g. admin + regular user), and **multiple pages in one context** to simulate multi-tab flows for the same logged-in user.
+
+**Interview-ready summary:** "Browser is the process, context is an isolated session inside it, and page is a tab inside that context — I reach for multiple contexts when I need independent users, and multiple pages when I need multiple tabs for the same user."
+
+---
+
+### 4. How do you handle locators in Playwright? Which locators do you prefer?
+
+I always use `locator()` (or the semantic `getBy*` helpers built on top of it) rather than the older `page.$()` / `ElementHandle` API, because `Locator` is **lazy** — it re-finds the element every time an action runs, so it never goes stale if the DOM re-renders.
+
+My preference order, closest to Playwright's own recommendation:
+
+1. `getByRole()` — matches ARIA role + accessible name, most resilient to markup changes
+2. `getByLabel()` / `getByPlaceholder()` — for form fields
+3. `getByText()` — for static visible copy
+4. `getByTestId()` — the escape hatch when there's no meaningful role/text
+5. CSS/XPath — last resort, most brittle
+
+```javascript
+// Preferred
+await page.getByRole('button', { name: 'Add to cart' }).click();
+
+// Fallback when there's no semantic hook
+await page.getByTestId('cart-icon').click();
+```
+
+**Interview-ready summary:** "I default to role-based and label-based locators because they mirror how a real user identifies elements and survive styling/markup churn — CSS/XPath and `getByTestId` are reserved for cases with no meaningful semantic hook."
+
+---
+
+### 5. What is the difference between `locator()`, `getByRole()`, `getByText()` and `getByTestId()`?
+
+| Method | What it matches on | When I use it |
+|---|---|---|
+| `locator()` | Any CSS or XPath selector you pass it | General-purpose — the base API everything else builds on |
+| `getByRole()` | ARIA role + accessible name (button, link, heading, textbox...) | Default choice — resilient, accessibility-aligned |
+| `getByText()` | Visible text content | Static, user-facing copy where a role isn't meaningful |
+| `getByTestId()` | The `data-testid` attribute | Elements with no meaningful role/text, or when devs have added explicit test hooks |
+
+```javascript
+const price = page.locator('.product-price');        // raw CSS
+const addBtn = page.getByRole('button', { name: 'Add to Cart' });
+const message = page.getByText('Item added to cart');
+const icon = page.getByTestId('wishlist-icon');
+```
+
+`getByRole`, `getByLabel`, `getByText`, and `getByTestId` are all just convenience wrappers that eventually resolve down to a `Locator` — they don't behave differently from `locator()` once resolved; the difference is purely in **what they match on**.
+
+**Interview-ready summary:** "`locator()` is the general-purpose base API; `getByRole`/`getByText`/`getByTestId` are semantic shortcuts on top of it that match on accessibility role, visible text, or an explicit test hook respectively — I pick whichever gives the most stable match for that specific element."
+
+---
+
+### 6. How does Playwright handle auto-waiting?
+
+Before performing an action, Playwright runs a chain of **actionability checks** on the target element and retries until they all pass or a timeout is hit:
+
+1. **Attached** — element exists in the DOM
+2. **Visible** — has a non-empty bounding box, not `visibility:hidden`
+3. **Stable** — not still animating (same bounding box across two consecutive frames)
+4. **Receives events** — not obscured by another element (e.g. a modal overlay)
+5. **Enabled** — not `disabled`
+6. Additionally for `fill()`: **editable** (not `readonly`)
+
+```javascript
+// Playwright retries all actionability checks internally until timeout
+await page.getByRole('button', { name: 'Pay Now' }).click();
+```
+
+If a check keeps failing, Playwright throws a timeout error that names **which check failed** — visible directly in the error message and in Trace Viewer, which is far more actionable than a bare Selenium `ElementNotInteractableException`.
+
+**Interview-ready summary:** "Auto-waiting is a sequence of actionability checks — attached, visible, stable, receives-events, enabled — run before every action, retried until timeout. Web-first assertions like `expect(locator).toBeVisible()` apply the same polling model, which is why explicit `waitForTimeout()` calls are rarely needed."
+
+---
+
+### 7. What is the difference between `waitForSelector()` and Playwright's built-in auto-waiting?
+
+| | `waitForSelector()` / `locator.waitFor()` | Built-in auto-waiting |
+|---|---|---|
+| When it runs | Only when explicitly called | Automatically, before every action |
+| What it checks | A single named state (`attached`, `visible`, `hidden`, `detached`) | The full actionability chain (attached, visible, stable, receives-events, enabled) |
+| When I need it | Waiting for something that isn't tied to an immediate action — e.g. a spinner to disappear before continuing | Never need to add it manually for a normal click/fill — it's already built in |
+
+```javascript
+// Explicit — waiting for a condition that isn't immediately followed by an action
+await page.locator('.loading-spinner').waitFor({ state: 'hidden' });
+
+// No explicit wait needed here — auto-waiting handles it
+await page.getByRole('button', { name: 'Submit' }).click();
+```
+
+**Interview-ready summary:** "Auto-waiting happens automatically before every action and covers the full actionability chain; `waitForSelector`/`locator.waitFor()` is for the specific cases where I need to wait on a state that isn't immediately followed by an action, like a spinner disappearing before the next step."
+
+---
+
+### 8. How do you handle multiple tabs/windows in Playwright?
+
+Listen for the `page` event on the context (a new tab) or the `popup` event on the page (a `target="_blank"` link or `window.open`):
+
+```javascript
+const [newPage] = await Promise.all([
+  context.waitForEvent('page'),
+  page.getByRole('link', { name: 'Open in new tab' }).click(),
+]);
+await newPage.waitForLoadState();
+await expect(newPage.getByRole('heading')).toHaveText('Details');
+```
+
+```javascript
+const [popup] = await Promise.all([
+  page.waitForEvent('popup'),
+  page.getByRole('button', { name: 'Terms & Conditions' }).click(),
+]);
+await popup.close();
+```
+
+Key practices:
+- Always pair the event wait with the triggering action inside `Promise.all` — otherwise there's a race where the event fires before the wait starts.
+- Keep an explicit reference to the new `Page` object; don't assume `page` still points at the active tab.
+- Use `context.pages()` to enumerate every currently open tab if needed.
+
+**Interview-ready summary:** "For new tabs/popups I wait on the `page`/`popup` context event alongside the triggering click inside `Promise.all`, and keep an explicit reference to the returned `Page` object rather than assuming `page` is still the active tab."
+
+---
+
+### 9. How do you handle iframes, alerts and dropdowns in Playwright?
+
+**iframes** — use `frameLocator()`, which scopes subsequent locators to inside the frame and keeps full auto-waiting:
+
+```javascript
+const frame = page.frameLocator('#payment-frame');
+await frame.getByLabel('Card number').fill('4111111111111111');
+await frame.getByRole('button', { name: 'Pay' }).click();
+```
+
+**Alerts / dialogs** — register the listener **before** the action that triggers the dialog, since native dialogs block execution the instant they fire:
+
+```javascript
+page.on('dialog', dialog => {
+  console.log(dialog.message());
+  dialog.accept(); // or dialog.dismiss()
+});
+await page.getByRole('button', { name: 'Delete' }).click();
+```
+
+**Dropdowns:**
+
+```javascript
+// Native <select>
+await page.selectOption('#country', { label: 'India' });
+
+// Custom (non-native) dropdown built from divs
+await page.getByRole('combobox', { name: 'Country' }).click();
+await page.getByRole('option', { name: 'India' }).click();
+```
+
+**Interview-ready summary:** "iframes go through `frameLocator()` for scoped, auto-waited locators; dialogs need the `page.on('dialog', ...)` listener registered *before* the triggering click since they're blocking; and dropdowns are either `selectOption()` for a native `<select>` or role-based click-and-select for a custom widget."
+
+---
+
+### 10. Explain `async/await` and Promises in TypeScript with a Playwright example.
+
+A **Promise** represents the eventual result of an asynchronous operation — pending, fulfilled, or rejected. Nearly every Playwright action returns one.
+
+`async` marks a function as asynchronous and makes it always return a Promise; `await` pauses execution inside that function until a Promise resolves, returning the resolved value instead of the Promise object itself.
+
+```javascript
+async function login(page, username, password) {
+  await page.goto('/login');           // waits for navigation to finish
+  await page.getByLabel('Username').fill(username);
+  await page.getByLabel('Password').fill(password);
+  await page.getByRole('button', { name: 'Log in' }).click();
+  await page.waitForURL('/dashboard'); // waits for the redirect
+}
+```
+
+Without `await`, the function would move on to the next line before the Promise settles — a common source of race-condition bugs in a Playwright suite (e.g. asserting on a page before navigation has actually completed).
+
+**Interview-ready summary:** "Every Playwright action is a Promise under the hood; `async`/`await` lets me write that asynchronous chain in a readable, top-to-bottom style instead of nested `.then()` calls, and forgetting an `await` is one of the most common causes of flaky-looking failures in a real suite."
+
+---
+
+## Round 2: Technical / Client
+
+### 1. How would you design a Playwright + TypeScript automation framework from scratch?
+
+I structure it in clear layers so it scales as the team and suite grow:
+
+```
+project-root/
+├── tests/          # spec files — thin, readable, business-focused
+├── pages/          # Page Object classes
+├── fixtures/       # custom test/expect extensions
+├── utils/          # helpers (data generation, API wrappers, date utils)
+├── config/         # environment-specific config (qa.json, staging.json...)
+├── testdata/       # fixtures/factories for test data
+├── playwright.config.js
+└── global-setup.js / auth.setup.js
+```
+
+Principles I insist on:
+
+- **Layered separation** — tests never call raw `page` actions for anything beyond a top-level flow; everything meaningful goes through page objects/fixtures.
+- **Fixtures over inheritance** — compose behavior (`loginPage`, `apiClient`, `testUser`) via `test.extend`, rather than deep class inheritance chains.
+- **Config-driven environments** instead of hardcoded URLs.
+- **Data isolation** — every test creates/owns its own data (via API) rather than relying on shared seed data, so parallel runs don't collide.
+- **Tagging** (`@smoke`, `@regression`) for selective execution in CI.
+- **Consistent reporting and CI wiring** from day one, not bolted on later.
+
+**Interview-ready summary:** "I design around clear layers — page objects, fixtures, typed API/data utilities, config-driven environments — with fixtures for composition instead of inheritance, and self-contained test data so parallel runs stay safe as the suite scales."
+
+---
+
+### 2. Explain the Page Object Model implementation in Playwright.
+
+Each page/component becomes a class holding its locators and behavior methods — tests never touch raw locators directly.
+
+```javascript
+// pages/LoginPage.js
+const { expect } = require('@playwright/test');
+
+class LoginPage {
+  constructor(page) {
+    this.page = page;
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: 'Log in' });
+    this.errorBanner = page.getByRole('alert');
+  }
+
+  async goto() {
+    await this.page.goto('/login');
+  }
+
+  async login(email, password) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async expectError(message) {
+    await expect(this.errorBanner).toHaveText(message);
+  }
+}
+
+module.exports = { LoginPage };
+```
+
+```javascript
+// tests/login.spec.js
+const { test } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
+
+test('shows error for invalid credentials', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('bad@user.com', 'wrongpass');
+  await loginPage.expectError('Invalid email or password');
+});
+```
+
+Practices at this level of experience: no business assertions embedded inside "action" methods, a base class for shared behavior (`waitForPageLoad`, `getToast`), and wiring page objects through a custom fixture so tests receive `{ loginPage }` directly instead of `new LoginPage(page)` in every test.
+
+**Interview-ready summary:** "I model each page as a class holding typed locators and behavior methods, wire it up through a custom fixture so tests just consume `{ loginPage }`, and keep test data and business assertions out of the page object itself so it stays reusable."
+
+---
+
+### 3. How do you manage test data and environment configurations?
+
+I keep environment config **out of test code entirely**, driven by an environment variable and a config module:
+
+```javascript
+// config/env.js
+const environments = {
+  qa: {
+    baseURL: 'https://qa.myapp.com',
+    apiURL: 'https://qa-api.myapp.com',
+  },
+  staging: {
+    baseURL: 'https://staging.myapp.com',
+    apiURL: 'https://staging-api.myapp.com',
+  },
+};
+
+const env = process.env.TEST_ENV || 'qa';
+module.exports = environments[env];
+```
+
+```bash
+TEST_ENV=staging npx playwright test
+```
+
+For test data:
+- **Static reference data** — checked-in JSON/fixture files
+- **Dynamic data** (unique emails, order IDs) — generated at runtime to avoid collisions in parallel runs
+- **Secrets** (credentials, API tokens) — always from environment variables / the CI secret store, never hardcoded or committed
+
+**Interview-ready summary:** "Environment differences live in a config module keyed by a `TEST_ENV` variable, secrets come from the CI secret store, and test data is either static fixtures or runtime-generated with unique identifiers so parallel tests never collide — the test code itself never hardcodes a URL or a password."
+
+---
+
+### 4. How do you execute Playwright tests in parallel?
+
+Playwright Test parallelizes **at the file level by default** — each test file runs in its own worker process.
+
+```javascript
+// playwright.config.js
+module.exports = {
+  fullyParallel: true, // also parallelize tests WITHIN a file
+  workers: process.env.CI ? 4 : undefined, // undefined = auto, based on CPU cores
+  retries: process.env.CI ? 2 : 0,
+};
+```
+
+```bash
+npx playwright test --workers=8
+```
+
+For genuinely large suites, I shard across multiple CI machines and merge the reports afterward:
+
+```bash
+npx playwright test --shard=1/4
+npx playwright test --shard=2/4
+```
+
+Practical considerations: each worker is a separate process with no shared in-memory state, so test data must be independent (unique per test) to avoid collisions; and I tune `workers` to the actual CI runner size rather than assuming more is always faster.
+
+**Interview-ready summary:** "Playwright parallelizes per file across worker processes by default; I turn on `fullyParallel` for test-level parallelism too, tune `workers` to the CI runner's real capacity, and shard across machines for very large suites — keeping test data independent is what makes parallelism safe rather than flaky."
+
+---
+
+### 5. How do you handle flaky tests in Playwright?
+
+My actual troubleshooting order:
+
+1. **Check the trace first** (`trace: 'on-first-retry'`) — most "flaky" failures are timing/race issues that are immediately visible in the trace's network/DOM timeline.
+2. **Look for hard waits** — search for `waitForTimeout()` and replace with a proper condition (`waitForResponse()`, a web-first assertion).
+3. **Check test isolation** — is the test depending on state left behind by another test (shared data, same email/order ID)? Fixed at the data layer with unique test data per run, not with retries.
+4. **Check animation timing** — a CSS transition finishing after the "stable" actionability check but before an assertion; disable animations in the test environment.
+5. **Mock unreliable third parties** (ads, analytics, payment sandboxes) via `page.route()` instead of hitting the real thing.
+6. **Only then, use retries** — as a safety net, never as the fix:
+
+```javascript
+// playwright.config.js
+module.exports = {
+  retries: process.env.CI ? 2 : 0,
+};
+```
+
+I also track flake rate over time via the CI report history — a test that needs a retry every single run gets flagged and fixed, not silently tolerated.
+
+**Interview-ready summary:** "Retries are a safety net, never the fix — the actual fix comes from the trace: replacing hard waits with proper conditions, isolating test data, disabling animations, and mocking unreliable third-party calls. I track flake rate so a masked issue doesn't go unaddressed indefinitely."
+
+---
+
+### 6. Explain Playwright fixtures. How have you created custom fixtures?
+
+Fixtures are Playwright Test's dependency-injection mechanism — reusable setup/teardown units that tests declare as parameters instead of duplicating setup code or relying on scattered `beforeEach` blocks.
+
+```javascript
+// fixtures/base.js
+const base = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
+
+exports.test = base.test.extend({
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
+  },
+
+  authenticatedPage: [async ({ page }, use) => {
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(process.env.TEST_USER);
+    await page.getByLabel('Password').fill(process.env.TEST_PASS);
+    await page.getByRole('button', { name: 'Log in' }).click();
+    await use();
+  }, { auto: true }], // runs automatically for every test in files that import this
+});
+
+exports.expect = base.expect;
+```
+
+```javascript
+// tests/dashboard.spec.js
+const { test, expect } = require('../fixtures/base');
+
+test('shows welcome banner after login', async ({ loginPage, page }) => {
+  await expect(page.getByText('Welcome')).toBeVisible();
+});
+```
+
+Why I reach for custom fixtures instead of `beforeEach`: they're composable (fixtures can depend on other fixtures), scoped (`test` vs `worker`), and guarantee automatic teardown — code after `await use()` runs as cleanup even on failure. A real example I've built: a `worker`-scoped `dbConnection` fixture (one connection pool per worker, not per test) and an `apiHelper` fixture wrapping common REST calls for seeding data.
+
+**Interview-ready summary:** "Fixtures are Playwright's DI system for setup/teardown — I extend `test` to inject page objects and auth state directly, use `auto: true` for setup every test needs, and worker scope for expensive resources like a DB connection that shouldn't be recreated per test."
+
+---
+
+### 7. How do you implement API testing using Playwright?
+
+Playwright ships a `request` fixture (`APIRequestContext`) for making HTTP calls directly, either standalone or sharing cookies/auth with a browser context.
+
+```javascript
+const { test, expect } = require('@playwright/test');
+
+test.describe('Users API', () => {
+  let apiContext;
+
+  test.beforeAll(async ({ playwright }) => {
+    apiContext = await playwright.request.newContext({
+      baseURL: 'https://api.example.com',
+      extraHTTPHeaders: { Authorization: `Bearer ${process.env.API_TOKEN}` },
+    });
+  });
+
+  test('creates a user', async () => {
+    const response = await apiContext.post('/users', {
+      data: { name: 'John Doe', email: 'john@example.com' },
+    });
+    expect(response.status()).toBe(201);
+    const body = await response.json();
+    expect(body.name).toBe('John Doe');
+  });
+
+  test.afterAll(async () => {
+    await apiContext.dispose();
+  });
+});
+```
+
+Patterns I use on real projects: **setup via API, verify via UI** (create test data through API calls instead of clicking through the UI, then assert via the browser — much faster and less flaky), and a **hybrid context** where `context.request` shares cookies with the page, letting me log in via UI once and then hit protected APIs directly with the same session.
+
+**Interview-ready summary:** "I use Playwright's built-in `request`/`APIRequestContext` for pure API tests and for fast test-data setup ahead of UI tests, reusing the same auth/session state between the API and UI layers wherever possible."
+
+---
+
+### 8. How do you capture screenshots, videos and traces when a test fails?
+
+All three are configured centrally in `playwright.config.js`, set to capture **only on failure/retry** to keep artifact storage sane:
+
+```javascript
+// playwright.config.js
+module.exports = {
+  use: {
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'on-first-retry',
+  },
+};
+```
+
+```bash
+npx playwright show-trace trace.zip
+```
+
+- **Screenshot** — a single image at the point of failure.
+- **Video** — a full recording of the test, retained only if it fails.
+- **Trace** — the richest artifact: DOM snapshots, network calls, console logs, and an action timeline per step, replayable in Trace Viewer exactly as it happened.
+
+In CI I always upload these as build artifacts specifically so a failure can be diagnosed from the artifact alone, without needing to reproduce it locally first.
+
+**Interview-ready summary:** "I set `screenshot: 'only-on-failure'`, `video: 'retain-on-failure'`, and `trace: 'on-first-retry'` in config, and always upload them as CI artifacts — the trace in particular lets me replay a CI failure exactly as it happened without reproducing it locally."
+
+---
+
+### 9. How do you integrate Playwright tests with Jenkins/CI-CD?
+
+A typical declarative Jenkins pipeline:
+
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps { git branch: 'main', url: 'https://github.com/org/automation-repo.git' }
+        }
+        stage('Install') {
+            steps {
+                sh 'npm ci'
+                sh 'npx playwright install --with-deps'
+            }
+        }
+        stage('Run Tests') {
+            steps { sh 'npx playwright test --workers=4' }
+        }
+        stage('Publish Report') {
+            steps {
+                publishHTML(target: [
+                    reportDir: 'playwright-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Playwright Report'
+                ])
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'test-results/**', allowEmptyArchive: true
+        }
+        failure {
+            mail to: 'team@company.com', subject: 'Build failed', body: 'Check Jenkins console output.'
+        }
+    }
+}
+```
+
+Practices I apply: cache `node_modules` and the Playwright browser binaries between runs to cut install time; upload traces/videos/screenshots only `if failure`, not every run; and separate a fast, tagged `@smoke` job on every PR from a fuller regression run on a schedule or merge to main.
+
+**Interview-ready summary:** "The pipeline installs dependencies and browsers, runs the suite with a tuned worker count, publishes the HTML report and archives failure artifacts, and notifies the team on failure — with a fast tagged smoke run on every PR separated from a fuller scheduled regression run."
+
+---
+
+### 10. How would you migrate an existing Selenium framework to Playwright?
+
+I treat it as an **incremental migration**, not a big-bang rewrite:
+
+1. **Assess and prioritize** — map existing Selenium test coverage to business criticality; migrate the highest-value, most frequently-run suites first (usually smoke/critical-path), not alphabetically.
+2. **Stand up the new framework in parallel** — build the Playwright framework's layers (page objects, fixtures, config) as a fresh structure, rather than trying to mechanically translate Selenium's `WebElement`/`WebDriverWait` idioms one-to-one — that produces a framework that *works* but never gets the actual benefits of Playwright's auto-waiting and context isolation.
+3. **Run both suites side by side temporarily** — keep the Selenium suite as the safety net in CI while the Playwright suite is being built out, only retiring a Selenium test once its Playwright equivalent is proven stable.
+4. **Translate concepts, not syntax**:
+   - `WebDriverWait` + `ExpectedConditions` → Playwright's built-in auto-waiting (usually just deleted, not translated)
+   - `driver.switchTo().window(handle)` → `context.waitForEvent('page')`
+   - `driver.switchTo().frame()` → `page.frameLocator()`
+   - Page Factory `@FindBy` → Locators initialized in a class constructor
+5. **Migrate CI/CD in step** — Playwright's own test runner, reporting, and parallelism replace whatever TestNG/JUnit + Selenium Grid setup existed; update the pipeline as each suite cuts over, not all at once.
+6. **Track migration progress visibly** — a simple dashboard of "migrated vs pending" suites keeps stakeholders informed and prevents the effort from stalling halfway.
+
+**Interview-ready summary:** "I migrate incrementally by business priority, keep the old Selenium suite running as a safety net until each Playwright equivalent is proven, and translate concepts rather than syntax — most Selenium wait code simply disappears rather than getting a Playwright equivalent, since auto-waiting already covers it."

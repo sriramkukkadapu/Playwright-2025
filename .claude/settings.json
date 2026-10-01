@@ -145,7 +145,16 @@
       "Bash(grep -n 'extend<\\\\|implements \\\\|: void\\\\b\\\\|\\): Promise<\\\\|Record<\\\\|!;$\\\\|!\\\\.' Learning/PlaywrightInterviewQnA.md)",
       "Read(//Users/sriramkukkadapu/.claude/projects/-Users-sriramkukkadapu-projects-Playwright-2025/688145f9-7ab5-4eeb-92e9-3afd8807d9ff/tool-results/**)",
       "Bash(grep -v \"^--$\")",
-      "Bash(grep -c '^\\\\*\\\\*\\\\[Day [0-9]:.*\\\\*\\\\*<br>$' PlaywrightQuesSeries.md)"
+      "Bash(grep -c '^\\\\*\\\\*\\\\[Day [0-9]:.*\\\\*\\\\*<br>$' PlaywrightQuesSeries.md)",
+      "Bash(grep -c \"^==============$\" /Users/sriramkukkadapu/projects/jobscrapping/output/testing_jobs/ncr_testing_jobs.txt)",
+      "Bash(awk '/^## Round 1: Technical$/,/^## Round 2: Technical \\\\/ Client$/' PlaywrightInterviewQnA.md)",
+      "Bash(awk '/^## Round 2: Technical \\\\/ Client$/,0' PlaywrightInterviewQnA.md)",
+      "Bash(ls -la \"/Users/sriramkukkadapu/Downloads/thw referrals/Sr Java\" 2>&1 | head -100)",
+      "Read(//Users/sriramkukkadapu/Downloads/thw referrals/Sr Java/**)",
+      "Bash(find \"/Users/sriramkukkadapu/Downloads/thw referrals/Sr Java\" -type f \\\\\\( -iname \"*.docx\" -o -iname \"*.doc\" -o -iname \"*.pdf\" -o -iname \"*.txt\" -o -iname \"*.rtf\" \\\\\\) | sort)",
+      "Bash(python3 -c \"import fitz; print\\('pymupdf ok'\\)\")",
+      "Bash(python3 -c \"import docx; print\\('docx ok'\\)\")",
+      "Bash(python3 parse_resumes.py)"
     ],
     "additionalDirectories": [
       "/Users/sriramkukkadapu/projects/Playwright-2025/Learning",
